@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "اختر نوع الحساب";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link href="~/css/choose-role.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+}
+
+<section class="min-h-screen flex items-center justify-center bg-gray-50 px-4" dir="rtl" lang="ar">
+    <div class="choose-role-card">
+        <img src="/images/Tarjim_Logo_Arabic_Standard.png" alt="شعار ترجم" class="w-32 mx-auto mb-4">
+
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">أهلاً بك في منصة ترجم 👋</h2>
+        <p class="text-gray-600 text-sm mb-6">اختر نوع الحساب للمتابعة</p>
+
+        <div class="flex flex-col md:flex-row gap-4 justify-center">
+
+            <a href="@Url.Action("Login", "Account")" class="choose-role-btn client hover:shadow-lg">
+                <i class="fas fa-user-tie"></i>
+                <span>الدخول كعميل</span>
+            </a>
+
+            <a href="@Url.Action("LoginTranslator", "Account")" class="choose-role-btn translator hover:shadow-lg">
+                <i class="fas fa-language"></i>
+                <span>الدخول كمترجم</span>
+            </a>
+
+        </div>
+
+        <div class="mt-6 text-xs text-gray-400">
+            ترجم تربطك بفرص الترجمة الأنسب لك، بدقة وسرعة وثقة 💼🌍
+        </div>
+    </div>
+</section>

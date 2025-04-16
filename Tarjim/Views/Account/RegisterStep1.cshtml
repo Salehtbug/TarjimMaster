@@ -1,0 +1,93 @@
+﻿@model Tarjim.ViewModels.RegisterStep1ViewModel
+
+@{
+    ViewData["Title"] = "إنشاء حساب";
+    ViewData["HideNavbar"] = true;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link href="~/css/register.css" rel="stylesheet" />
+    <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+}
+
+<section class="register-container" dir="rtl" lang="ar">
+    <div class="background-icons">
+        <img src="/images/trans0.jpg" alt="رمز ترجمة" class="bg-image-decor left-top" />
+        <img src="/images/tran" alt="Globe icon" class="bg-image-decor right-bottom" />
+        <img src="/images/trans00.png" alt="خريطة عالمية" class="bg-image-decor top-right" />
+    </div>
+
+    <div class="register-box">
+        <div class="register-side" data-aos="fade-up" data-aos-duration="1000">
+            <img src="/images/Tarjim_Logo_Arabic_Standard.png" alt="شعار ترجم" class="register-logo fade-in" />
+            <div class="register-welcome-wrapper">
+                <p class="typewriter">ابدأ رحلتك في عالم الترجمة بثقة</p>
+            </div>
+        </div>
+        <div class="register-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="register-progress">
+                <ol class="progress-steps">
+                    <li class="step active">
+                        <span class="circle">1</span>
+                        <span class="label">معلومات الدخول</span>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="step">
+                        <span class="circle">2</span>
+                        <span class="label">البيانات الشخصية</span>
+                    </li>
+                </ol>
+            </div>
+            <form asp-action="RegisterStep1" asp-controller="Account" method="post" class="register-form">
+
+                <div class="form-group">
+                    <label asp-for="Email" class="register-label">البريد الإلكتروني</label>
+                    <input asp-for="Email" type="email" class="register-input" placeholder="name@email.com" />
+                    <span asp-validation-for="Email" class="register-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Password" class="register-label">كلمة السر</label>
+                    <input asp-for="Password" type="password" class="register-input" placeholder="••••••" />
+                    <span asp-validation-for="Password" class="register-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword" class="register-label">تأكيد كلمة السر</label>
+                    <input asp-for="ConfirmPassword" type="password" class="register-input" placeholder="••••••" />
+                    <span asp-validation-for="ConfirmPassword" class="register-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="AccountType" class="register-label">نوع الحساب</label>
+                    <select asp-for="AccountType" class="register-input">
+                        <option value="">إختر نوع الحساب</option>
+                        <option value="Personal">فرد</option>
+                        <option value="Business">شركة</option>
+                    </select>
+                    <span asp-validation-for="AccountType" class="register-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="register-button">
+                        التالي
+                    </button>
+                </div>
+                <div class="register-alt">
+                    <button type="button" class="register-alt-btn">
+                        <img src="/images/iconsGoogle.png" class="register-google-icon" />
+                        <span>أنشئ حساب باستخدام جوجل</span>
+                    </button>
+                    <a href="/Account/Login" class="register-login-link">تسجيل الدخول</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>AOS.init();</script>
+}

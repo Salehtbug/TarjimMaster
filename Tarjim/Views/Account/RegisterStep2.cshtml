@@ -1,0 +1,137 @@
+﻿@model Tarjim.ViewModels.RegisterStep2ViewModel
+
+@{
+    ViewData["Title"] = "إكمال الحساب";
+    ViewData["HideNavbar"] = true;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link href="~/css/register.css" rel="stylesheet" />
+    <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+}
+
+
+
+<section class="register-container" dir="rtl" lang="ar">
+    <div class="register-box">
+        <div class="register-side" data-aos="fade-up">
+            <img src="/images/Tarjim_Logo_Arabic_Standard.png" alt="شعار ترجم" class="register-logo fade-in" />
+            <div class="register-welcome-wrapper">
+                <p class="typewriter">خطوة واحدة تفصلك عن بدء رحلتك معنا!</p>
+            </div>
+        </div>
+
+        <div class="register-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="register-progress">
+                <ol class="progress-steps">
+                    <li class="step">
+                        <span class="circle">1</span>
+                        <span class="label">معلومات الدخول</span>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="step active">
+                        <span class="circle">2</span>
+                        <span class="label">البيانات الشخصية</span>
+                    </li>
+                </ol>
+            </div>
+
+            <form asp-action="RegisterStep2" asp-controller="Account" method="post" enctype="multipart/form-data" class="register-form">
+
+                <div class="form-group text-center">
+                    <h2 class="text-xl font-semibold mb-4">المعلومات الشخصية</h2>
+
+                    <div class="flex flex-col items-center space-y-2">
+                        <label for="avatarUpload" class="cursor-pointer">
+                            <div class="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center text-3xl text-gray-600 hover:bg-gray-400 transition">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                        </label>
+
+                        <input asp-for="Avatar" name="Avatar" id="avatarUpload" type="file" class="hidden" accept="image/*" />
+                        <span asp-validation-for="Avatar" class="register-error block text-sm mt-1"></span>
+                        <p class="text-xs text-gray-500">الصورة الشخصية</p>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label asp-for="Name" class="register-label">الأسم الثنائي</label>
+                    <input asp-for="Name" name="Name" class="register-input" placeholder="مثال: أحمد محمد" />
+                    <span asp-validation-for="Name" class="register-error"></span>
+                </div>
+
+                @* <div class="form-group"> *@
+                @*     <label asp-for="AccountType" class="register-label">نوع الحساب</label> *@
+                @*     <select asp-for="AccountType" class="register-input"> *@
+                @*         <option value="">اختر نوع الحساب</option> *@
+                @*         <option value="Personal">فرد</option> *@
+                @*         <option value="Business">شركة</option> *@
+                @*     </select> *@
+                @*     <span asp-validation-for="AccountType" class="register-error"></span> *@
+                @* </div> *@
+
+                <div class="form-group">
+                    <label asp-for="Country" class="register-label">بلد الأقامة</label>
+                    <select asp-for="Country" name="Country" class="register-input" id="country">
+                        <option value="">اختر بلدك</option>
+                        <option value="Jordan">الأردن</option>
+                        <option value="Egypt">مصر</option>
+                        <option value="Saudi Arabia">السعودية</option>
+                    </select>
+                    <span asp-validation-for="Country" class="register-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="City" class="register-label">المحافظة</label>
+                    <select asp-for="City" name="City" class="register-input" id="city">
+                        <option value="">اختر المحافظة</option>
+                        <option value="Amman">عمّان</option>
+                        <option value="Irbid">إربد</option>
+                        <option value="Zarqa">الزرقاء</option>
+                    </select>
+                    <span asp-validation-for="City" class="register-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="register-button">
+                        إنشاء الحساب
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>AOS.init();</script>
+
+    <script>
+        const citiesByCountry = {
+            "Jordan": ["عمّان", "إربد", "الزرقاء", "العقبة", "البلقاء", "المفرق", "الكرك", "معان", "الطفيلة", "جرش", "عجلون", "مأدبا"],
+            "Egypt": ["القاهرة", "الجيزة", "الإسكندرية", "المنصورة", "طنطا", "الزقازيق"],
+            "Saudi Arabia": ["الرياض", "جدة", "مكة", "المدينة", "الدمام", "أبها"]
+        };
+
+        document.getElementById("country").addEventListener("change", function () {
+            const country = this.value;
+            const citySelect = document.getElementById("city");
+
+            citySelect.innerHTML = '<option value="">اختر المحافظة</option>';
+
+            if (citiesByCountry[country]) {
+                citiesByCountry[country].forEach(function (city) {
+                    const option = document.createElement("option");
+                    option.value = city;
+                    option.text = city;
+                    citySelect.appendChild(option);
+                });
+            }
+        });
+    </script>
+}
+

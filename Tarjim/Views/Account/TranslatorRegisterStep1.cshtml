@@ -1,0 +1,129 @@
+﻿@model Tarjim.ViewModels.TranslatorRegisterStep1ViewModel
+
+@{
+    ViewData["Title"] = "معلوماتك الشخصية - مترجم";
+    ViewData["HideNavbar"] = true;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link href="~/css/translatorregister.css" rel="stylesheet" />
+    <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+}
+
+<section class="register-container" dir="rtl" lang="ar">
+    <div class="register-box">
+  
+        <div class="register-side fade-in">
+            <div class="register-brand">
+                <img src="/images/Tarjim_Logo_Arabic_Standard.png" class="register-logo" alt="Tarjim Logo" />
+                <div class="register-welcome-wrapper">
+                    <p class="register-welcome">معلوماتك الشخصية ليتعرف عليك العملاء ✨</p>
+                </div>
+                <img src="/images/illustration_translator.png" class="illustration-image" alt="illustration" />
+            </div>
+        </div>
+
+        <div class="register-card" data-aos="fade-up">
+            @* <div class="register-progress"> *@
+            @*     <ol class="progress-steps"> *@
+            @*         <li class="step active"> *@
+            @*             <div class="circle">1</div> *@
+            @*             <span class="label">المعلومات الشخصية</span> *@
+            @*         </li> *@
+            @*         <li class="divider"></li> *@
+            @*         <li class="step"> *@
+            @*             <div class="circle">2</div> *@
+            @*             <span class="label">الموقع</span> *@
+            @*         </li> *@
+            @*         <li class="divider"></li> *@
+            @*         <li class="step"> *@
+            @*             <div class="circle">3</div> *@
+            @*             <span class="label">الدراسة</span> *@
+            @*         </li> *@
+            @*         <li class="divider"></li> *@
+            @*         <li class="step"> *@
+            @*             <div class="circle">4</div> *@
+            @*             <span class="label">شهادات إضافية</span> *@
+            @*         </li> *@
+            @*         <li class="divider"></li> *@
+            @*         <li class="step"> *@
+            @*             <div class="circle">5</div> *@
+            @*             <span class="label">معلومات مهنية</span> *@
+            @*         </li> *@
+            @*         <li class="divider"></li> *@
+            @*         <li class="step"> *@
+            @*             <div class="circle">6</div> *@
+            @*             <span class="label">وثائق مهمة</span> *@
+            @*         </li> *@
+            @*     </ol> *@
+            @* </div> *@
+
+
+            <form asp-action="TranslatorRegisterStep1" method="post" enctype="multipart/form-data" class="register-form">
+
+                <div class="form-group text-center">
+                    <label for="avatarUpload" class="cursor-pointer">
+                        <div class="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center text-3xl text-gray-600 hover:bg-gray-400 transition mx-auto">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </label>
+                    <input asp-for="Avatar" name="Avatar" id="avatarUpload" type="file" class="hidden" accept="image/*" />
+                    <span asp-validation-for="Avatar" class="register-error block mt-1 text-sm"></span>
+                    <p class="text-xs text-gray-500 mt-1">الصورة الشخصية</p>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Name" class="register-label">الاسم الثنائي</label>
+                    <input asp-for="Name" class="register-input" placeholder="مثال: أحمد محمد" />
+                    <span asp-validation-for="Name" class="register-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Bio" class="register-label">وصف الخدمة</label>
+                    <textarea asp-for="Bio" class="register-input" rows="4" placeholder="أدخل وصفاً مختصراً عن خدماتك وخبراتك..."></textarea>
+                    <span asp-validation-for="Bio" class="register-error"></span>
+                </div>
+
+                 <div class="form-group"> 
+                     <label asp-for="Country" class="register-label">الدولة</label> 
+                     <select asp-for="Country" class="register-input" id="country"> 
+                         <option value="" selected disabled>اختر الدولة</option> 
+                         <option value="Jordan">الأردن</option> 
+                         <option value="Egypt">مصر</option> 
+                         <option value="Saudi Arabia">السعودية</option> 
+                     </select> 
+                    <span asp-validation-for="Country" class="register-error"></span> 
+                 </div> 
+
+                 <div class="form-group"> 
+                    <label asp-for="City" class="register-label">المدينة</label> 
+                    <select asp-for="City" class="register-input" id="city"> 
+                      <option value="">اختر المدينة</option> 
+                   </select> 
+                    <span asp-validation-for="City" class="register-error"></span> 
+                </div> 
+
+                <div class="form-group">
+                    <button type="submit" class="registert-button" >التالي</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- عناصر زخرفية للخلفية -->
+    <span class="register-decor decor-1">مترجم</span>
+    <span class="register-decor decor-2">ترجم</span>
+    <span class="register-decor decor-3">فرصتك</span>
+    <span class="register-decor decor-4">ابدأ الآن</span>   
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+    <script src="~/js/register.js"></script>
+}

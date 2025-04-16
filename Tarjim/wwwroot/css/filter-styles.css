@@ -1,0 +1,160 @@
+﻿/* Filter Sidebar Styles */
+.filters-sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.filter-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* Filter Item Base Styles */
+.filter-item {
+    width: 100%;
+}
+
+.filter-button {
+    width: 100%;
+    text-align: right;
+    padding: 0.75rem 1rem;
+    border: none;
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    font-size: 0.9rem;
+    border-radius: 0.75rem;
+}
+
+    .filter-button:hover {
+        background-color: rgba(0, 0, 0, 0.03);
+    }
+
+    /* All Jobs Filter */
+    .filter-button[data-status="الكل"] {
+        color: var(--green);
+        background-color: var(--light-green);
+        border-radius: 999px;
+    }
+
+        /* Status Filters: Text and Icon Styles */
+        .filter-button[data-status="الكل"] .filter-text,
+        .filter-button[data-status="قيد التنفيذ"] .filter-text,
+        .filter-button[data-status="مكتمل"] .filter-text,
+        .filter-button[data-status="لم يقبل بعد"] .filter-text,
+        .filter-button[data-action] .filter-text {
+            margin-right: auto; /* Push text to right side */
+        }
+
+    /* In Progress Filter */
+    .filter-button[data-status="قيد التنفيذ"] {
+        color: var(--amber);
+    }
+
+        .filter-button[data-status="قيد التنفيذ"] .filter-icon {
+            color: var(--amber);
+        }
+
+    /* Completed Filter */
+    .filter-button[data-status="مكتمل"] {
+        color: var(--green);
+    }
+
+        .filter-button[data-status="مكتمل"] .filter-icon {
+            color: var(--green);
+        }
+
+    /* Not Accepted Filter */
+    .filter-button[data-status="لم يقبل بعد"] {
+        color: var(--red);
+    }
+
+        .filter-button[data-status="لم يقبل بعد"] .filter-icon {
+            color: var(--red);
+        }
+
+    /* Messages Filter */
+    .filter-button[data-action="messages"] {
+        color: var(--gray-700);
+    }
+
+        .filter-button[data-action="messages"] .filter-icon {
+            color: var(--gray-700);
+        }
+
+    /* Settings Filter */
+    .filter-button[data-action="settings"] {
+        color: var(--gray-700);
+    }
+
+        .filter-button[data-action="settings"] .filter-icon {
+            color: var(--gray-700);
+        }
+
+    /* Logout Button */
+    .filter-button[data-action="logout"] {
+        color: var(--red);
+    }
+
+        .filter-button[data-action="logout"] .filter-icon {
+            color: var(--red);
+        }
+
+/* Icons */
+.filter-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+    .filter-icon.completed {
+        background-color: var(--light-green);
+        color: var(--green);
+    }
+
+    .filter-icon.in-progress {
+        background-color: var(--light-amber);
+        color: var(--amber);
+    }
+
+    .filter-icon.not-accepted {
+        background-color: var(--light-red);
+        color: var(--red);
+    }
+
+/* Create Job Button */
+.create-job-btn {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+    .create-job-btn:hover {
+        background-color: var(--primary-hover);
+    }
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .filters-sidebar {
+        width: 100%;
+    }
+}

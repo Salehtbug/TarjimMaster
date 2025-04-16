@@ -1,0 +1,879 @@
+﻿<style>
+
+    /*---------------------------------------
+      TIMELINE
+    -----------------------------------------*/
+    .timeline-section {
+        background-image: url('/images/colleagues-working-cozy-office-medium-shot.jpg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        position: relative;
+    }
+
+    .timeline-container .vertical-scrollable-timeline {
+        list-style-type: none;
+        position: relative;
+        padding-left: 0;
+    }
+
+        .timeline-container .vertical-scrollable-timeline .list-progress {
+            width: 8px;
+            height: 87%;
+            background-color: var(--primary-color);
+            position: absolute;
+            right: 52px;
+            left: auto;
+            top: 0;
+            overflow: hidden;
+        }
+
+            .timeline-container .vertical-scrollable-timeline .list-progress .inner {
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                height: 100%;
+                background-color: var(--secondary-color);
+                width: 100%;
+            }
+
+        .timeline-container .vertical-scrollable-timeline li {
+            position: relative;
+            padding: 20px 0px 65px 145px;
+        }
+
+            .timeline-container .vertical-scrollable-timeline li:last-child {
+                padding-bottom: 0;
+            }
+
+            .timeline-container .vertical-scrollable-timeline li p {
+                line-height: 40px;
+            }
+
+                .timeline-container .vertical-scrollable-timeline li p:last-child {
+                    margin-bottom: 0;
+                }
+
+            .timeline-container .vertical-scrollable-timeline li .icon-holder {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 104px;
+                height: 104px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: var(--secondary-color);
+                border-radius: 50%;
+                z-index: 1;
+                transition: 0.4s all;
+            }
+
+                .timeline-container .vertical-scrollable-timeline li .icon-holder::before {
+                    content: "";
+                    width: 80px;
+                    height: 80px;
+                    border: 4px solid #fff;
+                    position: absolute;
+                    background-color: var(--secondary-color);
+                    border-radius: 50%;
+                    z-index: -1;
+                    transition: 0.4s all;
+                }
+
+                .timeline-container .vertical-scrollable-timeline li .icon-holder i {
+                    font-size: 25px;
+                    color: var(--white-color);
+                }
+
+            .timeline-container .vertical-scrollable-timeline li::before {
+                content: "";
+                position: absolute;
+                height: 100%;
+                width: 8px;
+                background-color: transparent;
+                left: 52px;
+                z-index: 0;
+            }
+
+            .timeline-container .vertical-scrollable-timeline li.active .icon-holder {
+                background-color: var(--primary-color);
+            }
+
+                .timeline-container .vertical-scrollable-timeline li.active .icon-holder::before {
+                    background-color: var(--primary-color);
+                }
+
+
+
+            .timeline-container .vertical-scrollable-timeline li .timeline-content {
+                background-color: rgba(0, 0, 0, 0.6); /* خلفية شفافة */
+                padding: 20px;
+                border-radius: 12px;
+                color: #fff;
+                font-size: 1rem;
+                line-height: 1.8;
+                max-width: 100%;
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+                transition: background-color 0.3s ease;
+            }
+
+                .timeline-container .vertical-scrollable-timeline li .timeline-content h4 {
+                    font-size: 1.3rem;
+                    font-weight: bold;
+                    color: #ffffff;
+                    margin-bottom: 10px;
+                }
+
+                .timeline-container .vertical-scrollable-timeline li .timeline-content p {
+                    color: #eeeeee;
+                    font-size: 1rem;
+                }
+
+    .timeline-content {
+        background-color: rgba(0, 0, 0, 0.6); /* تضليل أسود شفاف */
+        padding: 1.5rem;
+        border-radius: 1rem;
+        color: #fff;
+        font-size: 1.1rem;
+        line-height: 2;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        max-width: 100%;
+        transition: background-color 0.3s ease;
+    }
+
+        .timeline-content h4 {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-content p {
+            color: #e6e6e6;
+            font-size: 1rem;
+        }
+
+    <!-- في رأس الصفحة أو ملف CSS -->
+   
+    html {
+        scroll-behavior: smooth;
+    }
+
+
+</style>
+
+
+<section class="hero-section relative overflow-hidden" dir="rtl" lang="ar">
+    <video class="absolute top-0 left-0 w-full h-full object-cover z-0" autoplay muted loop playsinline>
+        <source src="/videos/Hero.mp4" type="video/mp4" />
+        متصفحك لا يدعم تشغيل الفيديو
+    </video>
+
+    <div class="absolute inset-0 bg-black/40 z-10"></div>
+
+    <div class="relative z-20 section-container text-center max-w-4xl mx-auto">
+        <h1 class="hero-title">مستقبل الترجمة في الشرق الأوسط</h1>
+        <p class="hero-description">
+            تمكين المترجمين المستقلين عن طريق تشكيل مجتمع نشط يجمع الخبرات المتنوعة ويوفر الفرص لتحسين جودة خدمات الترجمة
+        </p>
+
+        <div class="hero-cta-buttons">
+            <a href="/Register" class="hero-btn hero-btn-primary">
+                @* <svg xmlns="http://www.w3.org/2000/svg" class="icon-btn" viewBox="0 0 24 24" fill="currentColor"> *@
+                @*     <path d="M16 21v-2a4 4 0 00-8 0v2M12 11a4 4 0 100-8 4 4 0 000 8z" /> *@
+                @* </svg> *@
+                سجّل الآن
+            </a>
+
+            <a href="#demo" class="hero-btn hero-btn-secondary">
+                @* <svg class="icon-btn arrow-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"> *@
+                @*     <path d="M13 7l5 5-5 5M6 12h12" /> *@
+                @* </svg> *@
+                اطلب عرض توضيحي
+            </a>
+        </div>
+    </div>
+</section>
+<section class="py-20 bg-white" dir="rtl" lang="ar">
+    <div class="section-container">
+        <h2 class="section-title">ما الذي يميزنا لدى عملاؤنا</h2>
+        <p class="section-description">
+            نحن نسعى جاهدين لتوفير منصة متكاملة تلبي احتياجات المترجمين والعملاء على حد سواء، من خلال الجمع بين التكنولوجيا المتطورة والخبرة البشرية
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-8 mt-12">
+            <div class="transition-all duration-700 delay-100 fade-in opacity-0 translate-y-10">
+                <div class="grid sm:grid-cols-2 gap-6">
+
+                    <div class="feature-card transition-all duration-700 delay-100 fade-in opacity-0 translate-y-10">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-tarjim-green/10 p-2 rounded-full mt-1 ml-3">
+                                <svg class="h-5 w-5 text-tarjim-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2">شبكة تواصل بين المترجمين والعملاء</h3>
+                                <p class="text-gray-600 text-sm">منصة تجمع بين المترجمين المحترفين وأصحاب الاعمال لتسهيل التواصل وتنفيذ المشاريع بسهولة وكفاءة</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-card transition-all duration-700 delay-200 fade-in opacity-0 translate-y-10">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-tarjim-green/10 p-2 rounded-full mt-1 ml-3">
+                                <svg class="h-5 w-5 text-tarjim-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2">خدمات تسويقية للمترجمين</h3>
+                                <p class="text-gray-600 text-sm">نساعد المترجمين على بناء سمعتهم المهنية والوصول إلى عملاء جدد من خلال منصتنا المتكاملة</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-card transition-all duration-700 delay-300 fade-in opacity-0 translate-y-10">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-tarjim-green/10 p-2 rounded-full mt-1 ml-3">
+                                <svg class="h-5 w-5 text-tarjim-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2">أدوات مبتكرة لتمكين المترجمين</h3>
+                                <p class="text-gray-600 text-sm">نوفر تقنيات وأدوات متطورة تساعد المترجمين على تحسين إنتاجيتهم وجودة أعمالهم</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-card transition-all duration-700 delay-400 fade-in opacity-0 translate-y-10">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-tarjim-green/10 p-2 rounded-full mt-1 ml-3">
+                                <svg class="h-5 w-5 text-tarjim-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2">ترجمة عالية الجودة مع الخصوصية</h3>
+                                <p class="text-gray-600 text-sm">نضمن أعلى معايير الجودة والدقة في الترجمة مع الحفاظ على خصوصية المحتوى وسرية البيانات</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="transition-all duration-700 delay-500 fade-in opacity-0 translate-y-10">
+                <div class="img-placeholder aspect-video rounded-lg overflow-hidden shadow-md flex items-center justify-center bg-gray-100">
+                    <svg class="w-16 h-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="py-20 bg-gray-50" dir="rtl" lang="ar">
+    <div class="section-container fade-in-once opacity-0 translate-y-10 transition-all duration-700">
+        <h2 class="section-title">أرقام تحكي قصتنا</h2>
+        <p class="section-description">
+            نفخر بما حققناه من إنجازات خلال رحلتنا في تطوير صناعة الترجمة وبناء مجتمع متكامل يجمع بين المترجمين والعملاء من مختلف أنحاء الشرق الأوسط
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+            <div class="counter-card text-center">
+                <div class="text-5xl font-bold text-tarjim-green counter" data-target="12" data-suffix="K">0</div>
+                <div class="mt-2 text-gray-600 text-lg font-medium">عدد العملاء</div>
+            </div>
+            <div class="counter-card text-center">
+                <div class="text-5xl font-bold text-tarjim-green counter" data-target="55" data-suffix="%">0</div>
+                <div class="mt-2 text-gray-600 text-lg font-medium">نسبة المترجمين النشطين</div>
+            </div>
+            <div class="counter-card text-center">
+                <div class="text-5xl font-bold text-tarjim-green counter" data-target="5" data-suffix="K">0</div>
+                <div class="mt-2 text-gray-600 text-lg font-medium">عدد الوثائق المترجمة</div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="timeline-section py-20 mb-24 relative" dir="rtl" lang="ar">
+    <!-- تعتيم الخلفية -->
+    <div class="absolute inset-0 bg-black/60 z-0"></div>
+
+    <!-- المحتوى فوق التعتيم -->
+    <div class="container relative z-10">
+        <div class="text-center mb-12">
+            <h2 class="timeline-content text-white text-center text-3xl font-bold">آلية عمل ترجم</h2>
+        </div>
+
+        <div class="timeline-container position-relative">
+            <ul class="space-y-16 max-w-5xl mx-auto px-4 md:px-0">
+                <!-- الخطوة 1 -->
+                <li class="flex flex-col md:flex-row-reverse items-start md:items-center gap-6">
+                    <div class="flex-shrink-0 relative">
+                        <div class="w-20 h-20 bg-tarjim-green rounded-full flex items-center justify-center border-4 border-white shadow-lg">
+                            <i class="bi bi-upload text-white text-2xl"></i>
+                        </div>
+                        @* <div class="hidden md:block absolute top-full right-1/2 translate-x-1/2 h-16 w-1 bg-tarjim-green mt-1"></div> *@
+                    </div>
+                    <div class="timeline-content text-white text-right">
+                        <h4 class="text-xl font-bold mb-2">ارفع ملفك بكل سهولة</h4>
+                        <p class="leading-8">
+                            ابدأ برفع الملف الذي تريد ترجمته عبر منصتنا بكل أمان وسهولة، مع إمكانية اختيار اللغة المطلوبة.
+                        </p>
+                    </div>
+                </li>
+
+                <!-- الخطوة 2 -->
+                <li class="flex flex-col md:flex-row-reverse items-start md:items-center gap-6">
+                    <div class="flex-shrink-0 relative">
+                        <div class="w-20 h-20 bg-tarjim-green rounded-full flex items-center justify-center border-4 border-white shadow-lg">
+                            <i class="bi bi-person-check text-white text-2xl"></i>
+                        </div>
+                        @* <div class="hidden md:block absolute top-full right-1/2 translate-x-1/2 h-16 w-1 bg-tarjim-green mt-1"></div> *@
+                    </div>
+                    <div class="timeline-content text-white text-right">
+                        <h4 class="text-xl font-bold mb-2">تسليم الملف إلى مترجم محترف</h4>
+                        <p class="leading-8">
+                            بعد رفع الملف، يتم تحويله إلى أحد مترجمينا المحترفين، مما يضمن لك جودة ترجمة عالية مع الحفاظ على سرية المستندات.
+                        </p>
+                    </div>
+                </li>
+
+                <!-- الخطوة 3 -->
+                <li class="flex flex-col md:flex-row-reverse items-start md:items-center gap-6">
+                    <div class="flex-shrink-0">
+                        <div class="w-20 h-20 bg-tarjim-green rounded-full flex items-center justify-center border-4 border-white shadow-lg">
+                            <i class="bi bi-file-earmark-check text-white text-2xl"></i>
+                        </div>
+                    </div>
+                    <div class="timeline-content text-white text-right">
+                        <h4 class="text-xl font-bold mb-2">استلم الترجمة بسرعة وكفاءة</h4>
+                        <p class="leading-8">
+                            عند الانتهاء، سيتم تسليم الملف المترجم إليك بجودة مضمونة وفي الوقت المحدد، مما يتيح لك استخدامه فورًا دون تأخير.
+                        </p>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+
+        <div class="text-center mt-16">
+            <p class="text-white text-lg">
+                هل لديك استفسار؟ نحن هنا لمساعدتك!
+                <a href="#"
+                   class="inline-block mt-4 md:mt-0 md:ms-3 bg-tarjim-green text-white px-6 py-2 rounded-full
+          hover:bg-white hover:text-tarjim-green hover:shadow-lg hover:scale-105
+          transition-all duration-300 ease-in-out border border-transparent">
+                   اطلب عرض توضيحي 
+                </a>
+
+            </p>
+        </div>
+    </div>
+</section>
+<section class="pt-0 md:pt-0 pb-4 md:pb-6" dir="rtl">
+    <div class="section-container text-center">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-tarjim-green mb-0">
+            شركاؤنا
+        </h2>
+        <p class="text-gray-700 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
+            نتعاون مع مجموعة من الشركات والمؤسسات الرائدة في المنطقة لتقديم أفضل الخدمات وتوفير فرص عمل متنوعة للمترجمين
+        </p>
+    </div>
+    <div class="mt-6 w-full transition-opacity duration-700 fade-in-once">
+        <div class="relative w-full overflow-hidden">
+            <div class="absolute left-0 top-0 z-10 h-full w-16 bg-gradient-to-r from-white to-transparent"></div>
+            <div class="absolute right-0 top-0 z-10 h-full w-16 bg-gradient-to-l from-white to-transparent"></div>
+
+            <div class="flex animate-slide-rtl whitespace-nowrap">
+                @for (int i = 1; i <= 8; i++)
+                {
+                    <div class="flex items-center justify-center mx-4">
+                        <div class="bg-gray-200 h-14 w-32 rounded flex items-center justify-center">
+                            <span class="text-gray-400 text-sm">Logo @i</span>
+                        </div>
+                    </div>
+                }
+                @for (int i = 1; i <= 8; i++)
+                {
+                    <div class="flex items-center justify-center mx-4">
+                        <div class="bg-gray-200 h-14 w-32 rounded flex items-center justify-center">
+                            <span class="text-gray-400 text-sm">Logo @i</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section id="about" class="py-20 bg-tarjim-light-green" dir="rtl">
+    <div class="section-container">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900">عن ترجم</h2>
+
+        <div class="grid md:grid-cols-2 items-center gap-16">
+            <!-- النصوص -->
+            <div class="space-y-6 text-gray-700 leading-relaxed text-right max-w-xl mx-auto md:mx-0">
+                <p>
+                    منصة ترجم هي منصة متخصصة في مجال الترجمة تهدف إلى إيجاد حلول مبتكرة للتحديات التي يواجهها قطاع الترجمة في الشرق الأوسط.
+                </p>
+                <p>
+                    تأسست المنصة بهدف توفير بيئة تفاعلية تجمع بين المترجمين المحترفين وأصحاب الأعمال والمؤسسات، مما يسهم في تعزيز التواصل وتبادل الخبرات وتنفيذ المشاريع بكفاءة عالية.
+                </p>
+                <p>
+                    نؤمن في ترجم بأهمية توظيف التكنولوجيا لتطوير صناعة الترجمة وتمكين المترجمين من تقديم خدمات عالية الجودة تلبي احتياجات السوق المتنامية في المنطقة.
+                </p>
+                <p>
+                    رؤيتنا هي أن نصبح المنصة الرائدة في مجال الترجمة في الشرق الأوسط، من خلال بناء مجتمع متكامل يضم نخبة من المترجمين المحترفين وتوفير حلول مبتكرة تسهم في الارتقاء بمستوى الخدمات المقدمة في هذا القطاع.
+                </p>
+            </div>
+            <div class="flex justify-center md:justify-end items-center relative w-full">
+                <div class="relative w-[300px] h-[300px]">
+                    
+                    <img src="/images/Tarjim_Logo_Arabic_Standard.png" alt="Tarjim Logo"
+                         class="w-full h-full object-contain relative z-20" />
+
+                  
+                    @* <div class="absolute inset-0 bg-tarjim-green/10 rounded-full border-4 border-tarjim-green/20 z-10"></div> *@
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+@* <section id="testimonials" class="py-20 bg-white" dir="rtl">
+    <div class="section-container text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">ماذا يقول عملاؤنا؟</h2>
+        <p class="text-gray-600 mb-12">
+            نعتز بثقة شركائنا والعملاء الذين شاركونا تجاربهم المميزة في استخدام منصة ترجم
+        </p>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Testimonial 1 -->
+            <div class="bg-gray-50 p-6 rounded-lg shadow hover:shadow-md transition-all duration-300">
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    "تجربتي مع ترجم كانت سلسة وسريعة! حصلت على ترجمة احترافية في وقت قياسي، مع تواصل ممتاز من الفريق."
+                </p>
+                <div class="flex flex-col items-center">
+                    <img src="/images/avatar1.png" alt="Client 1" class="w-12 h-12 rounded-full mb-2" />
+                    <h4 class="font-bold text-tarjim-green">محمد السعدي</h4>
+                    <span class="text-sm text-gray-500">مدير مشاريع - شركة النور</span>
+                </div>
+            </div>
+
+            <!-- Testimonial 2 -->
+            <div class="bg-gray-50 p-6 rounded-lg shadow hover:shadow-md transition-all duration-300">
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    "منصة ترجم غيرت طريقة عملي كمترجم مستقل. سهولة الوصول للعملاء وتنظيم العمل ساعدني على تحسين دخلي."
+                </p>
+                <div class="flex flex-col items-center">
+                    <img src="/images/avatar2.png" alt="Client 2" class="w-12 h-12 rounded-full mb-2" />
+                    <h4 class="font-bold text-tarjim-green">سارة عبد الله</h4>
+                    <span class="text-sm text-gray-500">مترجمة محترفة</span>
+                </div>
+            </div>
+
+            <!-- Testimonial 3 -->
+            <div class="bg-gray-50 p-6 rounded-lg shadow hover:shadow-md transition-all duration-300">
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    "خدمة العملاء رائعة، والنتائج دائمًا تفوق التوقعات. أنصح بها كل من يبحث عن ترجمة دقيقة وسريعة."
+                </p>
+                <div class="flex flex-col items-center">
+                    <img src="/images/avatar3.png" alt="Client 3" class="w-12 h-12 rounded-full mb-2" />
+                    <h4 class="font-bold text-tarjim-green">أحمد العلي</h4>
+                    <span class="text-sm text-gray-500">صاحب شركة ناشئة</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> *@
+@* <section id="testimonials" class="py-20 bg-white" dir="rtl"> *@
+@*     <div class="section-container text-center"> *@
+@*         <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">ماذا يقول عملاؤنا؟</h2> *@
+@*         <p class="text-gray-600 mb-12"> *@
+@*             نعتز بثقة شركائنا والعملاء الذين شاركونا تجاربهم مع منصة ترجم *@
+@*         </p> *@
+
+@*         <!-- Swiper --> *@
+@*         <div class="swiper testimonials-swiper max-w-4xl mx-auto" data-aos="fade-up"> *@
+@*             <div class="swiper-wrapper"> *@
+@*                 <!-- Slide 1 --> *@
+@*                 <div class="swiper-slide bg-gray-50 p-6 rounded-lg shadow text-right"> *@
+@*                     <p class="text-gray-700 mb-4 leading-relaxed"> *@
+@*                         "تجربتي مع ترجم كانت احترافية من البداية للنهاية. جودة وسرعة والتزام بالمواعيد!" *@
+@*                     </p> *@
+@*                     <div class="flex items-center gap-3 mt-4"> *@
+@*                         <img src="/images/avatar1.png" class="w-12 h-12 rounded-full" alt="testimonial user" /> *@
+@*                         <div> *@
+@*                             <h4 class="font-bold text-tarjim-green">ليلى إبراهيم</h4> *@
+@*                             <p class="text-sm text-gray-500">مديرة محتوى</p> *@
+@*                         </div> *@
+@*                     </div> *@
+@*                 </div> *@
+
+@*                 <!-- Slide 2 --> *@
+@*                 <div class="swiper-slide bg-gray-50 p-6 rounded-lg shadow text-right"> *@
+@*                     <p class="text-gray-700 mb-4 leading-relaxed"> *@
+@*                         "منصة ترجم سهلت علينا إدارة المشاريع مع مترجمين محترفين بثقة عالية وسرعة استجابة ممتازة." *@
+@*                     </p> *@
+@*                     <div class="flex items-center gap-3 mt-4"> *@
+@*                         <img src="/images/avatar2.png" class="w-12 h-12 rounded-full" alt="testimonial user" /> *@
+@*                         <div> *@
+@*                             <h4 class="font-bold text-tarjim-green">فهد العنزي</h4> *@
+@*                             <p class="text-sm text-gray-500">رائد أعمال</p> *@
+@*                         </div> *@
+@*                     </div> *@
+@*                 </div> *@
+
+@*                 <!-- Slide 3 --> *@
+@*                 <div class="swiper-slide bg-gray-50 p-6 rounded-lg shadow text-right"> *@
+@*                     <p class="text-gray-700 mb-4 leading-relaxed"> *@
+@*                         "سهولة الاستخدام ودعم فني سريع. فعليًا أفضل تجربة ترجمة مرّيت فيها!" *@
+@*                     </p> *@
+@*                     <div class="flex items-center gap-3 mt-4"> *@
+@*                         <img src="/images/avatar3.png" class="w-12 h-12 rounded-full" alt="testimonial user" /> *@
+@*                         <div> *@
+@*                             <h4 class="font-bold text-tarjim-green">مها الخطيب</h4> *@
+@*                             <p class="text-sm text-gray-500">مترجمة مستقلة</p> *@
+@*                         </div> *@
+@*                     </div> *@
+@*                 </div> *@
+@*             </div> *@
+
+@*             <!-- Navigation --> *@
+@*             <div class="flex justify-center gap-4 mt-8"> *@
+@*                 <div class="swiper-button-prev !text-tarjim-green"></div> *@
+@*                 <div class="swiper-button-next !text-tarjim-green"></div> *@
+@*             </div> *@
+@*         </div> *@
+@*     </div> *@
+@* </section> *@
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+
+<section id="testimonials" class="py-20 bg-white" dir="rtl">
+    <div class="section-container text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">آراء عملائنا</h2>
+        <p class="text-gray-600 mb-12">
+            استمع إلى تجارب عملائنا وآرائهم حول الخدمات التي نقدمها وكيف ساعدتهم منصة ترجم في تحقيق أهدافهم
+        </p>
+
+        <!-- Swiper -->
+        <div class="swiper testimonials-swiper max-w-4xl mx-auto" data-aos="fade-up">
+            <div class="swiper-wrapper">
+                <!-- Testimonial 1 -->
+                <div class="swiper-slide p-6 bg-white rounded-xl shadow glass-card transition-all duration-500 text-right">
+                    <!-- فيديو أو زر تشغيل -->
+                    <div class="mb-6">
+                        <div class="aspect-video rounded-lg bg-gray-200 flex items-center justify-center overflow-hidden">
+                            <button class="w-16 h-16 bg-tarjim-green text-white rounded-full flex items-center justify-center transition-transform hover:scale-110">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 -mr-[2px]" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M8 5v14l11-7z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <p class="text-gray-700 leading-relaxed mb-4">
+                        "ساعدتني منصة ترجم على التواصل مع العديد من العملاء المهمين وتطوير مسيرتي المهنية."
+                    </p>
+
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 rounded-full bg-gray-300 ml-4"></div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900">أحمد محمد</h4>
+                            <p class="text-sm text-gray-600">مترجم محترف</p>
+                        </div>
+                    </div>
+             </div>
+       </div>
+
+                <!-- Testimonial 2 -->
+                <div class="swiper-slide p-6 bg-white rounded-xl shadow glass-card transition-all duration-500 text-right">
+                    <div class="mb-6">
+                        <div class="aspect-video rounded-lg bg-gray-200 flex items-center justify-center overflow-hidden">
+                            <button class="w-16 h-16 bg-tarjim-green text-white rounded-full flex items-center justify-center transition-transform hover:scale-110">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 -mr-[2px]" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M8 5v14l11-7z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <p class="text-gray-700 leading-relaxed mb-4">
+                        "وجدنا في منصة ترجم الحل الأمثل لاحتياجاتنا من الترجمة. المترجمون المحترفون والجودة العالية للخدمات المقدمة جعلتنا نتعامل معهم بشكل مستمر."
+                    </p>
+
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 rounded-full bg-gray-300 ml-4"></div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900">سارة أحمد</h4>
+                            <p class="text-sm text-gray-600">مديرة شركة</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- أزرار التنقل -->
+            <div class="flex justify-center gap-4 mt-10">
+                <!-- Prev -->
+                <button class="swiper-button-prev-custom w-10 h-10 rounded-full border border-tarjim-green text-tarjim-green hover:bg-tarjim-green hover:text-white transition flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+
+                <!-- Next -->
+                <button class="swiper-button-next-custom w-10 h-10 rounded-full border border-tarjim-green text-tarjim-green hover:bg-tarjim-green hover:text-white transition flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+
+</section>
+<section id="faq" class="py-20 bg-gray-50" dir="rtl">
+    <div class="section-container max-w-4xl">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-6">الأسئلة الأكثر شيوعًا</h2>
+        <p class="text-center text-gray-600 mb-12">
+            نجيب على استفساراتكم الشائعة حول منصة ترجم وكيفية الاستفادة من خدماتنا
+        </p>
+
+        <!-- 🔍 شريط البحث -->
+        <div class="max-w-2xl mx-auto mb-10">
+            <input type="text"
+                   id="faqSearchInput"
+                   placeholder="ابحث في الأسئلة..."
+                   class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-tarjim-green" />
+        </div>
+
+        <!-- ✅ قائمة الأسئلة -->
+        <div id="faqList" class="space-y-4">
+            @{
+                var faqs = new List<(string Question, string Answer)> {
+            ("كيف يمكنني التسجيل في منصة ترجم؟", "يمكنك التسجيل في منصة ترجم بسهولة من خلال النقر على زر 'تسجيل' في الصفحة الرئيسية..."),
+            ("ما هي تكلفة استخدام منصة ترجم؟", "تقدم منصة ترجم خطط اشتراك متنوعة تناسب احتياجات مختلف المستخدمين. يمكنك الاطلاع على تفاصيل الباقات والأسعار من خلال صفحة 'الاشتراكات' على موقعنا."),
+            ("هل يمكنني التواصل مع المترجم؟", "يمكنك البحث عن مترجمين متخصصين في مجالات محددة من خلال استخدام أدوات البحث المتقدمة في المنصة، حيث يمكنك تصفية النتائج حسب اللغات والتخصصات والتقييمات وغيرها من المعايير."),
+            ("كم من الوقت تستغرق الترجمة؟", "حسب حجم النص والمجال، لكن نلتزم بالوقت."),
+            ("هل تدعمون عدة لغات؟", "نعم، أكثر من 20 لغة مدعومة حالياً."),
+            };
+            }
+
+            @for (int i = 0; i < faqs.Count; i++)
+            {
+                <div class="border border-gray-200 rounded-lg overflow-hidden transition-all duration-300">
+                    <button type="button" class="w-full px-6 py-4 flex justify-between items-center bg-white text-right text-gray-900 font-medium text-lg faq-toggle" data-index="@i">
+                        <span>@faqs[i].Question</span>
+                        <svg class="w-5 h-5 text-tarjim-green transition-transform duration-300 rotate-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div class="faq-content transition-all duration-300 overflow-hidden max-h-0 opacity-0">
+                        <div class="px-6 py-4 bg-gray-50 text-gray-700 leading-relaxed">
+                            @faqs[i].Answer
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+@* CTA Section – دعوة لاتخاذ إجراء *@
+<section id="cta" class="py-20 bg-gradient-to-tr from-tarjim-green to-tarjim-green/80 text-white" dir="rtl">
+    <div class="section-container">
+        <div class="text-center max-w-3xl mx-auto" data-aos="fade-up" data-aos-duration="1000">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6 leading-relaxed">
+                إنشاء حساب جديد – كن جزءًا من تطوير خدمات الترجمة واشترك الآن
+            </h2>
+
+            <a href="/Register"
+               class="inline-block bg-white hover:bg-gray-50 text-tarjim-green font-bold py-4 px-8 rounded-lg mt-8 shadow-lg hover:shadow-xl transition-all">
+                سجل معنا
+            </a>
+
+            <!-- Social icons -->
+            <div class="mt-12 flex justify-center gap-6 text-lg">
+                <a href="#" class="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition" title="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="#" class="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition" title="WhatsApp">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <a href="#" class="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition" title="Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition" title="Twitter">
+                    <i class="fab fa-twitter"></i>
+                </a>
+            </div>
+            <!-- Logo -->
+            <div class="mt-12 flex justify-center  h-14 md:h-20 w-auto">
+                <img src="/images/Tarjim_Logo_Arabic_Green_CTA.png" alt="Tarjim logo" class="h-20 w-auto" />
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+    AOS.init({
+      once: true,
+      duration: 800
+    });
+</script>
+<script>
+  AOS.init({ once: true });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const faqButtons = document.querySelectorAll('.faq-toggle');
+        const allContents = document.querySelectorAll('.faq-content');
+        const allIcons = document.querySelectorAll('.rotate-icon');
+
+        faqButtons.forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                const content = btn.nextElementSibling;
+                const icon = btn.querySelector('.rotate-icon');
+
+                allContents.forEach((el, i) => {
+                    if (el !== content) {
+                        el.classList.remove('max-h-96', 'opacity-100');
+                        el.classList.add('max-h-0', 'opacity-0');
+                        allIcons[i].classList.remove('rotate-180');
+                    }
+                });
+
+                const isOpen = content.classList.contains('opacity-100');
+                content.classList.toggle('max-h-96', !isOpen);
+                content.classList.toggle('opacity-100', !isOpen);
+                content.classList.toggle('max-h-0', isOpen);
+                content.classList.toggle('opacity-0', isOpen);
+                icon.classList.toggle('rotate-180', !isOpen);
+            });
+        });
+
+        // ✅ Search functionality
+        const input = document.getElementById('faqSearchInput');
+        const items = document.querySelectorAll('#faqList > div');
+
+        input.addEventListener('input', function () {
+            const search = this.value.toLowerCase();
+            items.forEach(item => {
+                const question = item.querySelector('button span').textContent.toLowerCase();
+                const match = question.includes(search);
+                item.style.display = match ? 'block' : 'none';
+            });
+        });
+    });
+</script>
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        new Swiper(".testimonials-swiper", {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            rtl: true,
+            autoplay: {
+                delay: 6000,
+                disableOnInteraction: false,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next-custom", // ← الأسهم المخصصة
+                prevEl: ".swiper-button-prev-custom",
+            },
+        });
+
+        AOS.init({
+            once: true,
+            duration: 800,
+        });
+    });
+</script>
+
+
+
+@* <!-- Scripts --> *@
+@* <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script> *@
+@* <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script> *@
+
+@* <script> *@
+@*     document.addEventListener("DOMContentLoaded", function () { *@
+@*         new Swiper(".testimonials-swiper", { *@
+@*             slidesPerView: 1, *@
+@*             spaceBetween: 30, *@
+@*             loop: true, *@
+@*             rtl: true, *@
+@*             autoplay: { *@
+@*                 delay: 5000, *@
+@*                 disableOnInteraction: false, *@
+@*             }, *@
+@*             navigation: { *@
+@*                 nextEl: ".swiper-button-next", *@
+@*                 prevEl: ".swiper-button-prev", *@
+@*             }, *@
+@*         }); *@
+
+@*         AOS.init({ *@
+@*             once: true, *@
+@*             duration: 800, *@
+@*         }); *@
+@*     }); *@
+@* </script> *@
+
+
+<!-- سكربت تشغيل التايملاين -->
+<script>
+    window.addEventListener("load", function () {
+        const items = document.querySelectorAll("#vertical-scrollable-timeline li");
+        const progress = document.querySelector(".list-progress .inner");
+
+        if (!items.length || !progress) {
+            console.warn("❗ عناصر التايملاين مش لاقيها.");
+            return;
+        }
+
+        function updateTimeline() {
+            let scrollTop = window.scrollY + window.innerHeight / 2;
+
+            items.forEach((item, index) => {
+                if (item.offsetTop < scrollTop) {
+                    item.classList.add("active");
+                    progress.style.height = `${index * 170 + 170}px`;
+                }
+            });
+        }
+
+        window.addEventListener("scroll", updateTimeline);
+        updateTimeline();
+    });
+</script>
+
+
+
+
+
+
+

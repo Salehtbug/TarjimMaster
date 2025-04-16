@@ -1,0 +1,139 @@
+﻿/* Exact Filter Styles to Match Image */
+
+/* Main Container */
+.filters-sidebar {
+    width: 250px;
+    background-color: white;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.filter-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* All Filter */
+.filter-button[data-status="الكل"] {
+    background-color: #DCFCE7;
+    color: #22C55E;
+    padding: 12px 16px;
+    border-radius: 9999px;
+    border: none;
+    text-align: center;
+    width: 100%;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* Standard Filter Item */
+.filter-item {
+    width: 100%;
+}
+
+.filter-button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    background: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* Text & Icon Placement */
+.filter-text {
+    margin-right: auto;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.filter-icon {
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 0.75rem;
+}
+
+/* In Progress */
+.filter-button[data-status="قيد التنفيذ"] {
+    color: #F59E0B;
+}
+
+    .filter-button[data-status="قيد التنفيذ"] .filter-icon {
+        background-color: #FEF3C7;
+        color: #F59E0B;
+    }
+
+/* Completed */
+.filter-button[data-status="مكتمل"] {
+    color: #22C55E;
+}
+
+    .filter-button[data-status="مكتمل"] .filter-icon {
+        background-color: #DCFCE7;
+        color: #22C55E;
+    }
+
+/* Not Accepted */
+.filter-button[data-status="لم يقبل بعد"] {
+    color: #EF4444;
+}
+
+    .filter-button[data-status="لم يقبل بعد"] .filter-icon {
+        background-color: #FEE2E2;
+        color: #EF4444;
+    }
+
+/* Messages */
+.filter-button[data-action="messages"] {
+    color: #374151;
+}
+
+    .filter-button[data-action="messages"] .filter-icon {
+        background: none;
+        color: #374151;
+    }
+
+/* Settings */
+.filter-button[data-action="settings"] {
+    color: #374151;
+}
+
+    .filter-button[data-action="settings"] .filter-icon {
+        background: none;
+        color: #374151;
+    }
+
+/* Logout */
+.filter-button[data-action="logout"] {
+    color: #EF4444;
+}
+
+    .filter-button[data-action="logout"] .filter-icon {
+        background: none;
+        color: #EF4444;
+    }
+
+/* Create New Job Button */
+.create-job-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background-color: #00C98D;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    cursor: pointer;
+}

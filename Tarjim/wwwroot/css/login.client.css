@@ -1,0 +1,7 @@
+﻿body[dir="rtl"] {
+    font-family: 'Cairo', sans-serif;
+}
+
+.login-container {
+    background-color: #ecf4f3;
+}

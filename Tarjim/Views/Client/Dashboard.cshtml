@@ -1,0 +1,234 @@
+﻿@model List<Tarjim.ViewModels.ProjectCardViewModel>
+
+@{
+    ViewData["Title"] = "لوحة التحكم - العميل";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+<div class="dashboard-container">
+    <aside class="filters-sidebar">
+        <div class="filter-list">
+            <div class="filter-item">
+                <button class="filter-button" data-status="الكل">
+                    الكل
+                </button>
+            </div>
+
+            <div class="filter-item">
+                <button class="filter-button" data-status="قيد التنفيذ">
+                    <div class="filter-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <span class="filter-text">قيد التنفيذ</span>
+                </button>
+            </div>
+
+            <div class="filter-item">
+                <button class="filter-button" data-status="مكتمل">
+                    <div class="filter-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <span class="filter-text">مكتمل</span>
+                </button>
+            </div>
+
+            <div class="filter-item">
+                <button class="filter-button" data-status="لم يقبل بعد">
+                    <div class="filter-icon">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <span class="filter-text">لم يقبل بعد</span>
+                </button>
+            </div>
+
+            <div class="filter-item">
+                <button class="filter-button" data-action="messages">
+                    <div class="filter-icon">
+                        <i class="far fa-comment-alt"></i>
+                    </div>
+                    <span class="filter-text">الرسائل</span>
+                </button>
+            </div>
+
+            <div class="filter-item">
+                <button class="filter-button" data-action="settings">
+                    <div class="filter-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <span class="filter-text">الإعدادات</span>
+                </button>
+            </div>
+
+            <div class="filter-item">
+                <button class="filter-button" data-action="logout" id="logoutBtn">
+                    <div class="filter-icon">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </div>
+                    <span class="filter-text">تسجيل الخروج</span>
+                </button>
+            </div>
+        </div>
+
+        <button class="create-job-btn">
+            نشر وظيفة جديدة
+        </button>
+    </aside>
+
+    <main class="main-content">
+        <h1 class="dashboard-title">
+            راقب تقدمك، أنجز مهامك، وتابع كل جديد بسهولة<br>
+            مرحباً عميلنا العزيز
+        </h1>
+
+
+        <div class="jobs-container" id="jobCardsContainer">
+            @await Html.PartialAsync("_DashboardJobsPartial", Model)
+        </div>
+    </main>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Set first filter as active initially
+            $(".filter-button[data-status='الكل']").addClass("active");
+
+            // Filter jobs by status
+            $(".filter-button[data-status]").click(function () {
+                var status = $(this).data("status");
+
+                // Update active button
+                $(".filter-button").removeClass("active");
+                $(this).addClass("active");
+
+                // Fetch filtered jobs via AJAX
+                $.ajax({
+                    url: '@Url.Action("GetJobsPartial", "Client")',
+                    type: 'GET',
+                    data: { status: status },
+                    beforeSend: function() {
+                        // Show loading indicator
+                               $("#jobCardsContainer").html(`
+            <div class="flex justify-center items-center h-64">
+                <div class="text-center">
+                    <i class="fas fa-spinner fa-spin fa-3x mb-4" style="color: var(--primary);"></i>
+                    <p class="text-gray-600">جاري تحميل المشاريع...</p>
+                </div>
+            </div>
+        `);
+
+                    },
+                    success: function (html) {
+                        $("#jobCardsContainer").html(html);
+                    },
+                    error: function () {
+                        // Show error message with SweetAlert2
+                        Swal.fire({
+                            title: 'خطأ',
+                            text: 'حدث خطأ أثناء تحميل البيانات، يرجى المحاولة مرة أخرى',
+                            icon: 'error',
+                            confirmButtonText: 'حسنًا'
+                        });
+                    }
+                });
+            });
+
+            // Search functionality
+            let searchTimeout;
+            $("#searchInput").on("input", function() {
+                clearTimeout(searchTimeout);
+
+                const query = $(this).val();
+
+                searchTimeout = setTimeout(function() {
+                    // Get current active filter
+                    const activeStatus = $(".filter-button.active").data("status") || "الكل";
+
+                    $.ajax({
+                        url: '@Url.Action("GetJobsPartial", "Client")',
+                        type: 'GET',
+                        data: {
+                            status: activeStatus,
+                            searchQuery: query
+                        },
+                        success: function (html) {
+                            $("#jobCardsContainer").html(html);
+                        }
+                    });
+                }, 500);
+            });
+
+            // Setup delete button confirmation with SweetAlert2
+            $(document).on('click', '.delete-btn', function(e) {
+                e.preventDefault();
+                const projectId = $(this).data('id');
+
+                Swal.fire({
+                    title: 'هل أنت متأكد؟',
+                    text: 'هل تريد حذف هذا المشروع؟ لا يمكن التراجع عن هذا الإجراء',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'نعم، حذف',
+                    cancelButtonText: 'إلغاء',
+                    reverseButtons: true,
+                    background: '#fff',
+                    customClass: {
+                        confirmButton: 'swal-confirm-btn',
+                        cancelButton: 'swal-cancel-btn'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Send delete request
+                        $.ajax({
+                            url: '@Url.Action("DeleteProject", "Client")',
+                            type: 'POST',
+                            data: { projectId: projectId },
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire(
+                                        'تم الحذف!',
+                                        'تم حذف المشروع بنجاح',
+                                        'success'
+                                    );
+
+                                    // Refresh the current view
+                                    $(".filter-button.active").click();
+                                } else {
+                                    Swal.fire(
+                                        'خطأ!',
+                                        response.message || 'حدث خطأ أثناء حذف المشروع',
+                                        'error'
+                                    );
+                                }
+                            },
+                            error: function() {
+                                Swal.fire(
+                                    'خطأ!',
+                                    'حدث خطأ في الاتصال بالخادم',
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Logout button
+            $("#logoutBtn").click(function() {
+                Swal.fire({
+                    title: 'تسجيل الخروج',
+                    text: 'هل أنت متأكد من رغبتك في تسجيل الخروج؟',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'نعم',
+                    cancelButtonText: 'لا',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '@Url.Action("Logout", "Account")';
+                    }
+                });
+            });
+        });
+    </script>
+}
