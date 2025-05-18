@@ -1,0 +1,166 @@
+﻿@model List<Tarjim.Models.Skill>
+@{
+    ViewData["Title"] = "إدارة المهارات";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">إدارة المهارات</h5>
+        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addSkillModal">
+            <i class="fas fa-plus me-1"></i> إضافة مهارة جديدة
+        </button>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 70px;">الرقم</th>
+                        <th>اسم المهارة</th>
+                        <th>عدد المترجمين</th>
+                        <th style="width: 150px;">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var skill in Model)
+                        {
+                            <tr>
+                                <td>@skill.SkillId</td>
+                                <td>@skill.SkillName</td>
+                                <td>@skill.Translators.Count</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <button type="button" class="btn btn-light"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#editSkillModal"
+                                                data-id="@skill.SkillId"
+                                                data-name="@skill.SkillName">
+                                            <i class="fas fa-edit text-primary"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-light"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteSkillModal"
+                                                data-id="@skill.SkillId"
+                                                data-name="@skill.SkillName"
+                                        @(skill.Translators.Count > 0 ? "disabled" : "")
+                                                title="@(skill.Translators.Count > 0 ? "لا يمكن حذف المهارة لأنها مستخدمة من قبل المترجمين" : "حذف")">
+                                            <i class="fas fa-trash text-danger"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center py-4">لا توجد مهارات متوفرة</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal إضافة مهارة -->
+<div class="modal fade" id="addSkillModal" tabindex="-1" aria-labelledby="addSkillModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="Admin" asp-action="AddSkill" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addSkillModalLabel">إضافة مهارة جديدة</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="skillName" class="form-label">اسم المهارة</label>
+                        <input type="text" class="form-control" id="skillName" name="skillName" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">إضافة</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal تعديل مهارة -->
+<div class="modal fade" id="editSkillModal" tabindex="-1" aria-labelledby="editSkillModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="Admin" asp-action="EditSkill" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editSkillModalLabel">تعديل المهارة</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editSkillId" name="skillId">
+                    <div class="mb-3">
+                        <label for="editSkillName" class="form-label">اسم المهارة</label>
+                        <input type="text" class="form-control" id="editSkillName" name="skillName" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal حذف مهارة -->
+<div class="modal fade" id="deleteSkillModal" tabindex="-1" aria-labelledby="deleteSkillModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="Admin" asp-action="DeleteSkill" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteSkillModalLabel">تأكيد الحذف</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="deleteSkillId" name="skillId">
+                    <p>هل أنت متأكد من رغبتك في حذف المهارة: <strong id="deleteSkillName"></strong>؟</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-danger">تأكيد الحذف</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // تحديث بيانات modal التعديل
+            $('#editSkillModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                var name = button.data('name');
+
+                var modal = $(this);
+                modal.find('#editSkillId').val(id);
+                modal.find('#editSkillName').val(name);
+            });
+
+            // تحديث بيانات modal الحذف
+            $('#deleteSkillModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                var name = button.data('name');
+
+                var modal = $(this);
+                modal.find('#deleteSkillId').val(id);
+                modal.find('#deleteSkillName').text(name);
+            });
+        });
+    </script>
+}

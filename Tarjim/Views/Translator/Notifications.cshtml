@@ -1,0 +1,221 @@
+﻿@model List<Tarjim.Models.Notification>
+
+@{
+    ViewData["Title"] = "الإشعارات - المترجم";
+    Layout = "~/Views/Shared/_TranslatorLayout.cshtml";
+}
+
+<div class="dashboard-container">
+    <aside class="filters-sidebar">
+        <div class="filter-list">
+            <a href="@Url.Action("Index", "Translator")" class="filter-button" data-section="all">
+                <span class="filter-text">الرئيسية</span>
+                <div class="filter-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("Notifications", "Translator")" class="filter-button active" data-section="notifications">
+                <span class="filter-text">الإشعارات</span>
+                <div class="filter-icon">
+                    <i class="far fa-bell"></i>
+                </div>
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">الإشعارات</h1>
+            <button id="markAllAsReadBtn" class="btn btn-secondary btn-sm">
+                <i class="fas fa-check-double"></i> تعليم الكل كمقروء
+            </button>
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="notifications-list">
+                @foreach (var notification in Model)
+                {
+                    <div class="notification-item @(notification.IsRead == false ? "unread" : "")">
+                        <div class="notification-icon">
+                            @{
+                                string iconClass = "fas fa-info-circle";
+
+                                if (notification.Type == "new_project")
+                                {
+                                    iconClass = "fas fa-file-alt";
+                                }
+                                else if (notification.Type == "offer_accepted")
+                                {
+                                    iconClass = "fas fa-check-circle";
+                                }
+                                else if (notification.Type == "offer_rejected")
+                                {
+                                    iconClass = "fas fa-times-circle";
+                                }
+                                else if (notification.Type == "project_completed")
+                                {
+                                    iconClass = "fas fa-tasks";
+                                }
+                                else if (notification.Type == "review_received")
+                                {
+                                    iconClass = "fas fa-star";
+                                }
+                            }
+                            <i class="@iconClass"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-message">@notification.Message</div>
+                            <div class="notification-date">@notification.CreatedAt?.ToString("yyyy/MM/dd hh:mm tt")</div>
+                        </div>
+                        @if (!string.IsNullOrEmpty(notification.LinkUrl))
+                        {
+                            <a href="@notification.LinkUrl" class="notification-link">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        }
+                        else if (notification.RelatedId.HasValue && notification.RelatedType == "project")
+                        {
+                            <a href="@Url.Action("Details", "Project", new { id = notification.RelatedId })" class="notification-link">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        }
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="far fa-bell-slash"></i>
+                </div>
+                <h3 class="empty-title">لا توجد إشعارات</h3>
+                <p class="empty-message">
+                    ليس لديك أي إشعارات حالياً. ستظهر هنا الإشعارات المتعلقة بمشاريعك وعروضك.
+                </p>
+            </div>
+        }
+    </main>
+</div>
+
+@section Styles {
+    <style>
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .notifications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background-color: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            transition: all 0.2s ease;
+        }
+
+            .notification-item.unread {
+                background-color: var(--primary-light);
+                border-right: 4px solid var(--primary);
+            }
+
+        .notification-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-left: 1rem;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-message {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .notification-date {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+        }
+
+        .notification-link {
+            padding: 0.5rem;
+            color: var(--gray-600);
+            transition: all 0.2s ease;
+        }
+
+            .notification-link:hover {
+                color: var(--primary);
+            }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            background-color: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            color: var(--gray-400);
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 0.75rem;
+        }
+
+        .empty-message {
+            color: var(--gray-600);
+            max-width: 30rem;
+            margin: 0 auto;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $("#markAllAsReadBtn").click(function() {
+                $.ajax({
+                    url: '@Url.Action("MarkAllNotificationsAsRead", "Translator")',
+                    type: 'POST',
+                    success: function() {
+                        $(".notification-item.unread").removeClass("unread");
+                        $(".notification-badge").hide();
+                    }
+                });
+            });
+        });
+    </script>
+}

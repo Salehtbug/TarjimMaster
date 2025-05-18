@@ -1,0 +1,160 @@
+﻿@model Tarjim.ViewModels.TranslatorRegisterStep2ViewModel
+
+@{
+    ViewData["Title"] = "الموقع - مترجم";
+    ViewData["HideNavbar"] = true;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link href="~/css/translatorregister.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+}
+
+<section class="register-container" dir="rtl" lang="ar">
+    <div class="register-box">
+        <div class="register-side fade-in">
+            <img src="/images/Tarjim_Logo_Arabic_Standard.png" alt="شعار ترجم" class="register-logo" />
+            <p class="register-welcome">معلوماتك الشخصية ليتعرف عليك العملاء ✨</p>
+            <img src="/images/illustration_translator.png" class="illustration-image" alt="صورة توضيحية" />
+        </div>
+
+        <div class="register-card">
+            <div class="register-progress">
+                <ol class="progress-steps">
+                    <li class="step">
+                        <div class="circle">✓</div>
+                        <span class="label">المعلومات الشخصية</span>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="step active">
+                        <div class="circle">2</div>
+                        <span class="label">الموقع</span>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="step">
+                        <div class="circle">3</div>
+                        <span class="label">الوثائق والتعليم</span>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="step">
+                        <div class="circle">4</div>
+                        <span class="label">الشهادات</span>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="step">
+                        <div class="circle">5</div>
+                        <span class="label">المهارات</span>
+                    </li>
+                </ol>
+            </div>
+
+            <form asp-action="Step2" asp-controller="TranslatorRegistration" method="post" class="register-form">
+                <div asp-validation-summary="ModelOnly" class="register-error text-center mb-4"></div>
+
+                <h2 class="text-xl font-semibold mb-6 text-center">بلد الإقامة</h2>
+
+                <div class="form-group">
+                    <label asp-for="Country" class="register-label">بلد الإقامة</label>
+                    <select asp-for="Country" class="register-input" id="country">
+                        <option value="">إختر البلد المقيم فيها</option>
+                        <option value="Jordan">الأردن</option>
+                        <option value="Saudi Arabia">السعودية</option>
+                        <option value="UAE">الإمارات العربية المتحدة</option>
+                        <option value="Egypt">مصر</option>
+                        <option value="Kuwait">الكويت</option>
+                        <option value="Bahrain">البحرين</option>
+                        <option value="Qatar">قطر</option>
+                        <option value="Oman">عمان</option>
+                        <option value="Lebanon">لبنان</option>
+                        <option value="Palestine">فلسطين</option>
+                        <option value="Morocco">المغرب</option>
+                        <option value="Algeria">الجزائر</option>
+                        <option value="Tunisia">تونس</option>
+                        <option value="Libya">ليبيا</option>
+                        <option value="Iraq">العراق</option>
+                        <option value="Syria">سوريا</option>
+                    </select>
+                    <span asp-validation-for="Country" class="register-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="City" class="register-label">المحافظة</label>
+                    <select asp-for="City" class="register-input" id="city">
+                        <option value="">إختر المحافظة المقيم فيها</option>
+                    </select>
+                    <span asp-validation-for="City" class="register-error"></span>
+                </div>
+
+                <div class="form-group" style="display: flex; gap: 1rem;">
+                    <a asp-action="Step1" asp-controller="TranslatorRegistration" style="
+                        background-color: #f0f0f0;
+                        color: #555;
+                        padding: 0.75rem 1.5rem;
+                        font-weight: 600;
+                        font-size: 1rem;
+                        border-radius: 9999px;
+                        text-align: center;
+                        width: 25%;
+                        text-decoration: none;
+                    ">رجوع</a>
+                    <button type="submit" class="registert-button" style="width: 75%;">التالي</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- عناصر زخرفية للخلفية -->
+    <span class="register-decor decor-1">مترجم</span>
+    <span class="register-decor decor-2">ترجم</span>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // قائمة المدن حسب الدولة
+        const citiesByCountry = {
+            "Jordan": ["عمان", "إربد", "الزرقاء", "المفرق", "عجلون", "جرش", "مادبا", "البلقاء", "الكرك", "معان", "العقبة", "الطفيلة"],
+            "Saudi Arabia": ["الرياض", "جدة", "مكة المكرمة", "المدينة المنورة", "الدمام", "الخبر", "الطائف", "تبوك", "أبها", "حائل", "نجران"],
+            "UAE": ["دبي", "أبوظبي", "الشارقة", "عجمان", "أم القيوين", "رأس الخيمة", "الفجيرة"],
+            "Egypt": ["القاهرة", "الإسكندرية", "الجيزة", "الإسماعيلية", "بورسعيد", "السويس", "دمياط", "الفيوم", "المنيا", "أسيوط", "سوهاج", "المنصورة"],
+            "Kuwait": ["حولي", "الاحمدي", "الفروانية", "الجهراء", "مبارك الكبير", "العاصمة"],
+            "Bahrain": ["المنامة", "المحرق", "مدينة عيسى", "الرفاع", "جدحفص", "المحافظة الشمالية", "المحافظة الجنوبية"],
+            "Qatar": ["الدوحة", "الخور", "الوكرة", "أم صلال", "الريان", "مسيعيد", "الشمال"],
+            "Oman": ["مسقط", "صلالة", "السيب", "صحار", "صور", "نزوى", "البريمي", "عبري", "البطينة", "الداخلية"],
+            "Lebanon": ["بيروت", "طرابلس", "صيدا", "صور", "البقاع", "بعلبك", "الهرمل", "زحلة", "النبطية"],
+            "Palestine": ["القدس", "رام الله", "غزة", "نابلس", "الخليل", "بيت لحم", "جنين", "طولكرم", "قلقيلية", "أريحا", "رفح", "خان يونس"],
+            "Morocco": ["الرباط", "الدار البيضاء", "مراكش", "فاس", "أكادير", "طنجة", "وجدة", "الناظور", "تطوان", "مكناس"],
+            "Algeria": ["الجزائر", "وهران", "قسنطينة", "عنابة", "باتنة", "سطيف", "تلمسان", "بجاية", "البليدة", "بسكرة"],
+            "Tunisia": ["تونس", "صفاقس", "سوسة", "القيروان", "بنزرت", "قابس", "المنستير", "نابل", "قفصة", "المهدية"],
+            "Libya": ["طرابلس", "بنغازي", "مصراتة", "سبها", "البيضاء", "الزاوية", "زليتن", "درنة", "سرت", "غريان"],
+            "Iraq": ["بغداد", "الموصل", "البصرة", "أربيل", "السليمانية", "كركوك", "النجف", "كربلاء", "ديالى", "الديوانية"],
+            "Syria": ["دمشق", "حلب", "حمص", "اللاذقية", "حماة", "طرطوس", "دير الزور", "الرقة", "السويداء", "درعا"]
+        };
+
+        // تحديث المدن عند اختيار البلد
+        document.getElementById("country").addEventListener("change", function() {
+            const country = this.value;
+            const citySelect = document.getElementById("city");
+            citySelect.innerHTML = '<option value="">إختر المحافظة المقيم فيها</option>';
+
+            if (citiesByCountry[country]) {
+                citiesByCountry[country].forEach(city => {
+                    const option = document.createElement("option");
+                    option.value = city;
+                    option.text = city;
+                    citySelect.appendChild(option);
+                });
+            }
+        });
+
+        // استعادة المحافظات عند تحميل الصفحة إذا كان البلد محدداً مسبقاً
+        document.addEventListener("DOMContentLoaded", function() {
+            const country = document.getElementById("country").value;
+            if (country) {
+                document.getElementById("country").dispatchEvent(new Event('change'));
+            }
+        });
+    </script>
+}

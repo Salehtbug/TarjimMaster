@@ -1,0 +1,263 @@
+﻿@model List<Tarjim.Models.Project>
+
+@{
+    ViewData["Title"] = "نتائج البحث";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+<div class="dashboard-container">
+    <!-- السايدبار - نفس الكود الموجود في Index.cshtml -->
+    <aside class="filters-sidebar">
+        <div class="filter-list">
+            <a href="@Url.Action("Index", "Client")" class="filter-button @(ViewBag.ActiveSection == "all" ? "active" : "")" data-section="all">
+                <span class="filter-text">الكل</span>
+                <div class="filter-icon">
+                    <i class="fas fa-border-all"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("InProgress", "Client")" class="filter-button @(ViewBag.ActiveSection == "in-progress" ? "active" : "")" data-section="in-progress">
+                <span class="filter-text">قيد التنفيذ</span>
+                <div class="filter-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("Completed", "Client")" class="filter-button @(ViewBag.ActiveSection == "completed" ? "active" : "")" data-section="completed">
+                <span class="filter-text">مكتمل</span>
+                <div class="filter-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("NotAccepted", "Client")" class="filter-button @(ViewBag.ActiveSection == "not-accepted" ? "active" : "")" data-section="not-accepted">
+                <span class="filter-text">لم يقبل بعد</span>
+                <div class="filter-icon">
+                    <i class="fas fa-hourglass-start"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("Messages", "Client")" class="filter-button @(ViewBag.ActiveSection == "messages" ? "active" : "")" data-section="messages">
+                <span class="filter-text">الرسائل</span>
+                <div class="filter-icon">
+                    <i class="far fa-comment-alt"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("RequestTranslator", "Client")" class="filter-button @(ViewBag.ActiveSection == "request-translator" ? "active" : "")" data-section="request-translator">
+                <span class="filter-text">طلب مترجم فوري</span>
+                <div class="filter-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("Notifications", "Client")" class="filter-button @(ViewBag.ActiveSection == "notifications" ? "active" : "")" data-section="notifications">
+                <span class="filter-text">الإشعارات</span>
+                <div class="filter-icon">
+                    <i class="far fa-bell"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("Settings", "Client")" class="filter-button @(ViewBag.ActiveSection == "settings" ? "active" : "")" data-section="settings">
+                <span class="filter-text">الإعدادات</span>
+                <div class="filter-icon">
+                    <i class="fas fa-cog"></i>
+                </div>
+            </a>
+
+            <button class="filter-button" id="logoutBtn" data-section="logout">
+                <span class="filter-text">تسجيل الخروج</span>
+                <div class="filter-icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+            </button>
+        </div>
+
+        <a href="@Url.Action("Step1", "ProjectCreation")" class="btn btn-primary">
+            <i class="fas fa-plus"></i> نشر وظيفة جديدة
+        </a>
+    </aside>
+
+
+    <!-- المحتوى الرئيسي -->
+    <main class="main-content">
+        <h1 class="dashboard-title">نتائج البحث: "@ViewBag.Query"</h1>
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="search-results">
+                <p class="results-count">تم العثور على @Model.Count نتيجة</p>
+
+                <div class="jobs-container">
+                    @foreach (var project in Model)
+                    {
+                        <div class="job-card">
+                            <div class="status-bar @(
+                                project.Status == "Completed" ? "completed" :
+                                (project.Status == "Assigned" || project.Status == "In Progress") ? "in-progress" :
+                                "not-accepted"
+                            )"></div>
+                            <div class="job-content">
+                                <div class="job-header">
+                                    <h3 class="job-title">@project.Title</h3>
+                                    <p class="job-subtitle">
+                                        @(project.SourceLanguage?.LanguageName ?? "غير محدد") إلى @(project.TargetLanguage?.LanguageName ?? "غير محدد")
+                                        | @(project.Category?.CategoryName ?? "غير محدد")
+                                    </p>
+                                </div>
+                                <div class="job-dates">
+                                    <div class="job-date">تاريخ الإنشاء: @project.CreatedAt?.ToString("yyyy/MM/dd")</div>
+                                    @if (project.Deadline.HasValue)
+                                    {
+                                        <div class="job-date">الموعد النهائي: @project.Deadline?.ToString("yyyy/MM/dd")</div>
+                                    }
+                                </div>
+                                <div class="job-actions">
+                                    <span class="status-badge @(
+                                        project.Status == "Completed" ? "completed" :
+                                        (project.Status == "Assigned" || project.Status == "In Progress") ? "in-progress" :
+                                        "not-accepted"
+                                    )">
+                                        @if (project.Status == "Completed")
+                                        {
+                                            <i class="fas fa-check"></i>
+                                            <span>مكتمل</span>
+                                        }
+                                        else if (project.Status == "Assigned" || project.Status == "In Progress")
+                                        {
+                                            <i class="fas fa-clock"></i>
+                                            <span>قيد التنفيذ</span>
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-hourglass-start"></i>
+                                            <span>في انتظار العروض</span>
+                                        }
+                                    </span>
+                                    <a href="@Url.Action("Details", "Project", new { id = project.ProjectId })" class="view-btn">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    @if (project.Status == "Open")
+                                    {
+                                        <button class="delete-btn" data-id="@project.ProjectId">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3 class="empty-title">لا توجد نتائج</h3>
+                <p class="empty-message">
+                    لم يتم العثور على نتائج مطابقة لعبارة البحث: "@ViewBag.Query".
+                    <br>
+                    حاول استخدام كلمات رئيسية مختلفة أو <a href="@Url.Action("Create", "Project")">إنشاء مشروع جديد</a>.
+                </p>
+            </div>
+        }
+    </main>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // زر تسجيل الخروج
+            $("#logoutBtn").click(function() {
+                Swal.fire({
+                    title: 'تسجيل الخروج',
+                    text: 'هل أنت متأكد من رغبتك في تسجيل الخروج؟',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'نعم',
+                    cancelButtonText: 'لا',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '@Url.Action("Logout", "Auth")';
+                    }
+                });
+            });
+
+            // زر حذف المشروع
+            $(".delete-btn").click(function(e) {
+                e.preventDefault();
+                const projectId = $(this).data('id');
+
+                Swal.fire({
+                    title: 'هل أنت متأكد؟',
+                    text: 'هل تريد حذف هذا المشروع؟ لا يمكن التراجع عن هذا الإجراء',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'نعم، حذف',
+                    cancelButtonText: 'إلغاء',
+                    reverseButtons: true,
+                    background: '#fff',
+                    customClass: {
+                        confirmButton: 'swal-confirm-btn',
+                        cancelButton: 'swal-cancel-btn'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '@Url.Action("DeleteProject", "Client")',
+                            type: 'POST',
+                            data: { projectId: projectId },
+                            success: function(response) {
+                                if (response.success) {
+                                    $(`.delete-btn[data-id="${projectId}"]`).closest('.job-card').fadeOut(300, function() {
+                                        $(this).remove();
+
+                                        // التحقق من وجود مشاريع أخرى
+                                        if ($('.job-card').length === 0) {
+                                            $('.search-results').replaceWith(`
+                                                <div class="empty-state">
+                                                    <div class="empty-icon">
+                                                        <i class="fas fa-search"></i>
+                                                    </div>
+                                                    <h3 class="empty-title">لا توجد نتائج</h3>
+                                                    <p class="empty-message">
+                                                        لم يتم العثور على نتائج مطابقة لعبارة البحث: "@ViewBag.Query".
+                                                        <br>
+                                                        حاول استخدام كلمات رئيسية مختلفة أو <a href="@Url.Action("Create", "Project")">إنشاء مشروع جديد</a>.
+                                                    </p>
+                                                </div>
+                                            `);
+                                        }
+                                    });
+
+                                    Swal.fire(
+                                        'تم الحذف!',
+                                        'تم حذف المشروع بنجاح',
+                                        'success'
+                                    );
+                                } else {
+                                    Swal.fire(
+                                        'خطأ!',
+                                        response.message || 'حدث خطأ أثناء حذف المشروع',
+                                        'error'
+                                    );
+                                }
+                            },
+                            error: function() {
+                                Swal.fire(
+                                    'خطأ!',
+                                    'حدث خطأ في الاتصال بالخادم',
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

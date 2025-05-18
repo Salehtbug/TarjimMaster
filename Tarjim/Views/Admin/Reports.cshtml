@@ -1,0 +1,99 @@
+﻿@model Tarjim.ViewModels.ReportsViewModel
+@{
+    ViewData["Title"] = "التقارير والإحصائيات";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">تحليل المشاريع</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="chart-container" style="position: relative; height: 300px;">
+                            <canvas id="projectsChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="list-group">
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                إجمالي المشاريع
+                                <span class="badge bg-primary rounded-pill">@Model.ProjectStatistics.Total</span>
+                            </div>
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                مشاريع مفتوحة
+                                <span class="badge bg-secondary rounded-pill">@Model.ProjectStatistics.Open</span>
+                            </div>
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                قيد التنفيذ
+                                <span class="badge bg-info rounded-pill">@Model.ProjectStatistics.InProgress</span>
+                            </div>
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                مكتملة
+                                <span class="badge bg-success rounded-pill">@Model.ProjectStatistics.Completed</span>
+                            </div>
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                ملغاة
+                                <span class="badge bg-danger rounded-pill">@Model.ProjectStatistics.Canceled</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        $(document).ready(function () {
+            var tarjimColors = {
+                primary: '#00c98d',
+                secondary: '#6c757d',
+                info: '#0dcaf0',
+                success: '#198754',
+                warning: '#ffc107',
+                danger: '#dc3545'
+            };
+
+            var projectsCtx = document.getElementById('projectsChart').getContext('2d');
+            var projectsChart = new Chart(projectsCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['مفتوحة', 'قيد التنفيذ', 'مكتملة', 'ملغاة'],
+                    datasets: [{
+                        data: [
+        @Model.ProjectStatistics.Open,
+        @Model.ProjectStatistics.InProgress,
+        @Model.ProjectStatistics.Completed,
+        @Model.ProjectStatistics.Canceled
+                        ],
+                        backgroundColor: [
+                            tarjimColors.secondary,
+                            tarjimColors.info,
+                            tarjimColors.success,
+                            tarjimColors.danger
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'توزيع المشاريع حسب الحالة'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

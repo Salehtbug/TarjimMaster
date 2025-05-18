@@ -1,0 +1,320 @@
+﻿@model Tarjim.ViewModels.TranslatorDashboardViewModel
+
+@{
+    ViewData["Title"] = "لوحة التحكم - المترجم";
+    Layout = "~/Views/Shared/_TranslatorLayout.cshtml";
+}
+
+<div class="dashboard-container">
+    <!-- السايدبار - سيظهر في كل صفحات الداشبورد -->
+    <aside class="filters-sidebar">
+        <div class="filter-list">
+            <a href="@Url.Action("Index", "Translator")" class="filter-button @(ViewBag.ActiveSection == "all" ? "active" : "")" data-section="all">
+                <span class="filter-text">الكل</span>
+                <div class="filter-icon">
+                    <i class="fas fa-border-all"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("AvailableProjects", "Translator")" class="filter-button @(ViewBag.ActiveSection == "available" ? "active" : "")" data-section="available">
+                <span class="filter-text">المشاريع المتاحة</span>
+                <div class="filter-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("MyProjects", "Translator")" class="filter-button @(ViewBag.ActiveSection == "in-progress" ? "active" : "")" data-section="in-progress">
+                <span class="filter-text">مشاريعي الحالية</span>
+                <div class="filter-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("MyOffers", "Offer")" class="filter-button @(ViewBag.ActiveSection == "offers" ? "active" : "")" data-section="offers">
+                <span class="filter-text">عروضي</span>
+                <div class="filter-icon">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("CompletedProjects", "Translator")" class="filter-button @(ViewBag.ActiveSection == "completed" ? "active" : "")" data-section="completed">
+                <span class="filter-text">المشاريع المكتملة</span>
+                <div class="filter-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("Profile", "Translator")" class="filter-button @(ViewBag.ActiveSection == "profile" ? "active" : "")" data-section="profile">
+                <span class="filter-text">الملف الشخصي</span>
+                <div class="filter-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("Notifications", "Translator")" class="filter-button @(ViewBag.ActiveSection == "notifications" ? "active" : "")" data-section="notifications">
+                <span class="filter-text">الإشعارات</span>
+                <div class="filter-icon">
+                    <i class="far fa-bell"></i>
+                </div>
+            </a>
+
+            <button class="filter-button" id="logoutBtn" data-section="logout">
+                <span class="filter-text">تسجيل الخروج</span>
+                <div class="filter-icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+            </button>
+        </div>
+    </aside>
+
+    <!-- المحتوى الرئيسي - سيتغير حسب الصفحة المختارة -->
+    <main class="main-content">
+        <h1 class="dashboard-title">
+            مرحباً بك في لوحة تحكم المترجم<br>
+            @Model.Translator.Name
+        </h1>
+
+        <!-- هنا محتوى الداشبورد الرئيسي -->
+        <div class="dashboard-sections">
+            <!-- المشاريع المتاحة -->
+            <section class="dashboard-section">
+                <h2 class="section-title">المشاريع المتاحة</h2>
+                @if (Model != null && Model.AvailableProjects != null && Model.AvailableProjects.Any())
+                {
+                    <div class="jobs-container">
+                        @foreach (var project in Model.AvailableProjects)
+                        {
+                            <div class="job-card">
+                                <div class="status-bar not-accepted"></div>
+                                <div class="job-content">
+                                    <div class="job-header">
+                                        <h3 class="job-title">@project.Title</h3>
+                                        <p class="job-subtitle">
+                                            @(project.SourceLanguage?.LanguageName ?? "غير محدد") إلى @(project.TargetLanguage?.LanguageName ?? "غير محدد")
+                                            | @(project.Category?.CategoryName ?? "غير محدد")
+                                        </p>
+                                    </div>
+                                    <div class="job-dates">
+                                        <div class="job-date">تاريخ الإنشاء: @project.CreatedAt?.ToString("yyyy/MM/dd")</div>
+                                        @if (project.Deadline.HasValue)
+                                        {
+                                            <div class="job-date">الموعد النهائي: @project.Deadline?.ToString("yyyy/MM/dd")</div>
+                                        }
+                                    </div>
+                                    <div class="job-actions">
+                                        <span class="status-badge not-accepted">
+                                            <i class="fas fa-hourglass-start"></i>
+                                            متاح للعروض
+                                        </span>
+                                        <a href="@Url.Action("Details", "Project", new { id = project.ProjectId })" class="view-btn">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="@Url.Action("Create", "Offer", new { projectId = project.ProjectId })" class="view-btn">
+                                            <i class="fas fa-file-invoice-dollar"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="section-footer">
+                        <a href="@Url.Action("AvailableProjects", "Translator")" class="view-all-btn">عرض الكل</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <h3 class="empty-title">لا توجد مشاريع متاحة حالياً</h3>
+                        <p class="empty-message">
+                            لم يتم العثور على مشاريع متاحة للترجمة في الوقت الحالي.
+                            يمكنك تحديث الصفحة لاحقاً للتحقق من وجود مشاريع جديدة.
+                        </p>
+                    </div>
+                }
+            </section>
+
+            <!-- المشاريع قيد التنفيذ -->
+            @if (Model != null && Model.ActiveProjects != null && Model.ActiveProjects.Any())
+            {
+                <section class="dashboard-section">
+                    <h2 class="section-title">مشاريعي قيد التنفيذ</h2>
+                    <div class="jobs-container">
+                        @foreach (var project in Model.ActiveProjects)
+                        {
+                            <div class="job-card">
+                                <div class="status-bar in-progress"></div>
+                                <div class="job-content">
+                                    <div class="job-header">
+                                        <h3 class="job-title">@project.Title</h3>
+                                        <p class="job-subtitle">
+                                            @(project.SourceLanguage?.LanguageName ?? "غير محدد") إلى @(project.TargetLanguage?.LanguageName ?? "غير محدد")
+                                            | @(project.Category?.CategoryName ?? "غير محدد")
+                                        </p>
+                                    </div>
+                                    <div class="job-dates">
+                                        <div class="job-date">تاريخ البدء: @project.UpdatedAt?.ToString("yyyy/MM/dd")</div>
+                                        @if (project.Deadline.HasValue)
+                                        {
+                                            <div class="job-date">الموعد النهائي: @project.Deadline?.ToString("yyyy/MM/dd")</div>
+                                        }
+                                    </div>
+                                    <div class="job-actions">
+                                        <span class="status-badge in-progress">
+                                            <i class="fas fa-clock"></i>
+                                            قيد التنفيذ
+                                        </span>
+                                        <a href="@Url.Action("WorkOnProject", "Translator", new { id = project.ProjectId })" class="view-btn">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="section-footer">
+                        <a href="@Url.Action("MyProjects", "Translator")" class="view-all-btn">عرض الكل</a>
+                    </div>
+                </section>
+            }
+
+            <!-- العروض قيد الانتظار -->
+            @if (Model != null && Model.PendingOffers != null && Model.PendingOffers.Any())
+            {
+                <section class="dashboard-section">
+                    <h2 class="section-title">العروض قيد الانتظار</h2>
+                    <div class="jobs-container">
+                        @foreach (var offer in Model.PendingOffers)
+                        {
+                            <div class="job-card">
+                                <div class="status-bar not-accepted"></div>
+                                <div class="job-content">
+                                    <div class="job-header">
+                                        <h3 class="job-title">@offer.Project.Title</h3>
+                                        <p class="job-subtitle">
+                                            @(offer.Project.SourceLanguage?.LanguageName ?? "غير محدد") إلى @(offer.Project.TargetLanguage?.LanguageName ?? "غير محدد")
+                                            | @(offer.Project.Category?.CategoryName ?? "غير محدد")
+                                        </p>
+                                    </div>
+                                    <div class="job-dates">
+                                        <div class="job-date">تاريخ تقديم العرض: @offer.CreatedAt?.ToString("yyyy/MM/dd")</div>
+                                        @if (offer.DeliveryDate.HasValue)
+                                        {
+                                            <div class="job-date">تاريخ التسليم المقترح: @offer.DeliveryDate?.ToString("yyyy/MM/dd")</div>
+                                        }
+                                    </div>
+                                    <div class="job-actions">
+                                        <span class="status-badge not-accepted">
+                                            <i class="fas fa-hourglass-start"></i>
+                                            @offer.OfferStatus - @offer.ProposedFee JOD
+                                        </span>
+                                        <a href="@Url.Action("Details", "Offer", new { id = offer.OfferId })" class="view-btn">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <button class="delete-btn cancel-offer-btn" data-id="@offer.OfferId">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="section-footer">
+                        <a href="@Url.Action("MyOffers", "Offer")" class="view-all-btn">عرض الكل</a>
+                    </div>
+                </section>
+            }
+
+            <!-- نبذة عن التقييمات -->
+            <section class="dashboard-section">
+                <h2 class="section-title">تقييمي</h2>
+                <div class="profile-stats">
+                    <div class="stats-card">
+                        <div class="stats-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stats-info">
+                            <div class="stats-title">متوسط التقييم</div>
+                            <div class="stats-value">@Model.TotalRating.ToString("0.0")/5</div>
+                        </div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-icon">
+                            <i class="fas fa-comment"></i>
+                        </div>
+                        <div class="stats-info">
+                            <div class="stats-title">عدد التقييمات</div>
+                            <div class="stats-value">@Model.TotalReviews</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // زر تسجيل الخروج
+            $("#logoutBtn").click(function() {
+                Swal.fire({
+                    title: 'تسجيل الخروج',
+                    text: 'هل أنت متأكد من رغبتك في تسجيل الخروج؟',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'نعم',
+                    cancelButtonText: 'لا',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '@Url.Action("Logout", "Auth")';
+                    }
+                });
+            });
+
+            // زر إلغاء العرض
+            $(".cancel-offer-btn").click(function(e) {
+                e.preventDefault();
+                const offerId = $(this).data('id');
+
+                Swal.fire({
+                    title: 'هل أنت متأكد؟',
+                    text: 'هل تريد إلغاء هذا العرض؟ لا يمكن التراجع عن هذا الإجراء',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'نعم، إلغاء',
+                    cancelButtonText: 'تراجع',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // إرسال طلب إلغاء العرض
+                        $.ajax({
+                            url: '@Url.Action("Cancel", "Offer")',
+                            type: 'POST',
+                            data: { id: offerId, __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val() },
+                            success: function(response) {
+                                Swal.fire({
+                                    title: 'تم!',
+                                    text: 'تم إلغاء العرض بنجاح',
+                                    icon: 'success'
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    title: 'خطأ!',
+                                    text: 'حدث خطأ أثناء إلغاء العرض',
+                                    icon: 'error'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}S

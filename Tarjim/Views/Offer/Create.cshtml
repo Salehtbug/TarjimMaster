@@ -1,0 +1,244 @@
+﻿@model Tarjim.ViewModels.CreateOfferViewModel
+
+@{
+    ViewData["Title"] = "تقديم عرض";
+    Layout = "~/Views/Shared/_TranslatorLayout.cshtml";
+}
+
+<div class="dashboard-container">
+    <aside class="filters-sidebar">
+        <div class="filter-list">
+            <a href="@Url.Action("Index", "Translator")" class="filter-button" data-section="all">
+                <span class="filter-text">الرئيسية</span>
+                <div class="filter-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("AvailableProjects", "Translator")" class="filter-button" data-section="available">
+                <span class="filter-text">المشاريع المتاحة</span>
+                <div class="filter-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">تقديم عرض على مشروع</h1>
+        </div>
+
+        <div class="offer-creation-container">
+            <div class="project-info-card">
+                <h2 class="section-title">معلومات المشروع</h2>
+                @if (Model.Project != null)
+                {
+                    <div class="project-info-grid">
+                        <div class="info-item">
+                            <div class="info-label">عنوان المشروع</div>
+                            <div class="info-value">@Model.Project.Title</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">اللغة المصدر</div>
+                            <div class="info-value">@(Model.Project.SourceLanguage?.LanguageName ?? "غير محدد")</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">اللغة الهدف</div>
+                            <div class="info-value">@(Model.Project.TargetLanguage?.LanguageName ?? "غير محدد")</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">الفئة</div>
+                            <div class="info-value">@(Model.Project.Category?.CategoryName ?? "غير محدد")</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">الموعد النهائي</div>
+                            <div class="info-value">@(Model.Project.Deadline?.ToString("yyyy/MM/dd") ?? "غير محدد")</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">عدد الصفحات</div>
+                            <div class="info-value">@(Model.Project.PageCount ?? 0)</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">الميزانية المتوقعة</div>
+                            <div class="info-value">@(Model.Project.Budget?.ToString("0.00") ?? "غير محدد") JOD</div>
+                        </div>
+                    </div>
+                    <div class="project-description-box">
+                        <div class="info-label">وصف المشروع</div>
+                        <div class="project-description">@Html.Raw(Model.Project.Description ?? "لا يوجد وصف")</div>
+                    </div>
+                }
+            </div>
+
+            <div class="offer-form-card">
+                <h2 class="section-title">تفاصيل العرض</h2>
+                <form method="post" action="@Url.Action("Create", "Offer")">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="ProjectId" value="@Model.ProjectId" />
+
+                    <div class="form-group">
+                        <label for="ProposedFee" class="control-label">السعر المقترح (JOD)</label>
+                        <input id="ProposedFee" name="ProposedFee" class="form-control" type="number" step="0.01" min="1" value="@Model.ProposedFee" />
+                        @Html.ValidationMessage("ProposedFee", "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="DeliveryDate" class="control-label">تاريخ التسليم المتوقع</label>
+                        <input id="DeliveryDate" name="DeliveryDate" class="form-control" type="date" value="@(Model.DeliveryDate.ToString("yyyy-MM-dd"))" />
+                        @Html.ValidationMessage("DeliveryDate", "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Message" class="control-label">رسالة للعميل</label>
+                        <textarea id="Message" name="Message" class="form-control" rows="5" placeholder="اكتب رسالة توضح خبرتك في هذا المجال وسبب مناسبتك لهذا المشروع">@Model.Message</textarea>
+                        @Html.ValidationMessage("Message", "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="@Url.Action("Details", "Project", new { id = Model.ProjectId })" class="btn btn-secondary">إلغاء</a>
+                        <button type="submit" class="btn btn-primary">تقديم العرض</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+
+@section Styles {
+    <style>
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .offer-creation-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .project-info-card, .offer-form-card {
+            background-color: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+        }
+
+        .project-info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .info-item {
+            padding: 0.75rem;
+            background-color: var(--gray-50);
+            border-radius: var(--radius);
+        }
+
+        .info-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .project-description-box {
+            margin-top: 1.5rem;
+            padding: 0.75rem;
+            background-color: var(--gray-50);
+            border-radius: var(--radius);
+        }
+
+        .project-description {
+            margin-top: 0.5rem;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
+            font-family: var(--font-family);
+            transition: all 0.2s ease;
+        }
+
+            .form-control:focus {
+                outline: none;
+                border-color: var(--primary);
+                box-shadow: 0 0 0 2px rgba(0, 201, 141, 0.2);
+            }
+
+        .text-danger {
+            color: var(--red);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius);
+            font-family: var(--font-family);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+            .btn-primary:hover {
+                background-color: var(--primary-hover);
+            }
+
+        .btn-secondary {
+            background-color: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+            .btn-secondary:hover {
+                background-color: var(--gray-300);
+            }
+
+        \0040media (max-width: 768px) {
+            .project-info-grid
+
+        {
+            grid-template-columns: 1fr;
+        }
+
+        }
+    </style>
+}

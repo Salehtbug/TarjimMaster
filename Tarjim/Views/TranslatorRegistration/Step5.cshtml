@@ -1,0 +1,221 @@
+﻿@model Tarjim.ViewModels.TranslatorRegisterStep5ViewModel
+
+@{
+    ViewData["Title"] = "المهارات المهنية - مترجم";
+    ViewData["HideNavbar"] = true;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link href="~/css/translatorregister.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .select2-container {
+            width: 100% !important;
+        }
+
+        .select2-selection {
+            height: auto !important;
+            min-height: 38px !important;
+            border-radius: 0.375rem !important;
+            border-color: var(--tarjim-border) !important;
+        }
+
+        .select2-selection--multiple .select2-selection__choice {
+            background-color: #10b981 !important;
+            color: white !important;
+            border: none !important;
+            padding: 3px 8px !important;
+            border-radius: 4px !important;
+            margin-right: 5px !important;
+            margin-top: 5px !important;
+        }
+
+        .select2-selection--multiple .select2-selection__choice__remove {
+            color: white !important;
+            margin-right: 5px !important;
+        }
+
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #10b981 !important;
+        }
+    </style>
+}
+
+<section class="register-container" dir="rtl" lang="ar">
+    <div class="register-box">
+        <div class="register-side fade-in">
+            <img src="/images/Tarjim_Logo_Arabic_Standard.png" alt="شعار ترجم" class="register-logo" />
+            <p class="register-welcome">معلوماتك الشخصية ليتعرف عليك العملاء ✨</p>
+            <img src="/images/illustration_translator.png" class="illustration-image" alt="صورة توضيحية" />
+        </div>
+
+        <div class="register-card">
+            <div class="register-progress">
+                <ol class="progress-steps">
+                    <li class="step">
+                        <div class="circle">✓</div>
+                        <span class="label">المعلومات الشخصية</span>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="step">
+                        <div class="circle">✓</div>
+                        <span class="label">الموقع</span>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="step">
+                        <div class="circle">✓</div>
+                        <span class="label">الوثائق والتعليم</span>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="step">
+                        <div class="circle">✓</div>
+                        <span class="label">الشهادات</span>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="step active">
+                        <div class="circle">5</div>
+                        <span class="label">المهارات</span>
+                    </li>
+                </ol>
+            </div>
+
+            <form asp-action="Step5" asp-controller="TranslatorRegistration" method="post" class="register-form">
+                <div asp-validation-summary="ModelOnly" class="register-error text-center mb-4"></div>
+
+                <h2 class="text-xl font-semibold mb-6 text-center">المهارات المهنية</h2>
+
+                <div class="form-group">
+                    <label class="register-label">تحديد أنواع الخدمة</label>
+                    <select asp-for="SelectedServiceTypes" class="js-select2" multiple="multiple" data-placeholder="اختر أنواع الخدمة التي تقدمها">
+                        <option value=1>ترجمة نصية</option>
+                        <option value=2>ترجمة فورية</option>
+                        <option value=3>تدقيق لغوي</option>
+                        <option value=4>تحرير محتوى</option>
+                        <option value=5>تعريب</option>
+                        <option value=6>تفريغ صوتي</option>
+                        <option value=7>توطين</option>
+                    </select>
+                    <span asp-validation-for="SelectedServiceTypes" class="register-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="register-label">مجالات الإختصاص</label>
+                    <select asp-for="SelectedSpecializations" class="js-select2" multiple="multiple" data-placeholder="اختر مجالات اختصاصك">
+                        <option value="1">قانوني</option>
+                        <option value="2">طبي</option>
+                        <option value="3">تقني</option>
+                        <option value="4">أدبي</option>
+                        <option value="5">تسويقي</option>
+                        <option value="6">اقتصادي</option>
+                        <option value="7">تعليمي</option>
+                        <option value="8">إعلامي</option>
+                        <option value="9">ديني</option>
+                    </select>
+                    <span asp-validation-for="SelectedSpecializations" class="register-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="register-label">اللغات</label>
+                    <div style="display: flex; gap: 1rem;">
+                        <div style="flex: 1;">
+                            <label style="display: block; margin-bottom: 0.3rem; font-size: 0.85rem; color: #666;">من</label>
+                            <select asp-for="SourceLanguages" class="js-select2" multiple="multiple" data-placeholder="اختر اللغات المصدر">
+                                <option value="1">العربية</option>
+                                <option value="2">الإنجليزية</option>
+                                <option value="3">الفرنسية</option>
+                                <option value="4">الإسبانية</option>
+                                <option value="5">الألمانية</option>
+                                <option value="6">الإيطالية</option>
+                                <option value="7">البرتغالية</option>
+                                <option value="8">الروسية</option>
+                                <option value="9">الصينية</option>
+                                <option value="10">اليابانية</option>
+                                <option value="11">الكورية</option>
+                                <option value="12">التركية</option>
+                            </select>
+                            <span asp-validation-for="SourceLanguages" class="register-error"></span>
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="display: block; margin-bottom: 0.3rem; font-size: 0.85rem; color: #666;">إلى</label>
+                            <select asp-for="TargetLanguages" class="js-select2" multiple="multiple" data-placeholder="اختر اللغات الهدف">
+                                <option value="1">العربية</option>
+                                <option value="2">الإنجليزية</option>
+                                <option value="3">الفرنسية</option>
+                                <option value="4">الإسبانية</option>
+                                <option value="5">الألمانية</option>
+                                <option value="6">الإيطالية</option>
+                                <option value="7">البرتغالية</option>
+                                <option value="8">الروسية</option>
+                                <option value="9">الصينية</option>
+                                <option value="10">اليابانية</option>
+                                <option value="11">الكورية</option>
+                                <option value="12">التركية</option>
+                            </select>
+                            <span asp-validation-for="TargetLanguages" class="register-error"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="register-label">أوقات التفرغ للعمل</label>
+                    <select asp-for="AvailableDays" class="js-select2" multiple="multiple" data-placeholder="اختر أيام التفرغ للعمل">
+                        <option value="1">السبت</option>
+                        <option value="2">الأحد</option>
+                        <option value="3">الإثنين</option>
+                        <option value="4">الثلاثاء</option>
+                        <option value="5">الأربعاء</option>
+                        <option value="6">الخميس</option>
+                        <option value="7">الجمعة</option>
+                    </select>
+                    <span asp-validation-for="AvailableDays" class="register-error"></span>
+                </div>
+
+                <div class="form-group" style="display: flex; gap: 1rem;">
+                    <a asp-action="Step4" asp-controller="TranslatorRegistration" style="
+                        background-color: #f0f0f0;
+                        color: #555;
+                        padding: 0.75rem 1.5rem;
+                        font-weight: 600;
+                        font-size: 1rem;
+                        border-radius: 9999px;
+                        text-align: center;
+                        width: 25%;
+                        text-decoration: none;
+                    ">رجوع</a>
+                    <button type="submit" class="registert-button" style="width: 75%;">إنشاء الحساب</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- عناصر زخرفية للخلفية -->
+    <span class="register-decor decor-1">مترجم</span>
+    <span class="register-decor decor-2">ترجم</span>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // تهيئة القوائم المنسدلة المتعددة باستخدام Select2
+            $('.js-select2').select2({
+                dir: "rtl",
+                language: "ar",
+                allowClear: true,
+                width: '100%',
+                theme: 'classic'
+            });
+
+            // تطبيق التصميم على القوائم المنسدلة
+            $('.select2-container--default .select2-selection--multiple').css({
+                'padding': '5px',
+                'min-height': '42px'
+            });
+        });
+    </script>
+}

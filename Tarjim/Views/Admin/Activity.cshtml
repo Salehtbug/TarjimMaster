@@ -1,0 +1,142 @@
+﻿@model List<Tarjim.Models.ActivityLog>
+@{
+    ViewData["Title"] = "سجل النشاط";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">سجل النشاط</h5>
+        <div class="d-flex">
+            <div class="dropdown me-2">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="typeFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    @if (!string.IsNullOrEmpty(ViewBag.Type))
+                    {
+                        <span>@ViewBag.Type</span>
+                    }
+                    else
+                    {
+                        <span>جميع الأنشطة</span>
+                    }
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="typeFilterDropdown">
+                    <li><a class="dropdown-item" href="@Url.Action("Activity", "Admin")">جميع الأنشطة</a></li>
+                    @if (ViewBag.ActivityTypes != null)
+                    {
+                        foreach (var activityType in ViewBag.ActivityTypes)
+                        {
+                            <li><a class="dropdown-item" href="@Url.Action("Activity", "Admin", new { type = activityType })">@activityType</a></li>
+                        }
+                    }
+                </ul>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="userFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    @if (ViewBag.UserId != null)
+                    {
+                        var users = ViewBag.Users as List<Tarjim.Models.User>;
+                        var selectedUser = users?.FirstOrDefault(u => u.UserId == (int)ViewBag.UserId);
+                        <span>@(selectedUser?.Name ?? "المستخدم")</span>
+                    }
+
+                    else
+                    {
+                        <span>جميع المستخدمين</span>
+                    }
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userFilterDropdown" style="max-height: 300px; overflow-y: auto;">
+                    <li><a class="dropdown-item" href="@Url.Action("Activity", "Admin", new { type = ViewBag.Type })">جميع المستخدمين</a></li>
+                    @if (ViewBag.Users != null)
+                    {
+                        foreach (var user in ViewBag.Users)
+                        {
+                            <li><a class="dropdown-item" href="@Url.Action("Activity", "Admin", new { type = ViewBag.Type, userId = user.UserId })">@user.Name</a></li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>المستخدم</th>
+                        <th>النشاط</th>
+                        <th>الوصف</th>
+                        <th>عنوان IP</th>
+                        <th>متصفح المستخدم</th>
+                        <th>التاريخ والوقت</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var activity in Model)
+                        {
+                            <tr>
+                                <td>@activity.LogId</td>
+                                <td>
+                                    @if (activity.User != null)
+                                    {
+                                        <a href="@Url.Action("UserDetails", "Admin", new { id = activity.UserId })">
+                                            @activity.User.Name
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span>غير معروف</span>
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        string activityIcon = activity.ActivityType switch
+                                        {
+                                            "Login" => "fa-sign-in-alt text-info",
+                                            "Logout" => "fa-sign-out-alt text-warning",
+                                            "Register" => "fa-user-plus text-success",
+                                            "CreateProject" => "fa-folder-plus text-success",
+                                            "EditProject" => "fa-edit text-primary",
+                                            "DeleteProject" => "fa-trash text-danger",
+                                            "CreateOffer" => "fa-hand-holding-usd text-info",
+                                            "AcceptOffer" => "fa-check-circle text-success",
+                                            "StartWorking" => "fa-play text-primary",
+                                            "CompleteProject" => "fa-check-double text-success",
+                                            _ => "fa-circle-info text-secondary"
+                                        };
+                                    }
+                                    <i class="fas @activityIcon me-1"></i>
+                                    @activity.ActivityType
+                                </td>
+                                <td>@activity.Description</td>
+                                <td><small>@activity.IpAddress</small></td>
+                                <td>
+                                    <small class="text-truncate d-inline-block" style="max-width: 200px;" title="@activity.UserAgent">
+                                        @activity.UserAgent
+                                    </small>
+                                </td>
+                                <td>@activity.CreatedAt?.ToString("yyyy/MM/dd HH:mm:ss")</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center py-4">لا توجد أنشطة متوفرة</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // يمكن إضافة أي سكريبتات ضرورية هنا
+        });
+    </script>
+}

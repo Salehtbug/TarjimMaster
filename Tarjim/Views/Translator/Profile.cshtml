@@ -1,0 +1,637 @@
+﻿@model Tarjim.ViewModels.TranslatorProfileViewModel
+
+@{
+    ViewData["Title"] = "الملف الشخصي - المترجم";
+    Layout = "~/Views/Shared/_TranslatorLayout.cshtml";
+}
+
+<div class="dashboard-container">
+    <aside class="filters-sidebar">
+        <div class="filter-list">
+            <a href="@Url.Action("Index", "Translator")" class="filter-button" data-section="all">
+                <span class="filter-text">الرئيسية</span>
+                <div class="filter-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("Profile", "Translator")" class="filter-button active" data-section="profile">
+                <span class="filter-text">الملف الشخصي</span>
+                <div class="filter-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">الملف الشخصي</h1>
+        </div>
+
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    @if (!string.IsNullOrEmpty(Model.Translator.AvatarUrl))
+                    {
+                        <img src="@Model.Translator.AvatarUrl" alt="@Model.Translator.Name" />
+                    }
+                    else
+                    {
+                        <div class="avatar-placeholder">
+                            @Model.Translator.Name.Substring(0, 1)
+                        </div>
+                    }
+                </div>
+                <div class="profile-name">@Model.Translator.Name</div>
+                <div class="profile-rating">
+                    <div class="stars">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (i <= Convert.ToDouble(Model.Translator.Rating ?? 0))
+                            {
+                                <i class="fas fa-star"></i>
+                            }
+                            else if (i - 0.5 <= Convert.ToDouble(Model.Translator.Rating ?? 0))
+                            {
+                                <i class="fas fa-star-half-alt"></i>
+                            }
+                            else
+                            {
+                                <i class="far fa-star"></i>
+                            }
+                        }
+                    </div>
+                    <div class="rating-text">@((Model.Translator.Rating ?? 0).ToString("0.0")) (@Model.Reviews.Count تقييم)</div>
+                </div>
+                <div class="profile-actions">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                        <i class="fas fa-edit"></i> تعديل الملف الشخصي
+                    </button>
+                </div>
+            </div>
+
+            <div class="profile-content">
+                <div class="profile-section">
+                    <h2 class="section-title">نبذة عني</h2>
+                    <div class="section-content">
+                        @if (!string.IsNullOrEmpty(Model.Translator.Bio))
+                        {
+                            <p>@Model.Translator.Bio</p>
+                        }
+                        else
+                        {
+                            <p class="empty-text">لا توجد نبذة مضافة</p>
+                        }
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h2 class="section-title">المهارات</h2>
+                    <div class="section-content">
+                        @if (Model.Translator.Skills != null && Model.Translator.Skills.Any())
+                        {
+                            <div class="skills-list">
+                                @foreach (var skill in Model.Translator.Skills)
+                                {
+                                    <span class="skill-badge">@skill.SkillName</span>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="empty-text">لا توجد مهارات مضافة</p>
+                        }
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h2 class="section-title">السيرة الذاتية</h2>
+                    <div class="section-content">
+                        @if (Model.CvItems != null && Model.CvItems.Any())
+                        {
+                            <div class="cv-sections">
+                                @{
+                                    var educationItems = Model.CvItems.Where(c => c.Type == "Education").ToList();
+                                    var experienceItems = Model.CvItems.Where(c => c.Type == "Experience").ToList();
+                                    var certificationItems = Model.CvItems.Where(c => c.Type == "Certification").ToList();
+                                }
+
+                                @if (educationItems.Any())
+                                {
+                                    <div class="cv-section">
+                                        <h3 class="cv-section-title">التعليم</h3>
+                                        <div class="cv-items">
+                                            @foreach (var item in educationItems)
+                                            {
+                                                <div class="cv-item">
+                                                    <div class="cv-item-content">@item.Value</div>
+                                                    @if (item.StartDate.HasValue || item.EndDate.HasValue)
+                                                    {
+                                                        <div class="cv-item-date">
+                                                            @(item.StartDate?.ToString("yyyy/MM/dd") ?? "")
+                                                            @if (item.EndDate.HasValue)
+                                                            {
+                                                                <span> - </span>
+                                                                @item.EndDate?.ToString("yyyy/MM/dd")
+                                                            }
+                                                        </div>
+                                                    }
+                                                    @if (!string.IsNullOrEmpty(item.Note))
+                                                    {
+                                                        <div class="cv-item-note">@item.Note</div>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+
+                                @if (experienceItems.Any())
+                                {
+                                    <div class="cv-section">
+                                        <h3 class="cv-section-title">الخبرة</h3>
+                                        <div class="cv-items">
+                                            @foreach (var item in experienceItems)
+                                            {
+                                                <div class="cv-item">
+                                                    <div class="cv-item-content">@item.Value</div>
+                                                    @if (item.StartDate.HasValue || item.EndDate.HasValue)
+                                                    {
+                                                        <div class="cv-item-date">
+                                                            @(item.StartDate?.ToString("yyyy/MM/dd") ?? "")
+                                                            @if (item.EndDate.HasValue)
+                                                            {
+                                                                <span> - </span>
+                                                                @item.EndDate?.ToString("yyyy/MM/dd")
+                                                            }
+                                                        </div>
+                                                    }
+                                                    @if (!string.IsNullOrEmpty(item.Note))
+                                                    {
+                                                        <div class="cv-item-note">@item.Note</div>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+
+                                @if (certificationItems.Any())
+                                {
+                                    <div class="cv-section">
+                                        <h3 class="cv-section-title">الشهادات</h3>
+                                        <div class="cv-items">
+                                            @foreach (var item in certificationItems)
+                                            {
+                                                <div class="cv-item">
+                                                    <div class="cv-item-content">@item.Value</div>
+                                                    @if (item.StartDate.HasValue || item.EndDate.HasValue)
+                                                    {
+                                                        <div class="cv-item-date">
+                                                            @(item.StartDate?.ToString("yyyy/MM/dd") ?? "")
+                                                            @if (item.EndDate.HasValue)
+                                                            {
+                                                                <span> - </span>
+                                                                @item.EndDate?.ToString("yyyy/MM/dd")
+                                                            }
+                                                        </div>
+                                                    }
+                                                    @if (!string.IsNullOrEmpty(item.Note))
+                                                    {
+                                                        <div class="cv-item-note">@item.Note</div>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="empty-text">لا توجد بيانات سيرة ذاتية مضافة</p>
+                        }
+                    </div>
+                </div>
+
+                @if (Model.Reviews != null && Model.Reviews.Any())
+                {
+                    <div class="profile-section">
+                        <h2 class="section-title">التقييمات</h2>
+                        <div class="section-content">
+                            <div class="reviews-list">
+                                @foreach (var review in Model.Reviews)
+                                {
+                                    <div class="review-item">
+                                        <div class="review-header">
+                                            <div class="review-author">@review.Client.Name</div>
+                                            <div class="review-rating">
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    if (i <= review.Rating)
+                                                    {
+                                                        <i class="fas fa-star"></i>
+                                                    }
+                                                    else
+                                                    {
+                                                        <i class="far fa-star"></i>
+                                                    }
+                                                }
+                                            </div>
+                                            <div class="review-date">@review.CreatedAt?.ToString("yyyy/MM/dd")</div>
+                                        </div>
+                                        <div class="review-project">المشروع: @review.Project.Title</div>
+                                        @if (!string.IsNullOrEmpty(review.Comment))
+                                        {
+                                            <div class="review-comment">@review.Comment</div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- نافذة تعديل الملف الشخصي -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileModalLabel">تعديل الملف الشخصي</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="@Url.<form method="post" action="@Url.Action("UpdateProfile", "Translator")" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <div class="form-section">
+                        <h3 class="form-section-title">المعلومات الشخصية</h3>
+                        <div class="form-group">
+                            <label for="Name" class="control-label">الاسم</label>
+                            <input id="Name" name="Name" class="form-control" value="@Model.Translator.Name" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="Bio" class="control-label">نبذة عني</label>
+                            <textarea id="Bio" name="Bio" class="form-control" rows="4">@Model.Translator.Bio</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="Location" class="control-label">الموقع</label>
+                            <input id="Location" name="Location" class="form-control" value="@Model.Translator.Location" />
+                        </div>
+                        <div class="form-group">
+                            <label for="ProfileImage" class="control-label">الصورة الشخصية</label>
+                            <input type="file" id="ProfileImage" name="ProfileImage" class="form-control" accept="image/*" />
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="form-section-title">المهارات</h3>
+                        <div class="form-group">
+                            <div class="skills-selector">
+                                @if (Model.AllSkills != null && Model.AllSkills.Any())
+                                {
+                                    @foreach (var skill in Model.AllSkills)
+                                    {
+                                        <div class="form-check">
+                                            <input type="checkbox" name="SelectedSkillIds" value="@skill.SkillId" id="skill_@skill.SkillId"
+                                                   class="form-check-input" @(Model.SelectedSkillIds.Contains(skill.SkillId) ? "checked" : "") />
+                                            <label for="skill_@skill.SkillId" class="form-check-label">@skill.SkillName</label>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p>لا توجد مهارات متاحة</p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="form-section-title">السيرة الذاتية</h3>
+                        <div class="form-group">
+                            <label for="Education" class="control-label">المؤهلات التعليمية</label>
+                            <textarea id="Education" name="Education" class="form-control" rows="3">@(Model.CvItems.FirstOrDefault(c => c.Type == "Education")?.Value ?? "")</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="Experience" class="control-label">الخبرات السابقة</label>
+                            <textarea id="Experience" name="Experience" class="form-control" rows="3">@(Model.CvItems.FirstOrDefault(c => c.Type == "Experience")?.Value ?? "")</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="Certifications" class="control-label">الشهادات</label>
+                            <textarea id="Certifications" name="Certifications" class="form-control" rows="3">@(Model.CvItems.FirstOrDefault(c => c.Type == "Certification")?.Value ?? "")</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .profile-container {
+            background-color: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .profile-header {
+            padding: 2rem;
+            text-align: center;
+            background-color: var(--gray-50);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+            position: relative;
+        }
+
+            .profile-avatar img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 50%;
+                border: 3px solid var(--primary);
+            }
+
+        .avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 600;
+            color: var(--primary);
+            border: 3px solid var(--primary);
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-rating {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .stars {
+            color: var(--amber);
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .rating-text {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        .profile-actions {
+            display: flex;
+            justify-content: center;
+        }
+
+        .profile-content {
+            padding: 2rem;
+        }
+
+        .profile-section {
+            margin-bottom: 2.5rem;
+        }
+
+            .profile-section:last-child {
+                margin-bottom: 0;
+            }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .section-content {
+            line-height: 1.6;
+        }
+
+        .empty-text {
+            color: var(--gray-500);
+            font-style: italic;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .skill-badge {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            padding: 0.375rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .cv-sections {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .cv-section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--gray-700);
+        }
+
+        .cv-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .cv-item {
+            padding: 1rem;
+            background-color: var(--gray-50);
+            border-radius: var(--radius);
+            border-right: 3px solid var(--primary);
+        }
+
+        .cv-item-content {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .cv-item-date {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 0.25rem;
+        }
+
+        .cv-item-note {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            font-style: italic;
+        }
+
+        .reviews-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .review-item {
+            padding: 1rem;
+            background-color: var(--gray-50);
+            border-radius: var(--radius);
+        }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .review-author {
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+
+        .review-rating {
+            color: var(--amber);
+            margin-left: auto;
+        }
+
+        .review-date {
+            color: var(--gray-600);
+            font-size: 0.75rem;
+            margin-right: 1rem;
+        }
+
+        .review-project {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 0.5rem;
+        }
+
+        .review-comment {
+            line-height: 1.6;
+        }
+
+        /* Modal Styles */
+        .form-section {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+            .form-section:last-child {
+                margin-bottom: 0;
+                padding-bottom: 0;
+                border-bottom: none;
+            }
+
+        .form-section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--gray-700);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .control-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
+            font-family: var(--font-family);
+            transition: all 0.2s ease;
+        }
+
+            .form-control:focus {
+                outline: none;
+                border-color: var(--primary);
+                box-shadow: 0 0 0 2px rgba(0, 201, 141, 0.2);
+            }
+
+        .skills-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+        }
+
+        .form-check-input {
+            margin-left: 0.5rem;
+        }
+
+        \0040media (max-width: 768px) {
+            .skills-selector
+
+        {
+            grid-template-columns: 1fr;
+        }
+
+        .review-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .review-rating {
+            margin-left: 0;
+        }
+
+        .review-date {
+            margin-right: 0;
+        }
+
+        }
+    </style>
+}

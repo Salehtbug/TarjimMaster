@@ -1,0 +1,451 @@
+﻿@model Tarjim.ViewModels.WorkOnProjectViewModel
+
+@{
+    ViewData["Title"] = "العمل على المشروع - " + Model.Project.Title;
+    Layout = "~/Views/Shared/_TranslatorLayout.cshtml";
+}
+
+<div class="dashboard-container">
+    <aside class="filters-sidebar">
+        <div class="filter-list">
+            <a href="@Url.Action("Index", "Translator")" class="filter-button" data-section="all">
+                <span class="filter-text">الرئيسية</span>
+                <div class="filter-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("MyProjects", "Translator")" class="filter-button active" data-section="in-progress">
+                <span class="filter-text">مشاريعي الحالية</span>
+                <div class="filter-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">@Model.Project.Title</h1>
+            <div class="project-status">
+                @if (Model.Project.Status == "Assigned")
+                {
+                    <span class="status-badge not-accepted">
+                        <i class="fas fa-hourglass-start"></i>
+                        تم التعيين
+                    </span>
+                    <form method="post" action="@Url.Action("StartWorking", "Translator", new { id = Model.Project.ProjectId })">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-primary">بدء العمل</button>
+                    </form>
+                }
+                else if (Model.Project.Status == "In Progress")
+                {
+                    <span class="status-badge in-progress">
+                        <i class="fas fa-clock"></i>
+                        قيد التنفيذ
+                    </span>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#completeProjectModal">
+                        إكمال المشروع
+                    </button>
+                }
+            </div>
+        </div>
+
+        <div class="project-details-container">
+            <div class="project-info-card">
+                <h2 class="section-title">معلومات المشروع</h2>
+                <div class="project-info-grid">
+                    <div class="info-item">
+                        <div class="info-label">العميل</div>
+                        <div class="info-value">@Model.Project.Client.Name</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">اللغة المصدر</div>
+                        <div class="info-value">@(Model.Project.SourceLanguage?.LanguageName ?? "غير محدد")</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">اللغة الهدف</div>
+                        <div class="info-value">@(Model.Project.TargetLanguage?.LanguageName ?? "غير محدد")</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">الفئة</div>
+                        <div class="info-value">@(Model.Project.Category?.CategoryName ?? "غير محدد")</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">الموعد النهائي</div>
+                        <div class="info-value">@(Model.Project.Deadline?.ToString("yyyy/MM/dd") ?? "غير محدد")</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">عدد الصفحات</div>
+                        <div class="info-value">@(Model.Project.PageCount ?? 0)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-description-card">
+                <h2 class="section-title">وصف المشروع</h2>
+                <div class="project-description">
+                    @Html.Raw(Model.Project.Description ?? "لا يوجد وصف")
+                </div>
+            </div>
+
+            @if (Model.Requirements != null && Model.Requirements.Any())
+            {
+                <div class="project-requirements-card">
+                    <h2 class="section-title">متطلبات المشروع</h2>
+                    <div class="requirements-list">
+                        @foreach (var req in Model.Requirements)
+                        {
+                            <div class="requirement-item">
+                                <div class="requirement-label">@req.RequirementLabel</div>
+                                <div class="requirement-value">@req.RequirementValue</div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            <div class="project-files-card">
+                <h2 class="section-title">الملفات الأصلية</h2>
+                @if (Model.OriginalFiles != null && Model.OriginalFiles.Any())
+                {
+                    <div class="files-list">
+                        @foreach (var file in Model.OriginalFiles)
+                        {
+                            <div class="file-item">
+                                <div class="file-icon">
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
+                                <div class="file-info">
+                                    <div class="file-name">@file.FileName</div>
+                                    <div class="file-size">@(file.FileSize / 1024) كيلوبايت</div>
+                                </div>
+                                <a href="@Url.Action("DownloadFile", "Project", new { id = file.FileId })" class="file-download">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-files">
+                        <p>لا توجد ملفات مرفقة</p>
+                    </div>
+                }
+            </div>
+
+            <div class="project-files-card">
+                <h2 class="section-title">الملفات المترجمة</h2>
+                <div class="files-uploader">
+                    <form method="post" action="@Url.Action("UploadTranslatedFile", "Translator")" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="projectId" value="@Model.Project.ProjectId" />
+                        <div class="upload-box">
+                            <input type="file" id="fileUpload" name="file" class="file-input" accept=".doc,.docx,.pdf,.txt,.xls,.xlsx" required />
+                            <label for="fileUpload" class="upload-label">
+                                <i class="fas fa-cloud-upload-alt"></i><label for="fileUpload" class="upload-label">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span>اختر ملفًا أو اسحبه هنا</span>
+                                </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary upload-btn">رفع الملف</button>
+                    </form>
+                </div>
+
+                @if (Model.TranslatedFiles != null && Model.TranslatedFiles.Any())
+                {
+                    <div class="files-list">
+                        @foreach (var file in Model.TranslatedFiles)
+                        {
+                            <div class="file-item">
+                                <div class="file-icon">
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
+                                <div class="file-info">
+                                    <div class="file-name">@file.FileName</div>
+                                    <div class="file-size">@(file.FileSize / 1024) كيلوبايت</div>
+                                </div>
+                                <a href="@Url.Action("DownloadFile", "Project", new { id = file.FileId })" class="file-download">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-files">   
+                        <p>لم يتم رفع أي ملفات مترجمة بعد</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- نافذة إكمال المشروع -->
+<div class="modal fade" id="completeProjectModal" tabindex="-1" aria-labelledby="completeProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="completeProjectModalLabel">إكمال المشروع</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="@Url.Action("CompleteProject", "Translator", new { id = Model.Project.ProjectId })">
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="completionNotes" class="form-label">ملاحظات الإكمال</label>
+                        <textarea class="form-control" id="completionNotes" name="completionNotes" rows="4" placeholder="أضف أي ملاحظات للعميل حول الترجمة"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-success">تأكيد الإكمال</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .project-status {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .project-details-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .project-info-card, .project-description-card, .project-requirements-card, .project-files-card {
+            background-color: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+        }
+
+        .project-info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .info-item {
+            padding: 0.75rem;
+            background-color: var(--gray-50);
+            border-radius: var(--radius);
+        }
+
+        .info-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .project-description {
+            margin-top: 1rem;
+            line-height: 1.6;
+        }
+
+        .requirements-list {
+            margin-top: 1rem;
+        }
+
+        .requirement-item {
+            padding: 0.75rem;
+            background-color: var(--gray-50);
+            border-radius: var(--radius);
+            margin-bottom: 0.75rem;
+        }
+
+        .requirement-label {
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 0.25rem;
+        }
+
+        .requirement-value {
+            color: var(--gray-700);
+        }
+
+        .files-list {
+            margin-top: 1rem;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            background-color: var(--gray-50);
+            border-radius: var(--radius);
+            margin-bottom: 0.75rem;
+        }
+
+        .file-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-left: 1rem;
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 0.25rem;
+        }
+
+        .file-size {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+        }
+
+        .file-download {
+            padding: 0.5rem;
+            color: var(--gray-600);
+            transition: all 0.2s ease;
+        }
+
+            .file-download:hover {
+                color: var(--primary);
+            }
+
+        .files-uploader {
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .upload-box {
+            border: 2px dashed var(--gray-300);
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            color: var(--gray-600);
+        }
+
+            .upload-label i {
+                font-size: 2.5rem;
+                color: var(--primary);
+            }
+
+        .upload-btn {
+            width: 100%;
+        }
+
+        .empty-files {
+            padding: 1.5rem;
+            text-align: center;
+            color: var(--gray-600);
+            background-color: var(--gray-50);
+            border-radius: var(--radius);
+        }
+
+        \0040media (max-width: 768px) {
+            .project-info-grid
+
+        {
+            grid-template-columns: 1fr;
+        }
+
+        .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .project-status {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // إظهار اسم الملف المختار
+            $("#fileUpload").on("change", function() {
+                var fileName = $(this).val().split("\\").pop();
+                if (fileName) {
+                    $(".upload-label span").text(fileName);
+                } else {
+                    $(".upload-label span").text("اختر ملفًا أو اسحبه هنا");
+                }
+            });
+
+            // دعم سحب وإفلات الملفات
+            $(".upload-box").on("dragover", function(e) {
+                e.preventDefault();
+                $(this).addClass("drag-over");
+            });
+
+            $(".upload-box").on("dragleave", function(e) {
+                e.preventDefault();
+                $(this).removeClass("drag-over");
+            });
+
+            $(".upload-box").on("drop", function(e) {
+                e.preventDefault();
+                $(this).removeClass("drag-over");
+
+                if (e.originalEvent.dataTransfer.files.length) {
+                    $("#fileUpload")[0].files = e.originalEvent.dataTransfer.files;
+                    var fileName = $("#fileUpload").val().split("\\").pop();
+                    if (fileName) {
+                        $(".upload-label span").text(fileName);
+                    }
+                }
+            });
+        });
+    </script>
+}

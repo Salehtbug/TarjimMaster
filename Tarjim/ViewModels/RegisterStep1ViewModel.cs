@@ -5,24 +5,22 @@ namespace Tarjim.ViewModels
     public class RegisterStep1ViewModel
     {
         [Required(ErrorMessage = "البريد الإلكتروني مطلوب")]
-        [EmailAddress(ErrorMessage = "صيغة البريد الإلكتروني غير صحيحة")]
+        [EmailAddress(ErrorMessage = "البريد الإلكتروني غير صالح")]
         [Display(Name = "البريد الإلكتروني")]
-        public string? Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "كلمة المرور مطلوبة")]
+        [StringLength(100, ErrorMessage = "يجب أن تكون كلمة المرور على الأقل {2} حرفًا.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [MinLength(6, ErrorMessage = "كلمة المرور يجب أن تكون 6 أحرف على الأقل")]
         [Display(Name = "كلمة المرور")]
-        public string? Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "تأكيد كلمة المرور مطلوب")]
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "كلمة المرور غير متطابقة")]
         [Display(Name = "تأكيد كلمة المرور")]
-        public string? ConfirmPassword { get; set; }
+        [Compare("Password", ErrorMessage = "كلمة المرور وتأكيد كلمة المرور غير متطابقتين.")]
+        public string ConfirmPassword { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "نوع الحساب مطلوب")]
         [Display(Name = "نوع الحساب")]
-        public string? AccountType { get; set; }
+        public string AccountType { get; set; } = "Personal";
     }
 }

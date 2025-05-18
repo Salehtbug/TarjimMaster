@@ -1,3 +1,4 @@
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Tarjim.Models;
 
@@ -15,6 +16,17 @@ builder.Services.AddSession(options =>
 builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyConnectionString")));
 
+// إضافة خدمات المصادقة
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Auth/Login";
+        options.AccessDeniedPath = "/Auth/AccessDenied";
+        options.LogoutPath = "/Auth/Logout";
+        options.ExpireTimeSpan = TimeSpan.FromDays(7);
+        options.SlidingExpiration = true;
+    });
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -30,12 +42,13 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
+
 app.UseSession();
 
+// التأكد من ترتيب هذه الميدلوير
+app.UseAuthentication(); // أضف هذا السطر
 app.UseAuthorization();
-
 
 app.MapControllerRoute(
     name: "default",

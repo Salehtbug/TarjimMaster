@@ -1,0 +1,247 @@
+﻿@model Tarjim.ViewModels.ProjectConfirmationViewModel
+@{
+    ViewData["Title"] = "تأكيد المشروع";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow border-0">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <img src="~/images/logo.png" alt="ترجم" class="img-fluid mb-3" style="max-height: 60px;">
+                        <h2>نشر وظيفة جديدة</h2>
+                    </div>
+
+                    <!-- شريط التقدم -->
+                    <div class="mb-5 text-center">
+                        <div class="d-flex justify-content-center align-items-center position-relative">
+                            <div class="position-relative d-flex align-items-center">
+                                <div class="step-circle completed">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="step-label">معلومات الوظيفة</div>
+                            </div>
+                            <div class="step-connector completed"></div>
+                            <div class="position-relative d-flex align-items-center">
+                                <div class="step-circle active">
+                                    <span>2</span>
+                                </div>
+                                <div class="step-label">التأكيد</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h3 class="mb-4">معلومات الطلب للتأكيد</h3>
+
+                        <div class="bg-light p-3 rounded mb-4">
+                            <div class="row mb-3">
+                                <div class="col-md-4 fw-bold">عنوان المشروع:</div>
+                                <div class="col-md-8">@Model.Title</div>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(Model.Description))
+                            {
+                                <div class="row mb-3">
+                                    <div class="col-md-4 fw-bold">الوصف:</div>
+                                    <div class="col-md-8">@Model.Description</div>
+                                </div>
+                            }
+
+                            <div class="row mb-3">
+                                <div class="col-md-4 fw-bold">اللغات:</div>
+                                <div class="col-md-8">
+                                    <div class="d-flex align-items-center">
+                                        <span>@Model.SourceLanguageName</span>
+                                        <i class="fas fa-arrow-left mx-2"></i>
+                                        <span>@Model.TargetLanguageName</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(Model.CategoryName))
+                            {
+                                <div class="row mb-3">
+                                    <div class="col-md-4 fw-bold">فئة الترجمة:</div>
+                                    <div class="col-md-8">@Model.CategoryName</div>
+                                </div>
+                            }
+
+                            @if (Model.PageCount.HasValue)
+                            {
+                                <div class="row mb-3">
+                                    <div class="col-md-4 fw-bold">عدد الصفحات:</div>
+                                    <div class="col-md-8">@Model.PageCount</div>
+                                </div>
+                            }
+
+                            @if (Model.Budget.HasValue)
+                            {
+                                <div class="row mb-3">
+                                    <div class="col-md-4 fw-bold">الميزانية المتوقعة:</div>
+                                    <div class="col-md-8">@Model.Budget JOD</div>
+                                </div>
+                            }
+
+                            @if (Model.Deadline.HasValue)
+                            {
+                                <div class="row mb-3">
+                                    <div class="col-md-4 fw-bold">الموعد النهائي:</div>
+                                    <div class="col-md-8">@Model.Deadline.Value.ToShortDateString()</div>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- قسم الملفات -->
+                        @if (Model.UploadedFileNames != null && Model.UploadedFileNames.Count > 0)
+                        {
+                            <div class="mb-4">
+                                <h4>الملفات المرفقة</h4>
+                                <div class="list-group">
+                                    @for (int i = 0; i < Model.UploadedFileNames.Count; i++)
+                                    {
+                                        <div class="list-group-item d-flex align-items-center">
+                                            @{
+                                                var fileName = Model.UploadedFileNames[i];
+                                                string icon = "fa-file";
+
+                                                if (fileName.EndsWith(".pdf")) icon = "fa-file-pdf";
+                                                else if (fileName.EndsWith(".doc") || fileName.EndsWith(".docx")) icon = "fa-file-word";
+                                                else if (fileName.EndsWith(".xls") || fileName.EndsWith(".xlsx")) icon = "fa-file-excel";
+                                                else if (fileName.EndsWith(".jpg") || fileName.EndsWith(".jpeg") || fileName.EndsWith(".png")) icon = "fa-file-image";
+                                            }
+                                            <i class="fas @icon text-primary me-2"></i>
+                                            <span>@fileName</span>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        <!-- قسم المتطلبات الخاصة -->
+                        @if (Model.Requirements != null && Model.Requirements.Count > 0)
+                        {
+                            <div class="mb-4">
+                                <h4>المتطلبات الخاصة</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>عنوان المتطلب</th>
+                                                <th>النوع</th>
+                                                <th>القيمة الافتراضية</th>
+                                                <th>مطلوب</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var req in Model.Requirements)
+                                            {
+                                                <tr>
+                                                    <td>@req.Label</td>
+                                                    <td>
+                                                        @{
+                                                            string typeName = req.Type switch
+                                                            {
+                                                                "Text" => "نص",
+                                                                "Email" => "بريد إلكتروني",
+                                                                "Number" => "رقم",
+                                                                "Date" => "تاريخ",
+                                                                _ => req.Type
+                                                            };
+                                                        }
+                                                        @typeName
+                                                    </td>
+                                                    <td>@(string.IsNullOrEmpty(req.Value) ? "-" : req.Value)</td>
+                                                    <td>
+                                                        @if (req.IsRequired == true)
+                                                        {
+                                                            <i class="fas fa-check text-success"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="fas fa-times text-muted"></i>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="alert alert-info">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <i class="fas fa-info-circle fa-2x"></i>
+                                </div>
+                                <div>
+                                    <p class="mb-0">سيتم إرسال إشعار لجميع المترجمين المتاحين بهذا الطلب.</p>
+                                    <p class="mb-0">بمجرد أن يقوم أحد المترجمين بالتقديم، ستتلقى إشعاراً وستتمكن من اختيار المترجم المناسب.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form asp-action="SubmitProject" method="post">
+                        <div class="d-flex justify-content-between mt-5">
+                            <a asp-action="Step1" class="btn btn-outline-secondary">الرجوع</a>
+                            <button type="submit" class="btn btn-primary">نشر الطلب</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        /* تنسيق شريط التقدم */
+        .step-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #6c757d;
+            border: 2px solid #dee2e6;
+            margin: 0 auto;
+        }
+
+            .step-circle.active {
+                background-color: #0dcaf0;
+                color: white;
+                border-color: #0dcaf0;
+            }
+
+            .step-circle.completed {
+                background-color: #198754;
+                color: white;
+                border-color: #198754;
+            }
+
+        .step-label {
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            text-align: center;
+            width: 120px;
+        }
+
+        .step-connector {
+            height: 2px;
+            background-color: #dee2e6;
+            width: 60px;
+            margin: 0 -15px;
+        }
+
+            .step-connector.completed {
+                background-color: #198754;
+            }
+    </style>
+}

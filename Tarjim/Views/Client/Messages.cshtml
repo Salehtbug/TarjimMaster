@@ -1,0 +1,146 @@
+﻿@model List<Tarjim.ViewModels.ConversationViewModel>
+
+@{
+    ViewData["Title"] = "الرسائل";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+<div class="dashboard-container">
+    <!-- السايدبار - نفس الكود الموجود في Index.cshtml -->
+    <aside class="filters-sidebar">
+        <div class="filter-list">
+            <a href="@Url.Action("Index", "Client")" class="filter-button @(ViewBag.ActiveSection == "all" ? "active" : "")" data-section="all">
+                <span class="filter-text">الكل</span>
+                <div class="filter-icon">
+                    <i class="fas fa-border-all"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("InProgress", "Client")" class="filter-button @(ViewBag.ActiveSection == "in-progress" ? "active" : "")" data-section="in-progress">
+                <span class="filter-text">قيد التنفيذ</span>
+                <div class="filter-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("Completed", "Client")" class="filter-button @(ViewBag.ActiveSection == "completed" ? "active" : "")" data-section="completed">
+                <span class="filter-text">مكتمل</span>
+                <div class="filter-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("NotAccepted", "Client")" class="filter-button @(ViewBag.ActiveSection == "not-accepted" ? "active" : "")" data-section="not-accepted">
+                <span class="filter-text">لم يقبل بعد</span>
+                <div class="filter-icon">
+                    <i class="fas fa-hourglass-start"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("Messages", "Client")" class="filter-button @(ViewBag.ActiveSection == "messages" ? "active" : "")" data-section="messages">
+                <span class="filter-text">الرسائل</span>
+                <div class="filter-icon">
+                    <i class="far fa-comment-alt"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("RequestTranslator", "Client")" class="filter-button @(ViewBag.ActiveSection == "request-translator" ? "active" : "")" data-section="request-translator">
+                <span class="filter-text">طلب مترجم فوري</span>
+                <div class="filter-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("Notifications", "Client")" class="filter-button @(ViewBag.ActiveSection == "notifications" ? "active" : "")" data-section="notifications">
+                <span class="filter-text">الإشعارات</span>
+                <div class="filter-icon">
+                    <i class="far fa-bell"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("Settings", "Client")" class="filter-button @(ViewBag.ActiveSection == "settings" ? "active" : "")" data-section="settings">
+                <span class="filter-text">الإعدادات</span>
+                <div class="filter-icon">
+                    <i class="fas fa-cog"></i>
+                </div>
+            </a>
+
+            <button class="filter-button" id="logoutBtn" data-section="logout">
+                <span class="filter-text">تسجيل الخروج</span>
+                <div class="filter-icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+            </button>
+        </div>
+
+        <a href="@Url.Action("Step1", "ProjectCreation")" class="btn btn-primary">
+            <i class="fas fa-plus"></i> نشر وظيفة جديدة
+        </a>
+    </aside>
+
+
+    <!-- المحتوى الرئيسي -->
+    <main class="main-content">
+        <h1 class="dashboard-title">الرسائل</h1>
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="conversations-container">
+                @foreach (var conversation in Model)
+                {
+                    <a href="@Url.Action("Conversation", "Messages", new { userId = conversation.UserId })" class="conversation-card @(conversation.UnreadCount > 0 ? "unread" : "")">
+                        <div class="conversation-avatar">
+                            @conversation.UserName[0]
+                        </div>
+                        <div class="conversation-content">
+                            <div class="conversation-header">
+                                <div class="conversation-name">@conversation.UserName</div>
+                                <div class="conversation-date">@conversation.LastMessageDate.ToString("yyyy/MM/dd HH:mm")</div>
+                            </div>
+                            <div class="conversation-message">@conversation.LastMessage</div>
+                        </div>
+                        @if (conversation.UnreadCount > 0)
+                        {
+                            <div class="unread-badge">@conversation.UnreadCount</div>
+                        }
+                    </a>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3 class="empty-title">لا توجد محادثات</h3>
+                <p class="empty-message">
+                    ليس لديك أي محادثات في الوقت الحالي.
+                </p>
+            </div>
+        }
+    </main>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // زر تسجيل الخروج
+            $("#logoutBtn").click(function() {
+                Swal.fire({
+                    title: 'تسجيل الخروج',
+                    text: 'هل أنت متأكد من رغبتك في تسجيل الخروج؟',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'نعم',
+                    cancelButtonText: 'لا',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '@Url.Action("Logout", "Auth")';
+                    }
+                });
+            });
+        });
+    </script>
+}

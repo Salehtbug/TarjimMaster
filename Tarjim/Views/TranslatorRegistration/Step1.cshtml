@@ -1,0 +1,133 @@
+﻿@model Tarjim.ViewModels.TranslatorRegisterStep1ViewModel
+
+@{
+    ViewData["Title"] = "المعلومات الشخصية - مترجم";
+    ViewData["HideNavbar"] = true;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link href="~/css/translatorregister.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+}
+
+<section class="register-container" dir="rtl" lang="ar">
+    <div class="register-box">
+        <div class="register-side fade-in">
+            <img src="/images/Tarjim_Logo_Arabic_Standard.png" alt="شعار ترجم" class="register-logo" />
+            <p class="register-welcome">معلوماتك الشخصية ليتعرف عليك العملاء ✨</p>
+            <img src="/images/illustration_translator.png" class="illustration-image" alt="صورة توضيحية" />
+        </div>
+
+        <div class="register-card">
+            <div class="register-progress">
+                <ol class="progress-steps">
+                    <li class="step active">
+                        <div class="circle">1</div>
+                        <span class="label">المعلومات الشخصية</span>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="step">
+                        <div class="circle">2</div>
+                        <span class="label">الموقع</span>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="step">
+                        <div class="circle">3</div>
+                        <span class="label">الوثائق والتعليم</span>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="step">
+                        <div class="circle">4</div>
+                        <span class="label">الشهادات</span>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="step">
+                        <div class="circle">5</div>
+                        <span class="label">المهارات</span>
+                    </li>
+                </ol>
+            </div>
+
+            <form asp-action="Step1" asp-controller="TranslatorRegistration" method="post" enctype="multipart/form-data" class="register-form">
+                <div asp-validation-summary="ModelOnly" class="register-error text-center mb-4"></div>
+
+                <div class="form-group text-center">
+                    <label for="avatarUpload" class="cursor-pointer">
+                        <div class="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center text-3xl text-gray-600 hover:bg-gray-400 transition mx-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">الصورة الشخصية</p>
+                    </label>
+                    <input asp-for="Avatar" id="avatarUpload" type="file" class="hidden" accept="image/*" />
+                    <span asp-validation-for="Avatar" class="register-error block text-sm mt-1"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Name" class="register-label">الاسم الثنائي</label>
+                    <input asp-for="Name" class="register-input" placeholder="أدخل الاسم" />
+                    <span asp-validation-for="Name" class="register-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Email" class="register-label">البريد الإلكتروني</label>
+                    <input asp-for="Email" class="register-input" type="email" placeholder="name@example.com" dir="ltr" />
+                    <span asp-validation-for="Email" class="register-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Password" class="register-label">كلمة المرور</label>
+                    <input asp-for="Password" class="register-input" type="password" placeholder="••••••••" dir="ltr" />
+                    <span asp-validation-for="Password" class="register-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword" class="register-label">تأكيد كلمة المرور</label>
+                    <input asp-for="ConfirmPassword" class="register-input" type="password" placeholder="••••••••" dir="ltr" />
+                    <span asp-validation-for="ConfirmPassword" class="register-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Bio" class="register-label">وصف الخدمة</label>
+                    <textarea asp-for="Bio" class="register-input" rows="4" placeholder="أدخل وصف للخدمة التي تقدمها..."></textarea>
+                    <span asp-validation-for="Bio" class="register-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="registert-button">التالي</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- عناصر زخرفية للخلفية -->
+    <span class="register-decor decor-1">مترجم</span>
+    <span class="register-decor decor-2">ترجم</span>
+    <span class="register-decor decor-3">فرصتك</span>
+    <span class="register-decor decor-4">ابدأ الآن</span>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // عرض معاينة الصورة عند الاختيار
+        document.getElementById('avatarUpload').addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                const preview = document.querySelector('.w-24.h-24');
+
+                reader.onload = function(e) {
+                    preview.innerHTML = '';
+                    preview.style.backgroundImage = `url(${e.target.result})`;
+                    preview.style.backgroundSize = 'cover';
+                    preview.style.backgroundPosition = 'center';
+                };
+
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+    </script>
+}

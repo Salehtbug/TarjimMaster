@@ -16,7 +16,12 @@ namespace Tarjim.Controllers
         {
             return View();
         }
-        public ActionResult About()
+        public IActionResult About()
+        {
+            return View();
+        }
+
+        public IActionResult Contact()
         {
             return View();
         }

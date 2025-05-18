@@ -1,0 +1,187 @@
+﻿@model List<Tarjim.Models.Language>
+@{
+    ViewData["Title"] = "إدارة اللغات";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">إدارة اللغات</h5>
+        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addLanguageModal">
+            <i class="fas fa-plus me-1"></i> إضافة لغة جديدة
+        </button>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 70px;">الرقم</th>
+                        <th>اسم اللغة</th>
+                        <th>رمز اللغة</th>
+                        <th>عدد المشاريع (مصدر)</th>
+                        <th>عدد المشاريع (هدف)</th>
+                        <th style="width: 150px;">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var language in Model)
+                        {
+                            <tr>
+                                <td>@language.LanguageId</td>
+                                <td>@language.LanguageName</td>
+                                <td><code>@language.LanguageCode</code></td>
+                                <td>@language.ProjectSourceLanguages.Count</td>
+                                <td>@language.ProjectTargetLanguages.Count</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <button type="button" class="btn btn-light" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#editLanguageModal" 
+                                                data-id="@language.LanguageId" 
+                                                data-name="@language.LanguageName"
+                                                data-code="@language.LanguageCode">
+                                            <i class="fas fa-edit text-primary"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-light" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#deleteLanguageModal" 
+                                                data-id="@language.LanguageId" 
+                                                data-name="@language.LanguageName"
+                                                @(language.ProjectSourceLanguages.Count > 0 || language.ProjectTargetLanguages.Count > 0 ? "disabled" : "")
+                                                title="@(language.ProjectSourceLanguages.Count > 0 || language.ProjectTargetLanguages.Count > 0 ? "لا يمكن حذف اللغة لأنها مستخدمة في مشاريع" : "حذف")">
+                                            <i class="fas fa-trash text-danger"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-4">لا توجد لغات متوفرة</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal إضافة لغة -->
+<div class="modal fade" id="addLanguageModal" tabindex="-1" aria-labelledby="addLanguageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="Admin" asp-action="AddLanguage" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addLanguageModalLabel">إضافة لغة جديدة</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="languageName" class="form-label">اسم اللغة</label>
+                        <input type="text" class="form-control" id="languageName" name="languageName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="languageCode" class="form-label">رمز اللغة (ISO 639-1)</label>
+                        <input type="text" class="form-control" id="languageCode" name="languageCode" required maxlength="10" 
+                               pattern="[a-z]{2,3}(-[A-Z]{2})?"
+                               title="يجب أن يكون رمز اللغة وفقًا لمعيار ISO 639-1 (مثل ar, en, fr)">
+                        <small class="form-text text-muted">أدخل رمز اللغة وفقًا لمعيار ISO 639-1 (مثل ar, en, fr)</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">إضافة</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal تعديل لغة -->
+<div class="modal fade" id="editLanguageModal" tabindex="-1" aria-labelledby="editLanguageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="Admin" asp-action="EditLanguage" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editLanguageModalLabel">تعديل اللغة</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editLanguageId" name="languageId">
+                    <div class="mb-3">
+                        <label for="editLanguageName" class="form-label">اسم اللغة</label>
+                        <input type="text" class="form-control" id="editLanguageName" name="languageName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editLanguageCode" class="form-label">رمز اللغة (ISO 639-1)</label>
+                        <input type="text" class="form-control" id="editLanguageCode" name="languageCode" required maxlength="10"
+                               pattern="[a-z]{2,3}(-[A-Z]{2})?"
+                               title="يجب أن يكون رمز اللغة وفقًا لمعيار ISO 639-1 (مثل ar, en, fr)">
+                        <small class="form-text text-muted">أدخل رمز اللغة وفقًا لمعيار ISO 639-1 (مثل ar, en, fr)</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal حذف لغة -->
+<div class="modal fade" id="deleteLanguageModal" tabindex="-1" aria-labelledby="deleteLanguageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="Admin" asp-action="DeleteLanguage" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteLanguageModalLabel">تأكيد الحذف</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="deleteLanguageId" name="languageId">
+                    <p>هل أنت متأكد من رغبتك في حذف اللغة: <strong id="deleteLanguageName"></strong>؟</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-danger">تأكيد الحذف</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // تحديث بيانات modal التعديل
+            $('#editLanguageModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                var name = button.data('name');
+                var code = button.data('code');
+
+                var modal = $(this);
+                modal.find('#editLanguageId').val(id);
+                modal.find('#editLanguageName').val(name);
+                modal.find('#editLanguageCode').val(code);
+            });
+
+            // تحديث بيانات modal الحذف
+            $('#deleteLanguageModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                var name = button.data('name');
+
+                var modal = $(this);
+                modal.find('#deleteLanguageId').val(id);
+                modal.find('#deleteLanguageName').text(name);
+            });
+        });
+    </script>
+}

@@ -1,0 +1,90 @@
+﻿@{
+    ViewData["Title"] = "إعدادات النظام";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-white">
+        <h5 class="card-title mb-0">إعدادات النظام</h5>
+    </div>
+    <div class="card-body">
+        <form asp-controller="Admin" asp-action="UpdateSettings" method="post">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="platformFeePercentage" class="form-label">نسبة عمولة المنصة (%)</label>
+                        <div class="input-group">
+                            <input type="number" id="platformFeePercentage" name="platformFeePercentage" class="form-control" min="0" max="100" step="0.01" value="10" required>
+                            <span class="input-group-text">%</span>
+                        </div>
+                        <small class="text-muted">النسبة المئوية التي يتم خصمها من قيمة المشروع كعمولة للمنصة</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="allowInstantTranslation" name="allowInstantTranslation" checked>
+                            <label class="form-check-label" for="allowInstantTranslation">تفعيل خدمة الترجمة الفورية</label>
+                        </div>
+                        <small class="text-muted">تمكين أو تعطيل خدمة الترجمة الفورية في المنصة</small>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="minProjectFee" class="form-label">الحد الأدنى لقيمة المشروع</label>
+                        <div class="input-group">
+                            <input type="number" id="minProjectFee" name="minProjectFee" class="form-control" min="0" step="0.01" value="5" required>
+                            <span class="input-group-text">JOD</span>
+                        </div>
+                        <small class="text-muted">الحد الأدنى المسموح به لقيمة أي مشروع</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="instantTranslationFee" class="form-label">رسوم الترجمة الفورية (لكل ساعة)</label>
+                        <div class="input-group">
+                            <input type="number" id="instantTranslationFee" name="instantTranslationFee" class="form-control" min="0" step="0.01" value="15" required>
+                            <span class="input-group-text">JOD</span>
+                        </div>
+                        <small class="text-muted">سعر الساعة الواحدة لخدمة الترجمة الفورية</small>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="mb-3">إعدادات التواصل</h6>
+                    <div class="mb-3">
+                        <label for="supportEmail" class="form-label">البريد الإلكتروني للدعم</label>
+                        <input type="email" id="supportEmail" name="supportEmail" class="form-control" value="support@tarjim.com" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">رقم الهاتف</label>
+                        <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" value="+962 777 123 456">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <h6 class="mb-3">إعدادات الحساب البنكي</h6>
+                    <div class="mb-3">
+                        <label for="bankName" class="form-label">اسم البنك</label>
+                        <input type="text" id="bankName" name="bankName" class="form-control" value="البنك العربي">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="accountNumber" class="form-label">رقم الحساب</label>
+                        <input type="text" id="accountNumber" name="accountNumber" class="form-control" value="0001-234567-890">
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-end mt-4">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-1"></i> حفظ الإعدادات
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

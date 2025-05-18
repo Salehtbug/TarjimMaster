@@ -1,0 +1,496 @@
+﻿@model Tarjim.ViewModels.ProjectDetailsViewModel
+@{
+    ViewData["Title"] = "تفاصيل المشروع";
+    Layout = User.IsInRole("Translator")
+        ? "~/Views/Shared/_TranslatorLayout.cshtml"
+        : "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+<div class="container main-content my-4">
+    <div class="row">
+        <!-- القائمة الجانبية -->
+        @* <div class="col-lg-3 mb-4"> *@
+        @*     <div class="card border-0 shadow-sm sidebar"> *@
+        @*         <div class="card-header bg-transparent border-bottom-0"> *@
+        @*             <h5 class="mb-0">لوحة التحكم</h5> *@
+        @*         </div> *@
+        @*         <div class="list-group list-group-flush"> *@
+        @*             <a asp-controller="Client" asp-action="Index" class="list-group-item list-group-item-action"> *@
+        @*                 <i class="fas fa-home me-2"></i> الرئيسية *@
+        @*             </a> *@
+        @*             <a asp-controller="Client" asp-action="InProgress" class="list-group-item list-group-item-action"> *@
+        @*                 <i class="fas fa-spinner me-2"></i> قيد التنفيذ *@
+        @*             </a> *@
+        @*             <a asp-controller="Client" asp-action="Completed" class="list-group-item list-group-item-action"> *@
+        @*                 <i class="fas fa-check-circle me-2"></i> مكتملة *@
+        @*             </a> *@
+        @*             <a asp-controller="Client" asp-action="NotAccepted" class="list-group-item list-group-item-action"> *@
+        @*                 <i class="fas fa-clock me-2"></i> غير مقبولة *@
+        @*             </a> *@
+        @*             <a asp-controller="ProjectCreation" asp-action="Step1" class="list-group-item list-group-item-action active"> *@
+        @*                 <i class="fas fa-plus-circle me-2"></i> نشر طلب جديد *@
+        @*             </a> *@
+        @*             <a asp-controller="Client" asp-action="Messages" class="list-group-item list-group-item-action"> *@
+        @*                 <i class="fas fa-comment me-2"></i> الرسائل *@
+        @*             </a> *@
+        @*             <a asp-controller="Client" asp-action="RequestTranslator" class="list-group-item list-group-item-action"> *@
+        @*                 <i class="fas fa-user-plus me-2"></i> طلب مترجم فوري *@
+        @*             </a> *@
+        @*             <a asp-controller="Client" asp-action="Settings" class="list-group-item list-group-item-action"> *@
+        @*                 <i class="fas fa-cog me-2"></i> الإعدادات *@
+        @*             </a> *@
+        @*         </div> *@
+        @*     </div> *@
+        @* </div> *@
+
+        <!-- المحتوى الرئيسي -->
+        <div class="col-lg-9">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center bg-transparent">
+                    <h5 class="mb-0">تفاصيل المشروع</h5>
+                    <div>
+                        @if (Model.Project?.Status == "Open")
+                        {
+                            <a asp-controller="Project" asp-action="Edit" asp-route-id="@Model.Project.ProjectId" class="btn btn-sm btn-outline-primary ms-1">
+                                <i class="fas fa-edit"></i> تعديل
+                            </a>
+                            <button type="button" class="btn btn-sm btn-outline-danger ms-1" data-bs-toggle="modal" data-bs-target="#deleteProjectModal">
+                                <i class="fas fa-trash"></i> حذف
+                            </button>
+                        }
+                        <a asp-controller="Client" asp-action="Index" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-arrow-right"></i> عودة
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    @if (Model.Project != null)
+                    {
+                        <div class="project-details">
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <h4 class="mb-3">@Model.Project.Title</h4>
+                                    <div class="mb-3">
+                                        <div class="badge bg-@(StatusBadgeColor(Model.Project.Status)) mb-2">@GetStatusName(Model.Project.Status)</div>
+                                        <div class="text-muted">
+                                            <small><i class="far fa-calendar-alt me-1"></i> تاريخ الإنشاء: @Model.Project.CreatedAt?.ToString("yyyy/MM/dd")</small>
+                                        </div>
+                                    </div>
+
+                                    @if (!string.IsNullOrEmpty(Model.Project.Description))
+                                    {
+                                        <div class="mb-3">
+                                            <h6 class="fw-bold">وصف المشروع:</h6>
+                                            <p class="mb-0">@Model.Project.Description</p>
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="project-info">
+                                        <div class="info-item d-flex justify-content-between mb-2">
+                                            <span class="info-label">اللغة المصدر:</span>
+                                            <span class="info-value">@(Model.Project.SourceLanguage?.LanguageName ?? "-")</span>
+                                        </div>
+                                        <div class="info-item d-flex justify-content-between mb-2">
+                                            <span class="info-label">اللغة الهدف:</span>
+                                            <span class="info-value">@(Model.Project.TargetLanguage?.LanguageName ?? "-")</span>
+                                        </div>
+                                        <div class="info-item d-flex justify-content-between mb-2">
+                                            <span class="info-label">فئة الترجمة:</span>
+                                            <span class="info-value">@(Model.Project.Category?.CategoryName ?? "-")</span>
+                                        </div>
+                                        <div class="info-item d-flex justify-content-between mb-2">
+                                            <span class="info-label">عدد الصفحات:</span>
+                                            <span class="info-value">@(Model.Project.PageCount?.ToString() ?? "-")</span>
+                                        </div>
+                                        <div class="info-item d-flex justify-content-between mb-2">
+                                            <span class="info-label">الميزانية:</span>
+                                            <span class="info-value">@(Model.Project.Budget?.ToString("0.00") ?? "-") JOD</span>
+                                        </div>
+                                        <div class="info-item d-flex justify-content-between mb-2">
+                                            <span class="info-label">الموعد النهائي:</span>
+                                            <span class="info-value">@(Model.Project.Deadline?.ToString("yyyy/MM/dd") ?? "-")</span>
+                                        </div>
+
+                                        @if (Model.Project.Status != "Open")
+                                        {
+                                            <div class="info-item d-flex justify-content-between mb-2">
+                                                <span class="info-label">المترجم:</span>
+                                                <span class="info-value">
+                                                    @if (Model.Project.AssignedTranslator != null)
+                                                    {
+                                                        @Model.Project.AssignedTranslator.Name
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>-</span>
+                                                    }
+                                                </span>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- الملفات المرفقة -->
+                            @if (Model.ProjectFiles != null && Model.ProjectFiles.Any())
+                            {
+                                <div class="section mb-4">
+                                    <h5 class="section-title">الملفات المرفقة</h5>
+                                    <div class="list-group">
+                                        @foreach (var file in Model.ProjectFiles.Where(f => f.IsOriginal == true))
+                                        {
+                                            string fileIcon = GetFileIcon(file.FileName);
+                                            <a href="@Url.Action("DownloadFile", "Project", new { id = file.FileId })" class="list-group-item list-group-item-action d-flex align-items-center">
+                                                <i class="fas @fileIcon me-2 text-primary"></i>
+                                                <span class="me-auto">@file.FileName</span>
+                                                <small class="text-muted">@(file.FileSize / 1024) كيلوبايت</small>
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- الملفات المترجمة -->
+                            @if (Model.ProjectFiles != null && Model.ProjectFiles.Any(f => f.IsOriginal == false))
+                            {
+                                <div class="section mb-4">
+                                    <h5 class="section-title">الملفات المترجمة</h5>
+                                    <div class="list-group">
+                                        @foreach (var file in Model.ProjectFiles.Where(f => f.IsOriginal == false))
+                                        {
+                                            string fileIcon = GetFileIcon(file.FileName);
+                                            <a href="@Url.Action("DownloadFile", "Project", new { id = file.FileId })" class="list-group-item list-group-item-action d-flex align-items-center">
+                                                <i class="fas @fileIcon me-2 text-success"></i>
+                                                <span class="me-auto">@file.FileName</span>
+                                                <small class="text-muted">@(file.FileSize / 1024) كيلوبايت</small>
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- المتطلبات الخاصة -->
+                            @if (Model.ProjectRequirements != null && Model.ProjectRequirements.Any())
+                            {
+                                <div class="section mb-4">
+                                    <h5 class="section-title">المتطلبات الخاصة</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>المتطلب</th>
+                                                    <th>النوع</th>
+                                                    <th>القيمة</th>
+                                                    <th>إلزامي</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var req in Model.ProjectRequirements)
+                                                {
+                                                    <tr>
+                                                        <td>@req.RequirementLabel</td>
+                                                        <td>@GetRequirementTypeName(req.RequirementType)</td>
+                                                        <td>@(req.RequirementValue ?? "-")</td>
+                                                        <td>
+                                                            @if (req.IsRequired == true)
+                                                            {
+                                                                <i class="fas fa-check text-success"></i>
+                                                            }
+                                                            else
+                                                            {
+                                                                <i class="fas fa-times text-muted"></i>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- العروض المقدمة -->
+                            @if (Model.ProjectOffers != null && Model.ProjectOffers.Any())
+                            {
+                                <div class="section mb-4">
+                                    <h5 class="section-title">العروض المقدمة</h5>
+                                    <div class="row">
+                                        @foreach (var offer in Model.ProjectOffers)
+                                        {
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card h-100">
+                                                    <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            @if (offer.Translator != null)
+                                                            {
+                                                                <h6 class="mb-0">@offer.Translator.Name</h6>
+                                                            }
+                                                            else
+                                                            {
+                                                                <h6 class="mb-0">مترجم</h6>
+                                                            }
+                                                            <small class="text-muted">@(offer.CreatedAt?.ToString("yyyy/MM/dd") ?? "-")</small>
+                                                        </div>
+                                                        <div class="badge bg-primary">@offer.ProposedFee JOD</div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p class="card-text small">
+                                                            @(offer.Message ?? "لا توجد ملاحظات إضافية.")
+                                                        </p>
+                                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                                            <div class="small text-muted">
+                                                                <i class="far fa-calendar-alt me-1"></i> موعد التسليم: @(offer.DeliveryDate?.ToString("yyyy/MM/dd") ?? "-")
+                                                            </div>
+                                                            @if (User.IsInRole("Client"))
+                                                            {
+                                                                <form asp-controller="Client" asp-action="AcceptOffer" method="post">
+                                                                    <input type="hidden" name="offerId" value="@offer.OfferId" />
+                                                                    <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('هل أنت متأكد من قبول هذا العرض؟')">
+                                                                        <i class="fas fa-check me-1"></i> قبول العرض
+                                                                    </button>
+                                                                </form>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- الإجراءات -->
+                            <div class="section mb-4">
+                                @if (Model.Project.Status == "Open")
+                                {
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        هذا المشروع مفتوح للمترجمين لتقديم العروض عليه. سيتم إشعارك عند استلام عروض جديدة.
+                                    </div>
+                                }
+                                else if (Model.Project.Status == "Assigned" || Model.Project.Status == "In Progress")
+                                {
+                                    <div class="alert alert-primary">
+                                        <i class="fas fa-spinner me-2"></i>
+                                        هذا المشروع قيد التنفيذ حالياً. سيتم إشعارك عند الانتهاء من الترجمة.
+                                    </div>
+                                }
+                                else if (Model.Project.Status == "Completed")
+                                {
+                                    <div class="alert alert-success">
+                                        <i class="fas fa-check-circle me-2"></i>
+                                        تم إكمال هذا المشروع. يمكنك الآن تنزيل الملفات المترجمة.
+                                    </div>
+
+                                    <!-- نموذج تقييم المترجم واستلام المشروع -->
+                                    <div class="card border-0 shadow-sm mt-3">
+                                        <div class="card-header bg-transparent">
+                                            <h5 class="mb-0">استلام المشروع</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <form asp-controller="Client" asp-action="CompleteReceiving" method="post">
+                                                <input type="hidden" name="projectId" value="@Model.Project.ProjectId" />
+
+                                                <div class="mb-3">
+                                                    <label class="form-label">تقييم المترجم</label>
+                                                    <div class="rating-stars mb-2">
+                                                        <input type="radio" id="star5" name="rating" value="5" required /><label for="star5"></label>
+                                                        <input type="radio" id="star4" name="rating" value="4" /><label for="star4"></label>
+                                                        <input type="radio" id="star3" name="rating" value="3" /><label for="star3"></label>
+                                                        <input type="radio" id="star2" name="rating" value="2" /><label for="star2"></label>
+                                                        <input type="radio" id="star1" name="rating" value="1" /><label for="star1"></label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="comment" class="form-label">تعليق</label>
+                                                    <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="أضف تعليقاً على أداء المترجم..."></textarea>
+                                                </div>
+
+                                                <button type="submit" class="btn btn-primary" onclick="return confirm('هل أنت متأكد من استلام المشروع؟')">
+                                                    <i class="fas fa-check-circle me-1"></i> استلام المشروع وتقييم المترجم
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                }
+                                else if (Model.Project.Status == "Received")
+                                {
+                                    <div class="alert alert-success">
+                                        <i class="fas fa-check-circle me-2"></i>
+                                        تم استلام هذا المشروع. شكراً لاستخدامك منصة ترجيم.
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            لم يتم العثور على تفاصيل المشروع.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal حذف المشروع -->
+<div class="modal fade" id="deleteProjectModal" tabindex="-1" aria-labelledby="deleteProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteProjectModalLabel">تأكيد الحذف</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>هل أنت متأكد من حذف هذا المشروع؟ لا يمكن التراجع عن هذا الإجراء.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                <form asp-controller="Project" asp-action="Delete" method="post">
+                    <input type="hidden" name="id" value="@Model?.Project?.ProjectId" />
+                    <button type="submit" class="btn btn-danger">تأكيد الحذف</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .section {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .info-label {
+            font-weight: 500;
+            color: #6c757d;
+        }
+
+        .info-value {
+            font-weight: 500;
+        }
+
+        /* تنسيق التقييم بالنجوم */
+        .rating-stars {
+            direction: ltr;
+            display: inline-block;
+        }
+
+            .rating-stars input {
+                display: none;
+            }
+
+            .rating-stars label {
+                float: right;
+                cursor: pointer;
+                color: #ccc;
+                font-size: 1.5rem;
+            }
+
+                .rating-stars label:before {
+                    content: '\f005';
+                    font-family: 'Font Awesome 5 Free';
+                    font-weight: 900;
+                }
+
+            .rating-stars input:checked ~ label {
+                color: #ffc107;
+            }
+
+            .rating-stars:not(:checked) > label:hover,
+            .rating-stars:not(:checked) > label:hover ~ label {
+                color: #ffc107;
+            }
+
+            .rating-stars input:checked ~ label:hover,
+            .rating-stars input:checked ~ label:hover ~ label {
+                color: #ffdb70;
+            }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        // تنشيط نظام تقييم النجوم
+        $(document).ready(function() {
+            $('.rating-stars input').change(function() {
+                var ratingValue = $(this).val();
+                console.log('تم اختيار تقييم: ' + ratingValue);
+            });
+        });
+    </script>
+}
+
+@functions {
+
+
+    string StatusBadgeColor(string status)
+    {
+        return status switch
+        {
+            "Open" => "secondary",
+            "Assigned" => "info",
+            "In Progress" => "primary",
+            "Completed" => "success",
+            "Received" => "success",
+            "Canceled" => "danger",
+            _ => "secondary"
+        };
+    }
+
+    string GetStatusName(string status)
+    {
+        return status switch
+        {
+            "Open" => "مفتوح",
+            "Assigned" => "تم التعيين",
+            "In Progress" => "قيد التنفيذ",
+            "Completed" => "مكتمل",
+            "Received" => "تم الاستلام",
+            "Canceled" => "ملغي",
+            _ => status
+        };
+    }
+
+    string GetFileIcon(string fileName)
+    {
+        string extension = System.IO.Path.GetExtension(fileName).ToLower();
+        return extension switch
+        {
+            ".pdf" => "fa-file-pdf",
+            ".doc" => "fa-file-word",
+            ".docx" => "fa-file-word",
+            ".xls" => "fa-file-excel",
+            ".xlsx" => "fa-file-excel",
+            ".jpg" => "fa-file-image",
+            ".jpeg" => "fa-file-image",
+            ".png" => "fa-file-image",
+            _ => "fa-file"
+        };
+    }
+
+    string GetRequirementTypeName(string type)
+    {
+        return type switch
+        {
+            "Text" => "نص",
+            "Email" => "بريد إلكتروني",
+            "Number" => "رقم",
+            "Date" => "تاريخ",
+            _ => type
+        };
+    }
+}

@@ -15,6 +15,10 @@ public partial class Notification
 
     public string? LinkUrl { get; set; }
 
+    public int? RelatedId { get; set; }
+
+    public string? RelatedType { get; set; }
+
     public bool? IsRead { get; set; }
 
     public DateTime? CreatedAt { get; set; }

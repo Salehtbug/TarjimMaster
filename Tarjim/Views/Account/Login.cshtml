@@ -1,82 +1,0 @@
-﻿@model Tarjim.ViewModels.LoginViewModel
-
-@{
-    ViewData["Title"] = "تسجيل الدخول";
-    ViewData["HideNavbar"] = true;
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-@section Styles {
-    <link href="~/css/base.login.css" rel="stylesheet" />
-    <link href="~/css/login.client.css" rel="stylesheet" />
-
-    <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
-}
-
-<section class="login-container" dir="rtl" lang="ar">
-    <div class="background-icons">
-        <img src="/images/trans0.jpg" alt="رمز ترجمة" class="bg-image-decor left-top" />
-        <img src="/images/trans10.png" alt="Globe icon" class="bg-image-decor right-bottom" />
-        <img src="/images/trans00.png" alt="خريطة عالمية" class="bg-image-decor top-right" />
-    </div>
-    <div class="login-box">
-
-        <div class="login-side" data-aos="fade-up">
-            <img src="/images/Tarjim_Logo_Arabic_Standard.png" alt="شعار ترجم" class="login-logo fade-in" />
-            <div class="login-welcome">
-                <h1>أهلاً بعودتك إلى ترجم 👋</h1>
-                <p>منصة تجمعك مع فرص الترجمة في كل مكان. سجل دخولك وابدأ الآن!</p>
-            </div>
-        </div>
-
-        <div class="login-card" data-aos="fade-up" data-aos-delay="200">
-
-            <form asp-action="Login" asp-controller="Account" method="post" class="login-form">
-
-                <div class="form-group">
-                    <label asp-for="Email" class="login-label">البريد الإلكتروني</label>
-                    <input asp-for="Email" type="email" class="login-input" placeholder="name@email.com" />
-                    <span asp-validation-for="Email" class="login-error"></span>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="Password" class="login-label">كلمة المرور</label>
-                    <input asp-for="Password" type="password" class="login-input" placeholder="••••••" />
-                    <span asp-validation-for="Password" class="login-error"></span>
-                </div>
-
-                <div class="form-options flex items-center justify-between text-sm">
-                    <a href="#" class="forgot-password hover-underline">نسيت كلمة المرور؟</a>
-
-                    <div class="remember-me-wrapper">
-                        <input asp-for="RememberMe" type="checkbox" id="rememberMe" class="remember-checkbox" />
-                        <label for="rememberMe" class="remember-label">تذكرني</label>
-                    </div>
-                </div>
-
-
-                <button type="submit" class="login-button">تسجيل الدخول</button>
-
-                <div class="relative flex items-center my-6">
-                    <div class="flex-grow border-t border-gray-300"></div>
-                    <span class="flex-shrink px-4 text-gray-500 text-sm">أو</span>
-                    <div class="flex-grow border-t border-gray-300"></div>
-                </div>
-
-
-                <button type="button" class="login-google-btn">
-                    <span>أنشئ حساب باستخدام جوجل</span>
-                    <img src="/images/iconsGoogle.png" class="login-google-icon" />
-                </button>
-
-                <a href="/Account/RegisterStep1" class="login-alt-link">أنشئ حساب كعميل</a>
-            </form>
-        </div>
-    </div>
-</section>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    <script>AOS.init();</script>
-}

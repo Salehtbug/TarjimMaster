@@ -1,0 +1,179 @@
+﻿@model List<Tarjim.Models.Project>
+@{
+    ViewData["Title"] = "إدارة المشاريع";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">إدارة المشاريع</h5>
+        <div class="d-flex">
+            <div class="dropdown me-2">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="statusFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    @if (!string.IsNullOrEmpty(ViewBag.Status))
+                    {
+                        @(ViewBag.Status switch
+                        {
+                            "Open" => "مفتوح",
+                            "Assigned" => "تم التعيين",
+                            "In Progress" => "قيد التنفيذ",
+                            "Completed" => "مكتمل",
+                            "Received" => "تم الاستلام",
+                            "Canceled" => "ملغي",
+                            _ => ViewBag.Status
+                        })
+                    }
+                    else
+                    {
+                        <span>جميع الحالات</span>
+                    }
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="statusFilterDropdown">
+                    <li><a class="dropdown-item" href="@Url.Action("Projects", "Admin")">جميع الحالات</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Projects", "Admin", new { status = "Open" })">مفتوح</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Projects", "Admin", new { status = "Assigned" })">تم التعيين</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Projects", "Admin", new { status = "In Progress" })">قيد التنفيذ</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Projects", "Admin", new { status = "Completed" })">مكتمل</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Projects", "Admin", new { status = "Received" })">تم الاستلام</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Projects", "Admin", new { status = "Canceled" })">ملغي</a></li>
+                </ul>
+            </div>
+            <form class="d-flex" action="@Url.Action("Projects", "Admin")" method="get">
+                <input type="hidden" name="status" value="@ViewBag.Status" />
+                <input class="form-control form-control-sm me-2" type="search" name="search" placeholder="بحث..." aria-label="بحث">
+                <button class="btn btn-sm btn-outline-primary" type="submit">بحث</button>
+            </form>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 60px;">الرقم</th>
+                        <th>العنوان</th>
+                        <th>العميل</th>
+                        <th>اللغات</th>
+                        <th>التصنيف</th>
+                        <th>المترجم</th>
+                        <th>الميزانية</th>
+                        <th>الموعد النهائي</th>
+                        <th>الحالة</th>
+                        <th>تاريخ الإنشاء</th>
+                        <th style="width: 90px;">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var project in Model)
+                        {
+                            <tr>
+                                <td>@project.ProjectId</td>
+                                <td>
+                                    <a href="@Url.Action("ProjectDetails", "Admin", new { id = project.ProjectId })" title="@project.Title">
+                                        @(project.Title?.Length > 30 ? project.Title.Substring(0, 30) + "..." : project.Title)
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("UserDetails", "Admin", new { id = project.ClientId })">
+                                        @project.Client.Name
+                                    </a>
+                                </td>
+                                <td>
+                                    <div>
+                                        <span>من: @(project.SourceLanguage?.LanguageName ?? "-")</span>
+                                        <br />
+                                        <span>إلى: @(project.TargetLanguage?.LanguageName ?? "-")</span>
+                                    </div>
+                                </td>
+                                <td>@(project.Category?.CategoryName ?? "-")</td>
+                                <td>
+                                    @if (project.AssignedTranslator != null)
+                                    {
+                                        <a href="@Url.Action("UserDetails", "Admin", new { id = project.AssignedTranslatorId })">
+                                            @project.AssignedTranslator.Name
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">غير معين</span>
+                                    }
+                                </td>
+
+                                <td>@(project.Budget?.ToString("0.00") ?? "-") JOD</td>
+                                <td>
+                                    @if (project.Deadline.HasValue)
+                                    {
+                                        <span class="@(DateTime.Now > project.Deadline ? "text-danger" : "")">
+                                            @project.Deadline.Value.ToString("yyyy/MM/dd")
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span>-</span>
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        string badgeClass = project.Status switch
+                                        {
+                                            "Open" => "badge bg-secondary",
+                                            "Assigned" => "badge bg-info",
+                                            "In Progress" => "badge bg-primary",
+                                            "Completed" => "badge bg-success",
+                                            "Received" => "badge bg-success",
+                                            "Canceled" => "badge bg-danger",
+                                            _ => "badge bg-secondary"
+                                        };
+
+                                        string statusText = project.Status switch
+                                        {
+                                            "Open" => "مفتوح",
+                                            "Assigned" => "تم التعيين",
+                                            "In Progress" => "قيد التنفيذ",
+                                            "Completed" => "مكتمل",
+                                            "Received" => "تم الاستلام",
+                                            "Canceled" => "ملغي",
+                                            _ => project.Status
+                                        };
+                                    }
+                                    <span class="@badgeClass">@statusText</span>
+                                </td>
+                                <td>@project.CreatedAt?.ToString("yyyy/MM/dd")</td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-light dropdown-toggle" type="button" id="actionDropdown@(project.ProjectId)" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="actionDropdown@(project.ProjectId)">
+                                            <li>
+                                                <a class="dropdown-item" href="@Url.Action("ProjectDetails", "Admin", new { id = project.ProjectId })">
+                                                    <i class="fas fa-eye me-1"></i> عرض التفاصيل
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="11" class="text-center py-4">لا توجد مشاريع متوفرة</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // يمكن إضافة أي سكريبتات ضرورية هنا
+        });
+    </script>
+}   

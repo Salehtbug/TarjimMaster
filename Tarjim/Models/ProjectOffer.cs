@@ -15,7 +15,7 @@ public partial class ProjectOffer
 
     public string? Message { get; set; }
 
-    public DateOnly? DeliveryDate { get; set; }
+    public DateTime? DeliveryDate { get; set; }
 
     public string OfferStatus { get; set; } = null!;
 

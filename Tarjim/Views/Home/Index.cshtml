@@ -179,20 +179,15 @@
         </p>
 
         <div class="hero-cta-buttons">
-            <a href="/Register" class="hero-btn hero-btn-primary">
-                @* <svg xmlns="http://www.w3.org/2000/svg" class="icon-btn" viewBox="0 0 24 24" fill="currentColor"> *@
-                @*     <path d="M16 21v-2a4 4 0 00-8 0v2M12 11a4 4 0 100-8 4 4 0 000 8z" /> *@
-                @* </svg> *@
+            <a asp-controller="Auth" asp-action="ChooseRole" class="hero-btn hero-btn-primary">
                 سجّل الآن
             </a>
 
-            <a href="#demo" class="hero-btn hero-btn-secondary">
-                @* <svg class="icon-btn arrow-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"> *@
-                @*     <path d="M13 7l5 5-5 5M6 12h12" /> *@
-                @* </svg> *@
+            <a asp-controller="Home" asp-action="Contact" class="hero-btn hero-btn-secondary">
                 اطلب عرض توضيحي
             </a>
         </div>
+
     </div>
 </section>
 <section class="py-20 bg-white" dir="rtl" lang="ar">
@@ -363,7 +358,7 @@
         <div class="text-center mt-16">
             <p class="text-white text-lg">
                 هل لديك استفسار؟ نحن هنا لمساعدتك!
-                <a href="#"
+                <a href="/Home/Contact"
                    class="inline-block mt-4 md:mt-0 md:ms-3 bg-tarjim-green text-white px-6 py-2 rounded-full
           hover:bg-white hover:text-tarjim-green hover:shadow-lg hover:scale-105
           transition-all duration-300 ease-in-out border border-transparent">
@@ -692,7 +687,7 @@
                 إنشاء حساب جديد – كن جزءًا من تطوير خدمات الترجمة واشترك الآن
             </h2>
 
-            <a href="/Register"
+            <a href="/Auth/ChooseRole"
                class="inline-block bg-white hover:bg-gray-50 text-tarjim-green font-bold py-4 px-8 rounded-lg mt-8 shadow-lg hover:shadow-xl transition-all">
                 سجل معنا
             </a>

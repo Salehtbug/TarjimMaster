@@ -1,0 +1,309 @@
+﻿<div class="mb-3">
+    <div class="d-flex">
+        <div class="flex-shrink-0" style="width: 120px;">
+            <strong>العميل:</strong>
+        </div>
+        <div class="flex-grow-1">
+            <a href="@Url.Action("UserDetails", "Admin", new { id = Model.ClientId })">
+                @Model.Client.Name
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="mb-3">
+    <div class="d-flex">
+        <div class="flex-shrink-0" style="width: 120px;">
+            <strong>اللغات:</strong>
+        </div>
+        <div class="flex-grow-1">
+            من <strong>@Model.SourceLanguage.LanguageName</strong> إلى <strong>@Model.TargetLanguage.LanguageName</strong>
+        </div>
+    </div>
+</div>
+
+<div class="mb-3">
+    <div class="d-flex">
+        <div class="flex-shrink-0" style="width: 120px;">
+            <strong>نوع الخدمة:</strong>
+        </div>
+        <div class="flex-grow-1">
+            @if (Model.ServiceType == "video")
+            {
+                <span><i class="fas fa-video me-1 text-primary"></i> ترجمة فورية عبر الفيديو</span>
+            }
+            else if (Model.ServiceType == "phone")
+            {
+                <span><i class="fas fa-phone-alt me-1 text-success"></i> ترجمة فورية عبر الهاتف</span>
+            }
+            else
+            {
+                <span>@Model.ServiceType</span>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="mb-3">
+    <div class="d-flex">
+        <div class="flex-shrink-0" style="width: 120px;">
+            <strong>الموعد:</strong>
+        </div>
+        <div class="flex-grow-1">
+            @Model.AppointmentDate.ToString("yyyy/MM/dd HH:mm")
+        </div>
+    </div>
+</div>
+
+<div class="mb-3">
+    <div class="d-flex">
+        <div class="flex-shrink-0" style="width: 120px;">
+            <strong>المدة:</strong>
+        </div>
+        <div class="flex-grow-1">
+            @Model.Duration ساعة
+        </div>
+    </div>
+</div>
+
+<div class="mb-3">
+    <div class="d-flex">
+        <div class="flex-shrink-0" style="width: 120px;">
+            <strong>تاريخ الطلب:</strong>
+        </div>
+        <div class="flex-grow-1">
+            @Model.CreatedAt.ToString("yyyy/MM/dd HH:mm")
+        </div>
+    </div>
+</div>
+            </div>
+
+<div class="col-md-6">
+    <h6 class="mb-3">معلومات إضافية</h6>
+
+    @if (Model.AssignedTranslator != null)
+    {
+        <div class="mb-3">
+            <div class="d-flex">
+                <div class="flex-shrink-0" style="width: 120px;">
+                    <strong>المترجم:</strong>
+                </div>
+                <div class="flex-grow-1">
+                    <a href="@Url.Action("UserDetails", "Admin", new { id = Model.AssignedTranslatorId })">
+                        @Model.AssignedTranslator.Name
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+    else if (Model.Status == "Pending")
+    {
+        <div class="alert alert-warning mb-3">
+            <i class="fas fa-exclamation-triangle me-1"></i> لم يتم تعيين مترجم بعد
+        </div>
+    }
+
+    <div class="mb-3">
+        <strong>الملاحظات:</strong>
+        <div class="p-3 bg-light rounded mt-2" style="max-height: 200px; overflow-y: auto;">
+            @if (!string.IsNullOrEmpty(Model.Notes))
+            {
+                <p class="mb-0" style="white-space: pre-line;">@Model.Notes</p>
+            }
+            else
+            {
+                <p class="text-muted mb-0">لا توجد ملاحظات</p>
+            }
+        </div>
+    </div>
+</div>
+        </div>
+
+@if (Model.Status == "Pending")
+{
+    <div class="mt-4" id="assign">
+        <h6 class="mb-3">تعيين مترجم للطلب</h6>
+        <div class="card border shadow-sm">
+            <div class="card-body">
+                <form asp-controller="Admin" asp-action="AssignTranslator" method="post">
+                    <input type="hidden" name="requestId" value="@Model.RequestId" />
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="translatorId" class="form-label">اختر المترجم:</label>
+                                <select id="translatorId" name="translatorId" class="form-control" required>
+                                    <option value="">-- اختر مترجم --</option>
+                                    @if (ViewBag.AvailableTranslators != null)
+                                    {
+                                        foreach (var translator in ViewBag.AvailableTranslators)
+                                        {
+                                            <option value="@translator.UserId">
+                                                @translator.Name (@translator.Rating?.ToString("0.0") نجوم)
+                                            </option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex justify-content-end mt-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-user-check me-1"></i> تعيين المترجم
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <div id="translatorInfoContainer" class="alert alert-info d-none">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div id="translatorAvatar" class="text-center">
+                                        <div class="avatar-md bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto">
+                                            <i class="fas fa-user fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <h6 id="translatorName" class="mb-2"></h6>
+                                    <div class="d-flex flex-wrap">
+                                        <div class="me-3">
+                                            <small>التقييم:</small>
+                                            <div id="translatorRating" class="rating-stars"></div>
+                                        </div>
+                                        <div class="me-3">
+                                            <small>المشاريع المكتملة:</small>
+                                            <div id="translatorProjects"></div>
+                                        </div>
+                                        <div>
+                                            <small>المهارات:</small>
+                                            <div id="translatorSkills" class="mt-1"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+    </div>
+</div>
+
+<!-- Modal إلغاء الطلب -->
+<div class="modal fade" id="cancelRequestModal" tabindex="-1" aria-labelledby="cancelRequestModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelRequestModalLabel">تأكيد إلغاء الطلب</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-controller="Admin" asp-action="CancelInstantRequest" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="requestId" value="@Model.RequestId" />
+                    <p>هل أنت متأكد من إلغاء طلب الترجمة الفورية هذا؟</p>
+                    <div class="form-group mt-3">
+                        <label for="reason">سبب الإلغاء</label>
+                        <textarea id="reason" name="reason" class="form-control" rows="3" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-danger">تأكيد الإلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // سكريبت لعرض معلومات المترجم عند الاختيار
+        $(document).ready(function() {
+            var translators = [];
+
+        @if (ViewBag.AvailableTranslators != null)
+        {
+            <text>
+                        translators = [
+                @foreach (var translator in ViewBag.AvailableTranslators)
+                {
+                    <text>
+                                        {
+                                            id: @translator.UserId,
+                                            name: "@translator.Name",
+                                            avatar: "@translator.AvatarUrl",
+                                            rating: @(translator.Rating?.ToString() ?? "0"),
+                                            projects: @translator.ProjectAssignedTranslators.Count,
+                                            skills: [
+                        @foreach (var skill in translator.Skills)
+                        {
+                            <text>"@skill.SkillName",</text>
+                        }
+                                            ]
+                                        },
+                    </text>
+                }
+                        ];
+            </text>
+        }
+
+            $('#translatorId').change(function() {
+                var selectedId = $(this).val();
+
+                if (selectedId) {
+                    var selectedTranslator = translators.find(t => t.id == selectedId);
+
+                    if (selectedTranslator) {
+                        // اسم المترجم
+                        $('#translatorName').text(selectedTranslator.name);
+
+                        // الصورة الشخصية
+                        if (selectedTranslator.avatar) {
+                            $('#translatorAvatar').html('<img src="' + selectedTranslator.avatar + '" class="avatar-md rounded-circle">');
+                        }
+
+                        // التقييم
+                        var ratingHtml = '';
+                        var rating = parseFloat(selectedTranslator.rating);
+
+                        for (var i = 1; i <= 5; i++) {
+                            if (i <= rating) {
+                                ratingHtml += '<i class="fas fa-star text-warning"></i>';
+                            } else if (i - 0.5 <= rating) {
+                                ratingHtml += '<i class="fas fa-star-half-alt text-warning"></i>';
+                            } else {
+                                ratingHtml += '<i class="far fa-star text-warning"></i>';
+                            }
+                        }
+
+                        ratingHtml += ' <span>(' + rating.toFixed(1) + ')</span>';
+                        $('#translatorRating').html(ratingHtml);
+
+                        // عدد المشاريع
+                        $('#translatorProjects').text(selectedTranslator.projects);
+
+                        // المهارات
+                        var skillsHtml = '';
+                        if (selectedTranslator.skills.length > 0) {
+                            selectedTranslator.skills.forEach(function(skill) {
+                                skillsHtml += '<span class="badge bg-light text-dark me-1 mb-1">' + skill + '</span>';
+                            });
+                        } else {
+                            skillsHtml = '<span class="text-muted">لم يتم تحديد مهارات</span>';
+                        }
+                        $('#translatorSkills').html(skillsHtml);
+
+                        // عرض معلومات المترجم
+                        $('#translatorInfoContainer').removeClass('d-none');
+                    }
+                } else {
+                    $('#translatorInfoContainer').addClass('d-none');
+                }
+            });
+        });
+    </script>
+}

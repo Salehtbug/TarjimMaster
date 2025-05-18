@@ -1,0 +1,225 @@
+﻿@model List<Tarjim.Models.Project>
+
+@{
+    ViewData["Title"] = "المشاريع المكتملة - المترجم";
+    Layout = "~/Views/Shared/_TranslatorLayout.cshtml";
+}
+
+<div class="dashboard-container">
+    <aside class="filters-sidebar">
+        <div class="filter-list">
+            <a href="@Url.Action("Index", "Translator")" class="filter-button" data-section="all">
+                <span class="filter-text">الرئيسية</span>
+                <div class="filter-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("CompletedProjects", "Translator")" class="filter-button active" data-section="completed">
+                <span class="filter-text">المشاريع المكتملة</span>
+                <div class="filter-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">المشاريع المكتملة</h1>
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="jobs-container">
+                @foreach (var project in Model)
+                {
+                    <div class="job-card">
+                        <div class="status-bar completed"></div>
+                        <div class="job-content">
+                            <div class="job-header">
+                                <h3 class="job-title">@project.Title</h3>
+                                <p class="job-subtitle">
+                                    @(project.SourceLanguage?.LanguageName ?? "غير محدد") إلى @(project.TargetLanguage?.LanguageName ?? "غير محدد")
+                                    | @(project.Category?.CategoryName ?? "غير محدد")
+                                </p>
+                            </div>
+                            <div class="job-dates">
+                                <div class="job-date">تاريخ الإكمال: @project.UpdatedAt?.ToString("yyyy/MM/dd")</div>
+                                <div class="job-date">العميل: @project.Client.Name</div>
+                            </div>
+                            <div class="job-actions">
+                                <span class="status-badge completed">
+                                    <i class="fas fa-check"></i>
+                                    مكتمل
+                                </span>
+                                <a href="@Url.Action("Details", "Project", new { id = project.ProjectId })" class="view-btn">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h3 class="empty-title">لا توجد مشاريع مكتملة</h3>
+                <p class="empty-message">
+                    لم تقم بإكمال أي مشاريع حتى الآن. بمجرد إكمال المشاريع، ستظهر هنا.
+                </p>
+            </div>
+        }
+    </main>
+</div>
+
+@section Styles {
+    <style>
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .jobs-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .job-card {
+            background-color: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+        }
+
+        .status-bar {
+            width: 6px;
+        }
+
+            .status-bar.not-accepted {
+                background-color: var(--orange);
+            }
+
+            .status-bar.in-progress {
+                background-color: var(--blue);
+            }
+
+            .status-bar.completed {
+                background-color: var(--green);
+            }
+
+        .job-content {
+            flex: 1;
+            padding: 1.25rem;
+        }
+
+        .job-header {
+            margin-bottom: 1rem;
+        }
+
+        .job-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--gray-800);
+        }
+
+        .job-subtitle {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        .job-dates {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .job-date {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+        }
+
+        .job-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.375rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+            .status-badge.not-accepted {
+                background-color: var(--orange-light);
+                color: var(--orange);
+            }
+
+            .status-badge.in-progress {
+                background-color: var(--blue-light);
+                color: var(--blue);
+            }
+
+            .status-badge.completed {
+                background-color: var(--green-light);
+                color: var(--green);
+            }
+
+        .view-btn {
+            padding: 0.5rem;
+            border-radius: 50%;
+            background-color: var(--gray-100);
+            color: var(--gray-600);
+            transition: all 0.2s ease;
+        }
+
+            .view-btn:hover {
+                background-color: var(--primary);
+                color: white;
+            }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            background-color: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            color: var(--gray-400);
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 0.75rem;
+        }
+
+        .empty-message {
+            color: var(--gray-600);
+            max-width: 30rem;
+            margin: 0 auto;
+        }
+    </style>
+}

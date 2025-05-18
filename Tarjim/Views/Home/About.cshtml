@@ -1,0 +1,164 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "نبذة عن ترجم";
+}
+
+<section id="about" class="py-20 bg-tarjim-light-green" dir="rtl">
+    <div class="section-container">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900">عن ترجم</h2>
+
+        <div class="grid md:grid-cols-2 items-center gap-16">
+            <!-- النصوص -->
+            <div class="space-y-6 text-gray-700 leading-relaxed text-right max-w-xl mx-auto md:mx-0">
+                <p>
+                    منصة ترجم هي منصة متخصصة في مجال الترجمة تهدف إلى إيجاد حلول مبتكرة للتحديات التي يواجهها قطاع الترجمة في الشرق الأوسط.
+                </p>
+                <p>
+                    تأسست المنصة بهدف توفير بيئة تفاعلية تجمع بين المترجمين المحترفين وأصحاب الأعمال والمؤسسات، مما يسهم في تعزيز التواصل وتبادل الخبرات وتنفيذ المشاريع بكفاءة عالية.
+                </p>
+                <p>
+                    نؤمن في ترجم بأهمية توظيف التكنولوجيا لتطوير صناعة الترجمة وتمكين المترجمين من تقديم خدمات عالية الجودة تلبي احتياجات السوق المتنامية في المنطقة.
+                </p>
+                <p>
+                    رؤيتنا هي أن نصبح المنصة الرائدة في مجال الترجمة في الشرق الأوسط، من خلال بناء مجتمع متكامل يضم نخبة من المترجمين المحترفين وتوفير حلول مبتكرة تسهم في الارتقاء بمستوى الخدمات المقدمة في هذا القطاع.
+                </p>
+            </div>
+            <div class="flex justify-center md:justify-end items-center relative w-full">
+                <div class="relative w-[300px] h-[300px]">
+
+                    <img src="/images/Tarjim_Logo_Arabic_Standard.png" alt="Tarjim Logo"
+                         class="w-full h-full object-contain relative z-20" />
+
+
+                    @* <div class="absolute inset-0 bg-tarjim-green/10 rounded-full border-4 border-tarjim-green/20 z-10"></div> *@
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- About Timeline -->
+<section class="py-20 bg-white" dir="rtl">
+    <div class="section-container">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-tarjim-green mb-12">رحلتنا</h2>
+        <div class="timeline-container max-w-4xl mx-auto">
+            <ul class="space-y-12">
+                <li class="flex items-start gap-6">
+                    <div class="w-8 h-8 bg-tarjim-green rounded-full mt-2"></div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-gray-900">2024: التأسيس والانطلاقة</h3>
+                        <p class="text-gray-600 mt-2">بدأت منصة ترجم كـ Marketplace مبتكر يهدف لربط المترجمين بالعملاء بطريقة سهلة، سريعة، وآمنة.</p>
+                    </div>
+                </li>
+                <li class="flex items-start gap-6">
+                    <div class="w-8 h-8 bg-tarjim-green rounded-full mt-2"></div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-gray-900">2025: أولى النجاحات</h3>
+                        <p class="text-gray-600 mt-2">حققنا أكثر من 100 طلب ترجمة ناجح، وشهدنا نمواً متزايداً في عدد المستخدمين وتوسّع في الخدمات.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- Founders Section -->
+<style>
+    .founder-card {
+        background: white;
+        border-radius: 1rem;
+        overflow: hidden;
+        transition: 0.4s ease;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        text-align: center;
+        border: 3px solid transparent;
+        padding: 1rem;
+        max-width: 300px;
+        margin: auto;
+    }
+
+        .founder-card:hover {
+            background-color: var(--tarjim-green);
+            color: white;
+            border-color: var(--tarjim-green);
+        }
+
+        .founder-card img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 0.75rem;
+            transition: 0.3s;
+        }
+
+        .founder-card:hover img {
+            filter: brightness(90%);
+        }
+
+        .founder-card h3 {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        .founder-card p {
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            color: #666;
+            transition: 0.3s;
+        }
+
+        .founder-card:hover p {
+            color: white;
+        }
+</style>
+
+<section class="py-20 bg-tarjim-light-green" dir="rtl">
+    <div class="section-container text-center">
+        <h2 class="text-3xl font-bold text-tarjim-green mb-3">من يقف خلف ترجم</h2>
+        <p class="text-gray-700 text-lg mb-10">نحن فخورون بالفريق الذي يقود هذه الرحلة ويصنع التأثير في كل خطوة</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-10">
+            <div class="founder-card">
+                <img src="/images/Moh-removebg-preview.png" alt="محمد المقطري">
+                <h3>محمد المقطري</h3>
+                <p>الرئيس التنفيذي - CEO</p>
+            </div>
+            <div class="founder-card">
+                <img src="/images/saleh-removebg-preview.png" alt="صالح عبابنة">
+                <h3>صالح عبابنة</h3>
+                <p>الرئيس التنفيذي للتقنية - CTO</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Counters -->
+<section class="py-20 bg-tarjim-green text-white" dir="rtl">
+    <div class="section-container text-center">
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="counter-item">
+                <div class="text-4xl font-bold">+100</div>
+                <p class="mt-2">طلب ترجمة تم تنفيذه</p>
+            </div>
+            <div class="counter-item">
+                <div class="text-4xl font-bold">+80</div>
+                <p class="mt-2">مترجم محترف</p>
+            </div>
+            <div class="counter-item">
+                <div class="text-4xl font-bold">+3</div>
+                <p class="mt-2">لغات رئيسية مدعومة</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Success Stories -->
+<section class="py-20 bg-white" dir="rtl">
+    <div class="section-container text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-tarjim-green mb-6">قصص نجاح</h2>
+        <p class="max-w-2xl mx-auto text-gray-600 text-lg">
+            منذ انطلاقتها، ساعدت ترجم في تلبية احتياجات عملاء من مختلف الدول في ترجمة الوثائق القانونية، التعليمية، والطبية بدقة واحترافية.
+        </p>
+    </div>
+</section>

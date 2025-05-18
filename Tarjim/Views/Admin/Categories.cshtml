@@ -1,0 +1,179 @@
+﻿@model List<Tarjim.Models.TranslationCategory>
+@{
+    ViewData["Title"] = "إدارة التصنيفات";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">إدارة تصنيفات الترجمة</h5>
+        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+            <i class="fas fa-plus me-1"></i> إضافة تصنيف جديد
+        </button>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 70px;">الرقم</th>
+                        <th>اسم التصنيف</th>
+                        <th>الوصف</th>
+                        <th>عدد المشاريع</th>
+                        <th style="width: 150px;">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var category in Model)
+                        {
+                            <tr>
+                                <td>@category.CategoryId</td>
+                                <td>@category.CategoryName</td>
+                                <td>@category.Description</td>
+                                <td>@category.Projects.Count</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <button type="button" class="btn btn-light"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#editCategoryModal"
+                                                data-id="@category.CategoryId"
+                                                data-name="@category.CategoryName"
+                                                data-description="@category.Description">
+                                            <i class="fas fa-edit text-primary"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-light"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteCategoryModal"
+                                                data-id="@category.CategoryId"
+                                                data-name="@category.CategoryName"
+                                        @(category.Projects.Count > 0 ? "disabled" : "")
+                                                title="@(category.Projects.Count > 0 ? "لا يمكن حذف التصنيف لأنه مستخدم في مشاريع" : "حذف")">
+                                            <i class="fas fa-trash text-danger"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-4">لا توجد تصنيفات متوفرة</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal إضافة تصنيف -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="Admin" asp-action="AddCategory" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCategoryModalLabel">إضافة تصنيف جديد</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="categoryName" class="form-label">اسم التصنيف</label>
+                        <input type="text" class="form-control" id="categoryName" name="categoryName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">الوصف</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">إضافة</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal تعديل تصنيف -->
+<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="Admin" asp-action="EditCategory" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCategoryModalLabel">تعديل التصنيف</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editCategoryId" name="categoryId">
+                    <div class="mb-3">
+                        <label for="editCategoryName" class="form-label">اسم التصنيف</label>
+                        <input type="text" class="form-control" id="editCategoryName" name="categoryName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editDescription" class="form-label">الوصف</label>
+                        <textarea class="form-control" id="editDescription" name="description" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal حذف تصنيف -->
+<div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="Admin" asp-action="DeleteCategory" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteCategoryModalLabel">تأكيد الحذف</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="deleteCategoryId" name="categoryId">
+                    <p>هل أنت متأكد من رغبتك في حذف التصنيف: <strong id="deleteCategoryName"></strong>؟</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-danger">تأكيد الحذف</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // تحديث بيانات modal التعديل
+            $('#editCategoryModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                var name = button.data('name');
+                var description = button.data('description');
+
+                var modal = $(this);
+                modal.find('#editCategoryId').val(id);
+                modal.find('#editCategoryName').val(name);
+                modal.find('#editDescription').val(description);
+            });
+
+            // تحديث بيانات modal الحذف
+            $('#deleteCategoryModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                var name = button.data('name');
+
+                var modal = $(this);
+                modal.find('#deleteCategoryId').val(id);
+                modal.find('#deleteCategoryName').text(name);
+            });
+        });
+    </script>
+}

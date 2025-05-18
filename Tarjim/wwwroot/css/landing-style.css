@@ -144,3 +144,29 @@
 .hero-btn-secondary:hover .arrow-icon {
     animation: move-arrow 0.6s ease-in-out infinite;
 }
+/* أنماط صفحة About */
+.team-card {
+    transition: transform 0.3s;
+}
+
+    .team-card:hover {
+        transform: translateY(-10px);
+    }
+
+.counter-item {
+    padding: 2rem;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 1rem;
+}
+
+/* أنماط صفحة Contact */
+#contactForm input,
+#contactForm textarea {
+    transition: border-color 0.3s;
+}
+
+    #contactForm input:focus,
+    #contactForm textarea:focus {
+        border-color: var(--tarjim-green);
+        outline: none;
+    }

@@ -1,0 +1,220 @@
+﻿@model Tarjim.ViewModels.TranslatorRegisterStep3ViewModel
+
+@{
+    ViewData["Title"] = "الوثائق والتعليم - مترجم";
+    ViewData["HideNavbar"] = true;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link href="~/css/translatorregister.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+}
+
+<section class="register-container" dir="rtl" lang="ar">
+    <div class="register-box">
+        <div class="register-side fade-in">
+            <img src="/images/Tarjim_Logo_Arabic_Standard.png" alt="شعار ترجم" class="register-logo" />
+            <p class="register-welcome">معلوماتك الشخصية ليتعرف عليك العملاء ✨</p>
+            <img src="/images/illustration_translator.png" class="illustration-image" alt="صورة توضيحية" />
+        </div>
+
+        <div class="register-card">
+            <div class="register-progress">
+                <ol class="progress-steps">
+                    <li class="step">
+                        <div class="circle">✓</div>
+                        <span class="label">المعلومات الشخصية</span>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="step">
+                        <div class="circle">✓</div>
+                        <span class="label">الموقع</span>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="step active">
+                        <div class="circle">3</div>
+                        <span class="label">الوثائق والتعليم</span>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="step">
+                        <div class="circle">4</div>
+                        <span class="label">الشهادات</span>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="step">
+                        <div class="circle">5</div>
+                        <span class="label">المهارات</span>
+                    </li>
+                </ol>
+            </div>
+
+            <form asp-action="Step3" asp-controller="TranslatorRegistration" method="post" enctype="multipart/form-data" class="register-form">
+                <div asp-validation-summary="ModelOnly" class="register-error text-center mb-4"></div>
+
+                <h2 class="text-xl font-semibold mb-6 text-center">الوثائق والتعليم</h2>
+
+                <div class="form-group">
+                    <label class="register-label">نماذج سابقة من العمل</label>
+                    <div class="file-upload-container" id="workSampleContainer" style="
+                        border: 2px dashed #d1d5db;
+                        border-radius: 0.5rem;
+                        padding: 2rem;
+                        text-align: center;
+                        position: relative;
+                        cursor: pointer;
+                    ">
+                        <input type="file" asp-for="WorkSample" id="workSampleFile" style="
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            opacity: 0;
+                            cursor: pointer;
+                        " />
+                        <div id="workSamplePlaceholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            <p class="mt-2 text-sm text-gray-500">انقر هنا للتحميل أو قم بسحب الملفات وإفلاتها هنا</p>
+                        </div>
+                        <div id="workSampleInfo" class="hidden">
+                            <p class="file-name text-sm font-medium"></p>
+                            <p class="file-size text-xs text-gray-500 mt-1"></p>
+                        </div>
+                    </div>
+                    <span asp-validation-for="WorkSample" class="register-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="register-label">عضوية جمعية مترجمين أردنيين سارية المفعول</label>
+                    <div class="file-upload-container" id="membershipContainer" style="
+                        border: 2px dashed #d1d5db;
+                        border-radius: 0.5rem;
+                        padding: 2rem;
+                        text-align: center;
+                        position: relative;
+                        cursor: pointer;
+                    ">
+                        <input type="file" asp-for="MembershipDocument" id="membershipFile" style="
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            opacity: 0;
+                            cursor: pointer;
+                        " />
+                        <div id="membershipPlaceholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            <p class="mt-2 text-sm text-gray-500">انقر هنا للتحميل أو قم بسحب الملفات وإفلاتها هنا</p>
+                        </div>
+                        <div id="membershipInfo" class="hidden">
+                            <p class="file-name text-sm font-medium"></p>
+                            <p class="file-size text-xs text-gray-500 mt-1"></p>
+                        </div>
+                    </div>
+                    <span asp-validation-for="MembershipDocument" class="register-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="University" class="register-label">الجامعة</label>
+                    <input asp-for="University" class="register-input" placeholder="أدخل إسم الجامعة" />
+                    <span asp-validation-for="University" class="register-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Major" class="register-label">المحصل العلمي</label>
+                    <select asp-for="Major" class="register-input">
+                        <option value="">إختر المحصل العلمي</option>
+                        <option value="بكالوريوس">بكالوريوس</option>
+                        <option value="ماجستير">ماجستير</option>
+                        <option value="دكتوراه">دكتوراه</option>
+                        <option value="دبلوم">دبلوم</option>
+                        <option value="ثانوية عامة">ثانوية عامة</option>
+                    </select>
+                    <span asp-validation-for="Major" class="register-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FieldOfStudy" class="register-label">مجال الدراسة</label>
+                    <input asp-for="FieldOfStudy" class="register-input" placeholder="أدخل مجال الدراسة" />
+                    <span asp-validation-for="FieldOfStudy" class="register-error"></span>
+                </div>
+
+                <div class="form-group" style="display: flex; gap: 1rem;">
+                    <a asp-action="Step2" asp-controller="TranslatorRegistration" style="
+                        background-color: #f0f0f0;
+                        color: #555;
+                        padding: 0.75rem 1.5rem;
+                        font-weight: 600;
+                        font-size: 1rem;
+                        border-radius: 9999px;
+                        text-align: center;
+                        width: 25%;
+                        text-decoration: none;
+                    ">رجوع</a>
+                    <button type="submit" class="registert-button" style="width: 75%;">التالي</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- عناصر زخرفية للخلفية -->
+    <span class="register-decor decor-1">مترجم</span>
+    <span class="register-decor decor-2">ترجم</span>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // إدارة تحميل الملفات وعرض معلوماتها
+        document.addEventListener('DOMContentLoaded', function() {
+            // معالجة ملف نماذج العمل
+            const workSampleFile = document.getElementById('workSampleFile');
+            const workSamplePlaceholder = document.getElementById('workSamplePlaceholder');
+            const workSampleInfo = document.getElementById('workSampleInfo');
+            const workSampleContainer = document.getElementById('workSampleContainer');
+
+            workSampleFile.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const file = e.target.files[0];
+                    const fileName = file.name;
+                    const fileSize = (file.size / 1024).toFixed(2) + ' KB';
+
+                    workSamplePlaceholder.classList.add('hidden');
+                    workSampleInfo.classList.remove('hidden');
+                    workSampleInfo.querySelector('.file-name').textContent = fileName;
+                    workSampleInfo.querySelector('.file-size').textContent = fileSize;
+
+                    workSampleContainer.style.borderColor = '#10b981';
+                }
+            });
+
+            // معالجة ملف عضوية جمعية المترجمين
+            const membershipFile = document.getElementById('membershipFile');
+            const membershipPlaceholder = document.getElementById('membershipPlaceholder');
+            const membershipInfo = document.getElementById('membershipInfo');
+            const membershipContainer = document.getElementById('membershipContainer');
+
+            membershipFile.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const file = e.target.files[0];
+                    const fileName = file.name;
+                    const fileSize = (file.size / 1024).toFixed(2) + ' KB';
+
+                    membershipPlaceholder.classList.add('hidden');
+                    membershipInfo.classList.remove('hidden');
+                    membershipInfo.querySelector('.file-name').textContent = fileName;
+                    membershipInfo.querySelector('.file-size').textContent = fileSize;
+
+                    membershipContainer.style.borderColor = '#10b981';
+                }
+            });
+        });
+    </script>
+}

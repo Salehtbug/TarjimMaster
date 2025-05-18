@@ -1,0 +1,269 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - لوحة تحكم الإدارة - ترجم</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" />
+    <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/admin.css" />
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- الشريط الجانبي -->
+        <aside class="admin-sidebar">
+            <div class="admin-sidebar-header">
+                <a href="@Url.Action("Index", "Admin")" class="logo-container">
+                    <img src="~/img/logo.png" alt="ترجم" class="logo-img" />
+                    <span class="brand-name">ترجم</span>
+                </a>
+                <button type="button" class="sidebar-toggle-btn d-md-none" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <div class="admin-sidebar-body">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "Admin")" class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Index" ? "active" : "")">
+                            <span class="nav-icon"><i class="fas fa-tachometer-alt"></i></span>
+                            <span class="nav-text">لوحة التحكم</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Users", "Admin")" class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Users" || ViewContext.RouteData.Values["action"].ToString() == "UserDetails" ? "active" : "")">
+                            <span class="nav-icon"><i class="fas fa-users"></i></span>
+                            <span class="nav-text">المستخدمين</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Projects", "Admin")" class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Projects" || ViewContext.RouteData.Values["action"].ToString() == "ProjectDetails" ? "active" : "")">
+                            <span class="nav-icon"><i class="fas fa-file-alt"></i></span>
+                            <span class="nav-text">المشاريع</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("InstantRequests", "Admin")" class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "InstantRequests" || ViewContext.RouteData.Values["action"].ToString() == "InstantRequestDetails" ? "active" : "")">
+                            <span class="nav-icon"><i class="fas fa-headset"></i></span>
+                            <span class="nav-text">الترجمة الفورية</span>
+                            @{
+                                // عرض شارة للطلبات قيد الانتظار
+                                var pendingCount = ViewBag.PendingInstantRequests as int? ?? 0;
+                                if (pendingCount > 0)
+                                {
+                                    <span class="badge bg-danger">@pendingCount</span>
+                                }
+                            }
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Reports", "Admin")" class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Reports" ? "active" : "")">
+                            <span class="nav-icon"><i class="fas fa-chart-bar"></i></span>
+                            <span class="nav-text">التقارير</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Categories", "Admin")" class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Categories" ? "active" : "")">
+                            <span class="nav-icon"><i class="fas fa-tag"></i></span>
+                            <span class="nav-text">التصنيفات</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Languages", "Admin")" class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Languages" ? "active" : "")">
+                            <span class="nav-icon"><i class="fas fa-language"></i></span>
+                            <span class="nav-text">اللغات</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Skills", "Admin")" class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Skills" ? "active" : "")">
+                            <span class="nav-icon"><i class="fas fa-tools"></i></span>
+                            <span class="nav-text">المهارات</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Activity", "Admin")" class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Activity" ? "active" : "")">
+                            <span class="nav-icon"><i class="fas fa-history"></i></span>
+                            <span class="nav-text">سجل النشاط</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Settings", "Admin")" class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Settings" ? "active" : "")">
+                            <span class="nav-icon"><i class="fas fa-cog"></i></span>
+                            <span class="nav-text">الإعدادات</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item mt-auto">
+                        <a href="#" class="nav-link text-danger" id="logoutBtn">
+                            <span class="nav-icon"><i class="fas fa-sign-out-alt"></i></span>
+                            <span class="nav-text">تسجيل الخروج</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="admin-main">
+            <!-- شريط التنقل العلوي -->
+            <header class="admin-header">
+                <div class="d-flex align-items-center">
+                    <button type="button" class="sidebar-toggle-btn d-none d-md-block me-3" id="sidebarToggleLg">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item">
+                            <a href="@Url.Action("Index", "Admin")">لوحة التحكم</a>
+                        </li>
+                        @if (ViewContext.RouteData.Values["action"].ToString() != "Index")
+                        {
+                            <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                        }
+                    </ol>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="dropdown me-3">
+                        <button class="btn btn-sm position-relative" type="button" id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-bell fa-lg"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                3
+                            </span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end notifications-dropdown" aria-labelledby="notificationsDropdown">
+                            <div class="dropdown-header d-flex justify-content-between align-items-center">
+                                <span>الإشعارات</span>
+                                <a href="#" class="text-decoration-none small">تعليم الكل كمقروء</a>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <div class="notifications-list">
+                                <a href="#" class="dropdown-item notification-item unread">
+                                    <div class="notification-icon bg-primary text-white">
+                                        <i class="fas fa-file-alt"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <div class="notification-text">تم إنشاء مشروع جديد</div>
+                                        <div class="notification-time">منذ 5 دقائق</div>
+                                    </div>
+                                </a>
+                                <a href="#" class="dropdown-item notification-item unread">
+                                    <div class="notification-icon bg-success text-white">
+                                        <i class="fas fa-headset"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <div class="notification-text">طلب ترجمة فورية جديد</div>
+                                        <div class="notification-time">منذ 15 دقيقة</div>
+                                    </div>
+                                </a>
+                                <a href="#" class="dropdown-item notification-item unread">
+                                    <div class="notification-icon bg-info text-white">
+                                        <i class="fas fa-user-plus"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <div class="notification-text">مستخدم جديد قام بالتسجيل</div>
+                                        <div class="notification-time">منذ 30 دقيقة</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item text-center">عرض جميع الإشعارات</a>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn p-0" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-sm me-2 rounded-circle bg-primary text-white d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="d-none d-md-block">
+                                    <div class="fw-bold">المشرف</div>
+                                </div>
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-1"></i> الملف الشخصي</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-1"></i> الإعدادات</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" id="logoutBtnDropdown"><i class="fas fa-sign-out-alt me-1"></i> تسجيل الخروج</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </header>
+
+            <!-- محتوى الصفحة -->
+            <div class="admin-content">
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-1"></i> @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-circle me-1"></i> @TempData["ErrorMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                @RenderBody()
+            </div>
+
+            <!-- تذييل الصفحة -->
+            <footer class="admin-footer">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <div>&copy; @DateTime.Now.Year - منصة ترجم - جميع الحقوق محفوظة</div>
+                    <div class="tarjim-logo">ترجم</div>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Modal تسجيل الخروج -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">تسجيل الخروج</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>هل أنت متأكد من رغبتك في تسجيل الخروج؟</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <a href="@Url.Action("Logout", "Auth")" class="btn btn-danger">تسجيل الخروج</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        $(document).ready(function () {
+            // Toggle للقائمة الجانبية
+            $('#sidebarToggle, #sidebarToggleLg').click(function() {
+                $('body').toggleClass('sidebar-collapsed');
+            });
+
+            // تفعيل الـ Modal لتسجيل الخروج
+            $('#logoutBtn, #logoutBtnDropdown').click(function() {
+                $('#logoutModal').modal('show');
+            });
+
+            // إخفاء تنبيهات النجاح والخطأ بعد 5 ثوان
+            setTimeout(function() {
+                $('.alert-success, .alert-danger').fadeOut(500);
+            }, 5000);
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

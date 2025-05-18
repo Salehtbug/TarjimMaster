@@ -1,0 +1,495 @@
+﻿@{
+    ViewData["Title"] = "طلب مترجم فوري";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+<style>
+    /* ستايل خاص بصفحة طلب مترجم فوري */
+    .service-title {
+        color: var(--gray-800);
+        font-size: 1.75rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .instant-translator-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+        margin-top: 2rem;
+    }
+
+    .service-description {
+        background-color: white;
+        padding: 2rem;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow);
+    }
+
+        .service-description p {
+            color: var(--gray-600);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+    .section-title {
+        color: var(--primary);
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        position: relative;
+        padding-right: 1rem;
+    }
+
+        .section-title::before {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 0.5rem;
+            width: 4px;
+            height: 1.5rem;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+
+    .service-features {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .feature {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        background-color: var(--gray-50);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .feature:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+    .feature-icon {
+        width: 3.5rem;
+        height: 3.5rem;
+        border-radius: 50%;
+        background-color: var(--primary-light);
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+
+    .feature-content h3 {
+        color: var(--gray-800);
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .feature-content p {
+        color: var(--gray-500);
+        font-size: 0.875rem;
+        margin-bottom: 0;
+    }
+
+    .request-form-container {
+        background-color: white;
+        padding: 2rem;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow);
+    }
+
+    .form-title {
+        color: var(--gray-800);
+        font-size: 1.25rem;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 1.75rem;
+        position: relative;
+        padding-bottom: 1rem;
+    }
+
+        .form-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            right: 50%;
+            transform: translateX(50%);
+            width: 4rem;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 1.5px;
+        }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+        .form-group label {
+            display: block;
+            color: var(--gray-700);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--gray-300);
+        border-radius: var(--radius);
+        font-family: var(--font-family);
+        color: var(--gray-700);
+    }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 201, 141, 0.15);
+            outline: none;
+        }
+
+    select.form-control {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236B7280'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E");
+        background-position: left 1rem center;
+        background-repeat: no-repeat;
+        background-size: 1.25rem;
+        padding-left: 2.5rem;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    textarea.form-control {
+        min-height: 6rem;
+        resize: vertical;
+    }
+
+    .submit-btn {
+        display: block;
+        width: 100%;
+        padding: 1rem;
+        background-color: var(--primary);
+        color: white;
+        font-weight: 600;
+        border: none;
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+        .submit-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+    /* تخصيص ستايل للهاتف */
+    \40media (max-width: 768px) {
+        .instant-translator-container
+
+    {
+        grid-template-columns: 1fr;
+    }
+
+    .feature {
+        padding: 1.25rem;
+    }
+
+    .feature-icon {
+        width: 3rem;
+        height: 3rem;
+        font-size: 1.25rem;
+    }
+
+    }
+</style>
+
+<div class="dashboard-container">
+    <!-- السايدبار -->
+    <aside class="filters-sidebar">
+        <div class="filter-list">
+            <a href="@Url.Action("Index", "Client")" class="filter-button @(ViewBag.ActiveSection == "all" ? "active" : "")" data-section="all">
+                <span class="filter-text">الكل</span>
+                <div class="filter-icon">
+                    <i class="fas fa-border-all"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("InProgress", "Client")" class="filter-button @(ViewBag.ActiveSection == "in-progress" ? "active" : "")" data-section="in-progress">
+                <span class="filter-text">قيد التنفيذ</span>
+                <div class="filter-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("Completed", "Client")" class="filter-button @(ViewBag.ActiveSection == "completed" ? "active" : "")" data-section="completed">
+                <span class="filter-text">مكتمل</span>
+                <div class="filter-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("NotAccepted", "Client")" class="filter-button @(ViewBag.ActiveSection == "not-accepted" ? "active" : "")" data-section="not-accepted">
+                <span class="filter-text">لم يقبل بعد</span>
+                <div class="filter-icon">
+                    <i class="fas fa-hourglass-start"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("Messages", "Client")" class="filter-button @(ViewBag.ActiveSection == "messages" ? "active" : "")" data-section="messages">
+                <span class="filter-text">الرسائل</span>
+                <div class="filter-icon">
+                    <i class="far fa-comment-alt"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("RequestTranslator", "Client")" class="filter-button @(ViewBag.ActiveSection == "request-translator" ? "active" : "")" data-section="request-translator">
+                <span class="filter-text">طلب مترجم فوري</span>
+                <div class="filter-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("Notifications", "Client")" class="filter-button @(ViewBag.ActiveSection == "notifications" ? "active" : "")" data-section="notifications">
+                <span class="filter-text">الإشعارات</span>
+                <div class="filter-icon">
+                    <i class="far fa-bell"></i>
+                </div>
+            </a>
+
+            <a href="@Url.Action("Settings", "Client")" class="filter-button @(ViewBag.ActiveSection == "settings" ? "active" : "")" data-section="settings">
+                <span class="filter-text">الإعدادات</span>
+                <div class="filter-icon">
+                    <i class="fas fa-cog"></i>
+                </div>
+            </a>
+
+            <button class="filter-button" id="logoutBtn" data-section="logout">
+                <span class="filter-text">تسجيل الخروج</span>
+                <div class="filter-icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+            </button>
+        </div>
+
+        <a href="@Url.Action("Step1", "ProjectCreation")" class="btn btn-primary">
+            <i class="fas fa-plus"></i> نشر وظيفة جديدة
+        </a>
+    </aside>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="main-content">
+        <h1 class="service-title">خدمة الترجمة الفورية</h1>
+
+        <div class="instant-translator-container">
+            <div class="service-description">
+                <h2 class="section-title">تتيح لك خدمة الترجمة الفورية</h2>
+                <p>
+                    التواصل مباشرة مع مترجم محترف لمساعدتك في الترجمة الفورية للاجتماعات والمؤتمرات والمكالمات.
+                    استفد من خبرة مترجمينا المحترفين لضمان تواصل فعال وتقديم خدمة ترجمة عالية الجودة.
+                </p>
+                <div class="service-features">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>ترجمة فورية عبر الفيديو</h3>
+                            <p>للاجتماعات والمؤتمرات عبر الإنترنت، نضمن لك ترجمة احترافية ودقيقة في الوقت الحقيقي.</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>ترجمة فورية عبر الهاتف</h3>
+                            <p>للمكالمات الهاتفية والمحادثات السريعة، نوفر لك خدمة ترجمة فورية على مدار الساعة.</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>مترجمين محترفين</h3>
+                            <p>متخصصين في مجالات متنوعة مع خبرة طويلة في الترجمة الفورية وفهم عميق للثقافات المختلفة.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="request-form-container">
+                <h2 class="form-title">تقديم طلب مترجم فوري</h2>
+                <form id="instantTranslatorForm">
+                    <div class="form-group">
+                        <label for="sourceLanguage">اللغة المصدر</label>
+                        <select id="sourceLanguage" class="form-control" required>
+                            <option value="">اختر اللغة</option>
+                            <option value="1">العربية</option>
+                            <option value="2">الإنجليزية</option>
+                            <option value="3">الفرنسية</option>
+                            <option value="4">الإسبانية</option>
+                            <option value="5">الألمانية</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="targetLanguage">اللغة الهدف</label>
+                        <select id="targetLanguage" class="form-control" required>
+                            <option value="">اختر اللغة</option>
+                            <option value="1">العربية</option>
+                            <option value="2">الإنجليزية</option>
+                            <option value="3">الفرنسية</option>
+                            <option value="4">الإسبانية</option>
+                            <option value="5">الألمانية</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="serviceType">نوع الخدمة</label>
+                        <select id="serviceType" class="form-control" required>
+                            <option value="">اختر نوع الخدمة</option>
+                            <option value="video">ترجمة فورية عبر الفيديو</option>
+                            <option value="phone">ترجمة فورية عبر الهاتف</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="appointmentDate">تاريخ ووقت الموعد</label>
+                        <input type="datetime-local" id="appointmentDate" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duration">المدة المتوقعة (بالساعات)</label>
+                        <input type="number" id="duration" class="form-control" min="1" max="8" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">موضوع الترجمة</label>
+                        <input type="text" id="subject" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">ملاحظات إضافية</label>
+                        <textarea id="notes" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">تقديم الطلب</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // زر تسجيل الخروج
+            $("#logoutBtn").click(function() {
+                Swal.fire({
+                    title: 'تسجيل الخروج',
+                    text: 'هل أنت متأكد من رغبتك في تسجيل الخروج؟',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'نعم',
+                    cancelButtonText: 'لا',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '@Url.Action("Logout", "Auth")';
+                    }
+                });
+            });
+
+            // إرسال نموذج طلب مترجم فوري
+            $("#instantTranslatorForm").submit(function(e) {
+                e.preventDefault();
+
+                // جمع بيانات النموذج
+                const formData = {
+                    sourceLanguageId: $("#sourceLanguage").val(),
+                    targetLanguageId: $("#targetLanguage").val(),
+                    serviceType: $("#serviceType").val(),
+                    appointmentDate: $("#appointmentDate").val(),
+                    duration: $("#duration").val(),
+                    subject: $("#subject").val(),
+                    notes: $("#notes").val()
+                };
+
+                // التحقق من عدم تطابق اللغات
+                if (formData.sourceLanguageId === formData.targetLanguageId) {
+                    Swal.fire(
+                        'خطأ!',
+                        'لا يمكن أن تكون اللغة المصدر واللغة الهدف متطابقتين',
+                        'error'
+                    );
+                    return;
+                }
+
+                // إظهار رسالة تحميل
+                Swal.fire({
+                    title: 'جاري إرسال الطلب',
+                    text: 'يرجى الانتظار...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // في هذه المرحلة سنعرض رسالة نجاح، ولكن في التطبيق الفعلي ستقوم بإرسال البيانات إلى الخادم
+                setTimeout(() => {
+                    Swal.fire({
+                        title: 'تم إرسال الطلب بنجاح!',
+                        text: 'سيتم التواصل معك قريباً لتأكيد الموعد وتفاصيل الخدمة.',
+                        icon: 'success',
+                        confirmButtonText: 'حسناً'
+                    }).then(() => {
+                        // إعادة تعيين النموذج
+                        $("#instantTranslatorForm")[0].reset();
+                    });
+                }, 1500);
+
+                // في الحالة الفعلية ستقوم بإرسال الطلب إلى الخادم
+                /*
+                $.ajax({
+                    url: '@Url.Action("SubmitInstantTranslatorRequest", "Client")',
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: 'تم إرسال الطلب بنجاح!',
+                                text: 'سيتم التواصل معك قريباً لتأكيد الموعد وتفاصيل الخدمة.',
+                                icon: 'success',
+                                confirmButtonText: 'حسناً'
+                            }).then(() => {
+                                // إعادة تعيين النموذج
+                                $("#instantTranslatorForm")[0].reset();
+                            });
+                        } else {
+                            Swal.fire(
+                                'خطأ!',
+                                response.message || 'حدث خطأ أثناء إرسال الطلب',
+                                'error'
+                            );
+                        }
+                    },
+                    error: function() {
+                        Swal.fire(
+                            'خطأ!',
+                            'حدث خطأ في الاتصال بالخادم',
+                            'error'
+                        );
+                    }
+                });
+                */
+            });
+        });
+    </script>
+}
