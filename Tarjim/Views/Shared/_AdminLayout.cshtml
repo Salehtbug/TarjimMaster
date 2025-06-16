@@ -14,11 +14,11 @@
 </head>
 <body>
     <div class="admin-layout">
-        <!-- الشريط الجانبي -->
+    
         <aside class="admin-sidebar">
             <div class="admin-sidebar-header">
                 <a href="@Url.Action("Index", "Admin")" class="logo-container">
-                    <img src="~/img/logo.png" alt="ترجم" class="logo-img" />
+                    <img src="~/images/Tarjim_Logo_Arabic_transparent.png" alt="ترجم" class="logo-img" />
                     <span class="brand-name">ترجم</span>
                 </a>
                 <button type="button" class="sidebar-toggle-btn d-md-none" id="sidebarToggle">
@@ -50,7 +50,7 @@
                             <span class="nav-icon"><i class="fas fa-headset"></i></span>
                             <span class="nav-text">الترجمة الفورية</span>
                             @{
-                                // عرض شارة للطلبات قيد الانتظار
+                                
                                 var pendingCount = ViewBag.PendingInstantRequests as int? ?? 0;
                                 if (pendingCount > 0)
                                 {

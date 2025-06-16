@@ -189,7 +189,7 @@
         }
 
     /* تخصيص ستايل للهاتف */
-    \40media (max-width: 768px) {
+    \0040media (max-width: 768px) {
         .instant-translator-container
 
     {
@@ -286,6 +286,20 @@
     <main class="main-content">
         <h1 class="service-title">خدمة الترجمة الفورية</h1>
 
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
         <div class="instant-translator-container">
             <div class="service-description">
                 <h2 class="section-title">تتيح لك خدمة الترجمة الفورية</h2>
@@ -326,10 +340,12 @@
 
             <div class="request-form-container">
                 <h2 class="form-title">تقديم طلب مترجم فوري</h2>
-                <form id="instantTranslatorForm">
+                <form id="instantTranslatorForm" action="@Url.Action("SubmitInstantTranslatorRequest", "Client")" method="post">
+                    @Html.AntiForgeryToken()
+
                     <div class="form-group">
-                        <label for="sourceLanguage">اللغة المصدر</label>
-                        <select id="sourceLanguage" class="form-control" required>
+                        <label for="sourceLanguageId">اللغة المصدر</label>
+                        <select name="sourceLanguageId" id="sourceLanguageId" class="form-control" required>
                             <option value="">اختر اللغة</option>
                             <option value="1">العربية</option>
                             <option value="2">الإنجليزية</option>
@@ -340,8 +356,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="targetLanguage">اللغة الهدف</label>
-                        <select id="targetLanguage" class="form-control" required>
+                        <label for="targetLanguageId">اللغة الهدف</label>
+                        <select name="targetLanguageId" id="targetLanguageId" class="form-control" required>
                             <option value="">اختر اللغة</option>
                             <option value="1">العربية</option>
                             <option value="2">الإنجليزية</option>
@@ -353,31 +369,31 @@
 
                     <div class="form-group">
                         <label for="serviceType">نوع الخدمة</label>
-                        <select id="serviceType" class="form-control" required>
+                        <select name="serviceType" id="serviceType" class="form-control" required>
                             <option value="">اختر نوع الخدمة</option>
                             <option value="video">ترجمة فورية عبر الفيديو</option>
-                            <option value="phone">ترجمة فورية عبر الهاتف</option>
+                            <option value="phone">ترجمة فورية </option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="appointmentDate">تاريخ ووقت الموعد</label>
-                        <input type="datetime-local" id="appointmentDate" class="form-control" required>
+                        <input type="datetime-local" name="appointmentDate" id="appointmentDate" class="form-control" required>
                     </div>
 
                     <div class="form-group">
                         <label for="duration">المدة المتوقعة (بالساعات)</label>
-                        <input type="number" id="duration" class="form-control" min="1" max="8" required>
+                        <input type="number" name="duration" id="duration" class="form-control" min="1" max="8" required>
                     </div>
 
                     <div class="form-group">
                         <label for="subject">موضوع الترجمة</label>
-                        <input type="text" id="subject" class="form-control" required>
+                        <input type="text" name="subject" id="subject" class="form-control" required>
                     </div>
 
                     <div class="form-group">
                         <label for="notes">ملاحظات إضافية</label>
-                        <textarea id="notes" class="form-control" rows="3"></textarea>
+                        <textarea name="notes" id="notes" class="form-control" rows="3"></textarea>
                     </div>
 
                     <button type="submit" class="submit-btn">تقديم الطلب</button>
@@ -407,29 +423,16 @@
                 });
             });
 
-            // إرسال نموذج طلب مترجم فوري
+            // التحقق من عدم تطابق اللغات
             $("#instantTranslatorForm").submit(function(e) {
-                e.preventDefault();
-
-                // جمع بيانات النموذج
-                const formData = {
-                    sourceLanguageId: $("#sourceLanguage").val(),
-                    targetLanguageId: $("#targetLanguage").val(),
-                    serviceType: $("#serviceType").val(),
-                    appointmentDate: $("#appointmentDate").val(),
-                    duration: $("#duration").val(),
-                    subject: $("#subject").val(),
-                    notes: $("#notes").val()
-                };
-
-                // التحقق من عدم تطابق اللغات
-                if (formData.sourceLanguageId === formData.targetLanguageId) {
+                if ($("#sourceLanguageId").val() === $("#targetLanguageId").val()) {
+                    e.preventDefault();
                     Swal.fire(
                         'خطأ!',
                         'لا يمكن أن تكون اللغة المصدر واللغة الهدف متطابقتين',
                         'error'
                     );
-                    return;
+                    return false;
                 }
 
                 // إظهار رسالة تحميل
@@ -442,53 +445,7 @@
                     }
                 });
 
-                // في هذه المرحلة سنعرض رسالة نجاح، ولكن في التطبيق الفعلي ستقوم بإرسال البيانات إلى الخادم
-                setTimeout(() => {
-                    Swal.fire({
-                        title: 'تم إرسال الطلب بنجاح!',
-                        text: 'سيتم التواصل معك قريباً لتأكيد الموعد وتفاصيل الخدمة.',
-                        icon: 'success',
-                        confirmButtonText: 'حسناً'
-                    }).then(() => {
-                        // إعادة تعيين النموذج
-                        $("#instantTranslatorForm")[0].reset();
-                    });
-                }, 1500);
-
-                // في الحالة الفعلية ستقوم بإرسال الطلب إلى الخادم
-                /*
-                $.ajax({
-                    url: '@Url.Action("SubmitInstantTranslatorRequest", "Client")',
-                    type: 'POST',
-                    data: formData,
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire({
-                                title: 'تم إرسال الطلب بنجاح!',
-                                text: 'سيتم التواصل معك قريباً لتأكيد الموعد وتفاصيل الخدمة.',
-                                icon: 'success',
-                                confirmButtonText: 'حسناً'
-                            }).then(() => {
-                                // إعادة تعيين النموذج
-                                $("#instantTranslatorForm")[0].reset();
-                            });
-                        } else {
-                            Swal.fire(
-                                'خطأ!',
-                                response.message || 'حدث خطأ أثناء إرسال الطلب',
-                                'error'
-                            );
-                        }
-                    },
-                    error: function() {
-                        Swal.fire(
-                            'خطأ!',
-                            'حدث خطأ في الاتصال بالخادم',
-                            'error'
-                        );
-                    }
-                });
-                */
+                return true;
             });
         });
     </script>

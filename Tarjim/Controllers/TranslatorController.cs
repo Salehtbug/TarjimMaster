@@ -393,7 +393,7 @@ namespace Tarjim.Controllers
 
             ViewBag.ActiveSection = "completed";
             return View(completedProjects);
-        }
+        }       
 
         // إكمال المشروع
         [HttpPost]

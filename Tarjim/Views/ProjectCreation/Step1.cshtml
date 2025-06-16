@@ -2,15 +2,9 @@
 @{
     ViewData["Title"] = "نشر وظيفة جديدة";
     Layout = "~/Views/Shared/_ClientLayout.cshtml";
-
 }
 
-@* <link href="~/css/creation.css" rel="stylesheet" /> *@
-
 <link href="~/creation.css" rel="stylesheet" />
-
-
-
 
 <div class="container my-5">
     <div class="row justify-content-center">
@@ -18,34 +12,8 @@
             <div class="card shadow border-0">
                 <div class="card-body p-4">
                     <div class="text-center mb-4">
-                        <img src="~/images/logo.png" alt="ترجم" class="img-fluid mb-3" style="max-height: 60px;">
+                        <img src="~/images/Tarjim_Logo_Arabic_Standard.png" alt="ترجم" class="img-fluid mb-3" style="max-height: 60px;">
                         <h2>نشر وظيفة جديدة</h2>
-                    </div>
-
-                    <!-- شريط التقدم -->
-                    <div class="mb-5 text-center">
-                        <div class="d-flex justify-content-center align-items-center position-relative">
-                            <div class="position-relative d-flex align-items-center">
-                                <div class="step-circle active">
-                                    <span>1</span>
-                                </div>
-                                <div class="step-label">معلومات الوظيفة</div>
-                            </div>
-                            <div class="step-connector"></div>
-                            <div class="position-relative d-flex align-items-center">
-                                <div class="step-circle">
-                                    <span>2</span>
-                                </div>
-                                <div class="step-label">معلومات الدفع</div>
-                            </div>
-                            <div class="step-connector"></div>
-                            <div class="position-relative d-flex align-items-center">
-                                <div class="step-circle">
-                                    <span>3</span>
-                                </div>
-                                <div class="step-label">التأكيد</div>
-                            </div>
-                        </div>
                     </div>
 
                     <form asp-action="Step1" enctype="multipart/form-data" method="post">
@@ -148,9 +116,7 @@
 
                         <div class="mb-4">
                             <label class="form-label fw-bold">المتطلبات الخاصة</label>
-                            <div id="requirements-container">
-                                <!-- سيتم إضافة المتطلبات هنا بواسطة JavaScript -->
-                            </div>
+                            <div id="requirements-container"></div>
                             <button type="button" id="add-requirement" class="btn btn-sm btn-outline-primary mt-2">
                                 <i class="fas fa-plus"></i> إضافة متطلب
                             </button>
@@ -172,47 +138,38 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
-        // عرض قائمة الملفات المختارة
-        document.querySelector('.file-upload-input').addEventListener('change', function(e) {
+        document.querySelector('.file-upload-input').addEventListener('change', function () {
             const fileList = document.getElementById('file-list');
             fileList.innerHTML = '';
+            for (let i = 0; i < this.files.length; i++) {
+                const file = this.files[i];
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item d-flex align-items-center mt-2 p-2 border rounded';
 
-            if (this.files.length > 0) {
-                for (let i = 0; i < this.files.length; i++) {
-                    const file = this.files[i];
-                    const fileItem = document.createElement('div');
-                    fileItem.className = 'file-item d-flex align-items-center mt-2 p-2 border rounded';
+                let icon = 'fa-file';
+                if (file.type.includes('pdf')) icon = 'fa-file-pdf';
+                else if (file.type.includes('word') || file.name.endsWith('.doc') || file.name.endsWith('.docx')) icon = 'fa-file-word';
+                else if (file.type.includes('excel') || file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) icon = 'fa-file-excel';
+                else if (file.type.includes('image')) icon = 'fa-file-image';
 
-                    // إضافة أيقونة حسب نوع الملف
-                    let icon = 'fa-file';
-                    if (file.type.includes('pdf')) icon = 'fa-file-pdf';
-                    else if (file.type.includes('word') || file.name.endsWith('.doc') || file.name.endsWith('.docx')) icon = 'fa-file-word';
-                    else if (file.type.includes('excel') || file.name.endsWith('.xls')// استكمال كود JavaScript لصفحة Step1.cshtml
-                    else if (file.type.includes('excel') || file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) icon = 'fa-file-excel';
-                    else if (file.type.includes('image')) icon = 'fa-file-image';
+                const fileSize = (file.size / 1024).toFixed(2) + ' كيلوبايت';
 
-                    const fileSize = (file.size / 1024).toFixed(2) + ' كيلوبايت';
+                fileItem.innerHTML = `
+                    <i class="fas ${icon} text-primary me-2"></i>
+                    <div class="flex-grow-1">
+                        <div class="fw-bold">${file.name}</div>
+                        <small class="text-muted">${fileSize}</small>
+                    </div>
+                `;
 
-                    fileItem.innerHTML = `
-                        <i class="fas ${icon} text-primary me-2"></i>
-                        <div class="flex-grow-1">
-                            <div class="fw-bold">${file.name}</div>
-                            <small class="text-muted">${fileSize}</small>
-                        </div>
-                    `;
-
-                    fileList.appendChild(fileItem);
-                }
+                fileList.appendChild(fileItem);
             }
         });
 
-        // إضافة متطلبات خاصة
         let requirementCounter = 0;
-
-        document.getElementById('add-requirement').addEventListener('click', function() {
+        document.getElementById('add-requirement').addEventListener('click', function () {
             const container = document.getElementById('requirements-container');
             const reqId = requirementCounter++;
-
             const requirementHtml = `
                 <div class="requirement-item border rounded p-3 mb-2" data-id="${reqId}">
                     <div class="d-flex justify-content-between mb-2">
@@ -251,14 +208,12 @@
                 </div>
             `;
 
-            // إضافة HTML إلى الصفحة
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = requirementHtml;
             container.appendChild(tempDiv.firstElementChild);
 
-            // إضافة event listener لزر الحذف
             const removeButton = container.querySelector(`.requirement-item[data-id="${reqId}"] .btn-remove-requirement`);
-            removeButton.addEventListener('click', function() {
+            removeButton.addEventListener('click', function () {
                 container.querySelector(`.requirement-item[data-id="${reqId}"]`).remove();
             });
         });

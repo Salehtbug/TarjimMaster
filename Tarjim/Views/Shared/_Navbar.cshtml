@@ -40,3 +40,76 @@
         <a href="/Account/ChooseRole" class="block mt-2 bg-tarjim-green text-white text-center py-2 rounded-lg hover:bg-tarjim-green/90 transition">سجّل الآن</a>
     </div>
 </header>
+<script>
+        // Function to handle the mobile menu toggle
+    function handleMobileMenu() {
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuIcon = document.getElementById('menuIcon');
+
+        if (!mobileMenuToggle || !mobileMenu) return;
+
+        mobileMenuToggle.addEventListener('click', function() {
+            // Toggle the mobile menu visibility
+            const isHidden = mobileMenu.classList.contains('hidden');
+
+            if (isHidden) {
+                mobileMenu.classList.remove('hidden');
+                // Optionally change the menu icon to X
+                if (menuIcon) {
+                    menuIcon.innerHTML = `
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    `;
+                }
+            } else {
+                mobileMenu.classList.add('hidden');
+                // Restore the original menu icon
+                if (menuIcon) {
+                    menuIcon.innerHTML = `
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    `;
+                }
+            }
+        });
+
+        // Close menu when clicking on mobile menu links (optional)
+        const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.add('hidden');
+                // Restore original menu icon
+                if (menuIcon) {
+                    menuIcon.innerHTML = `
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    `;
+                }
+            });
+        });
+    }
+
+    // Handle fixed header behavior
+    function handleFixedHeader() {
+        const navbar = document.getElementById('mainNavbar');
+        if (!navbar) return;
+
+        function updateHeader() {
+            if (window.scrollY > 10) {
+                navbar.classList.add('bg-white', 'shadow-md', 'py-2');
+                navbar.classList.remove('bg-transparent', 'py-4');
+            } else {
+                navbar.classList.remove('bg-white', 'shadow-md', 'py-2');
+                navbar.classList.add('bg-transparent', 'py-4');
+            }
+        }
+
+        window.addEventListener('scroll', updateHeader);
+        // Initialize on page load
+        updateHeader();
+    }
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        handleMobileMenu();
+        handleFixedHeader();
+    });
+</script>

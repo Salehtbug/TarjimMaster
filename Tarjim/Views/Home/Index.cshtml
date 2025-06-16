@@ -380,26 +380,55 @@
     </div>
     <div class="mt-6 w-full transition-opacity duration-700 fade-in-once">
         <div class="relative w-full overflow-hidden">
+            <!-- Gradient overlays for smooth fade at edges -->
             <div class="absolute left-0 top-0 z-10 h-full w-16 bg-gradient-to-r from-white to-transparent"></div>
             <div class="absolute right-0 top-0 z-10 h-full w-16 bg-gradient-to-l from-white to-transparent"></div>
 
-            <div class="flex animate-slide-rtl whitespace-nowrap">
-                @for (int i = 1; i <= 8; i++)
-                {
-                    <div class="flex items-center justify-center mx-4">
-                        <div class="bg-gray-200 h-14 w-32 rounded flex items-center justify-center">
-                            <span class="text-gray-400 text-sm">Logo @i</span>
-                        </div>
+            <!-- Sliding logo container -->
+            <div class="flex animate-slide-rtl whitespace-nowrap" id="partnerLogos">
+                <!-- First set of partner logos -->
+                <div class="flex items-center justify-center mx-8">
+                    <div class="partner-logo bg-white shadow-sm rounded-lg h-16 w-40 p-3 flex items-center justify-center overflow-hidden">
+                        <img src="/images/logo.png" alt="Partner Logo 1" class="max-h-full max-w-full object-contain">
                     </div>
-                }
-                @for (int i = 1; i <= 8; i++)
-                {
-                    <div class="flex items-center justify-center mx-4">
-                        <div class="bg-gray-200 h-14 w-32 rounded flex items-center justify-center">
-                            <span class="text-gray-400 text-sm">Logo @i</span>
-                        </div>
+                </div>
+                <div class="flex items-center justify-center mx-8">
+                    <div class="partner-logo bg-white shadow-sm rounded-lg h-16 w-40 p-3 flex items-center justify-center overflow-hidden">
+                        <img src="/images/HyperPay_Logo.jpg" alt="Partner Logo 2" class="max-h-full max-w-full object-contain">
                     </div>
-                }
+                </div>
+                <div class="flex items-center justify-center mx-8">
+                    <div class="partner-logo bg-white shadow-sm rounded-lg h-16 w-40 p-3 flex items-center justify-center overflow-hidden">
+                        <img src="/images/Logo_RGB_Orange.png" alt="Partner Logo 3" class="max-h-full max-w-full object-contain">
+                    </div>
+                </div>
+
+                <!-- Spacer -->
+                <div class="flex items-center justify-center mx-16">
+                    <div class="w-4"></div>
+                </div>
+
+                <!-- Duplicate set for continuous animation -->
+                <div class="flex items-center justify-center mx-8">
+                    <div class="partner-logo bg-white shadow-sm rounded-lg h-16 w-40 p-3 flex items-center justify-center overflow-hidden">
+                        <img src="/images/logo.png" alt="Partner Logo 1" class="max-h-full max-w-full object-contain">
+                    </div>
+                </div>
+                <div class="flex items-center justify-center mx-8">
+                    <div class="partner-logo bg-white shadow-sm rounded-lg h-16 w-40 p-3 flex items-center justify-center overflow-hidden">
+                        <img src="/images/HyperPay_Logo.jpg" alt="Partner Logo 2" class="max-h-full max-w-full object-contain">
+                    </div>
+                </div>
+                <div class="flex items-center justify-center mx-8">
+                    <div class="partner-logo bg-white shadow-sm rounded-lg h-16 w-40 p-3 flex items-center justify-center overflow-hidden">
+                        <img src="/images/Logo_RGB_Orange.png" alt="Partner Logo 3" class="max-h-full max-w-full object-contain">
+                    </div>
+                </div>
+
+                <!-- Spacer at the end -->
+                <div class="flex items-center justify-center mx-16">
+                    <div class="w-4"></div>
+                </div>
             </div>
         </div>
     </div>

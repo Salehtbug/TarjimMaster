@@ -3,245 +3,354 @@
     ViewData["Title"] = "تأكيد المشروع";
     Layout = "~/Views/Shared/_ClientLayout.cshtml";
 }
+<style>
+    /* تنسيقات عامة للمشروع */
+    .main-container {
+        padding: 40px 0;
+    }
 
-<div class="container my-5">
+    .form-card {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .card-header-custom {
+        background-color: #fff;
+        padding: 25px 0;
+        text-align: center;
+        border-bottom: 1px solid #eaeaea;
+    }
+
+    .form-title {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #333;
+        margin-top: 10px;
+    }
+
+    .form-section {
+        padding: 2rem;
+    }
+
+    /* تنسيق معلومات المشروع */
+    .project-info {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+
+    .info-row {
+        margin-bottom: 12px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #eee;
+    }
+
+        .info-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+    .info-label {
+        color: #495057;
+        font-weight: 600;
+    }
+
+    .info-value {
+        color: #333;
+    }
+
+    .section-title {
+        color: #333;
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .main-title {
+        color: #333;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    /* تنسيق الملفات */
+    .files-list {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .file-item {
+        background-color: #fff;
+        padding: 12px 15px;
+        border: 1px solid #e9ecef;
+        margin-bottom: 8px;
+        border-radius: 8px;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+    }
+
+        .file-item:hover {
+            border-color: #0dcaf0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+    .file-icon {
+        color: #0dcaf0;
+        font-size: 1.1rem;
+        margin-left: 10px;
+    }
+
+    /* تنسيق المتطلبات */
+    .requirements-table {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    }
+
+        .requirements-table th {
+            background-color: #f8f9fa;
+            border-top: none;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .requirements-table th, .requirements-table td {
+            padding: 12px 15px;
+            vertical-align: middle;
+        }
+
+    /* تنسيق الأزرار */
+    .btn {
+        border-radius: 8px;
+        padding: 0.6rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+
+    .btn-primary {
+        background-color: #0dcaf0;
+        border-color: #0dcaf0;
+    }
+
+        .btn-primary:hover, .btn-primary:focus {
+            background-color: #0bacdb;
+            border-color: #0bacdb;
+        }
+
+    .btn-outline-secondary {
+        color: #6c757d;
+        border-color: #ced4da;
+    }
+
+        .btn-outline-secondary:hover {
+            background-color: #f8f9fa;
+            color: #495057;
+            border-color: #ced4da;
+        }
+
+    /* تنسيق الإشعارات */
+    .info-alert {
+        background-color: #e3f2fd;
+        border-color: #b6d4fe;
+        color: #084298;
+        border-radius: 8px;
+        padding: 15px;
+    }
+
+    .info-icon {
+        color: #0d6efd;
+        margin-left: 15px;
+    }
+</style>
+<div class="container main-container">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <div class="card shadow border-0">
-                <div class="card-body p-4">
-                    <div class="text-center mb-4">
-                        <img src="~/images/logo.png" alt="ترجم" class="img-fluid mb-3" style="max-height: 60px;">
-                        <h2>نشر وظيفة جديدة</h2>
-                    </div>
+            <div class="card form-card border-0">
 
-                    <!-- شريط التقدم -->
-                    <div class="mb-5 text-center">
-                        <div class="d-flex justify-content-center align-items-center position-relative">
-                            <div class="position-relative d-flex align-items-center">
-                                <div class="step-circle completed">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <div class="step-label">معلومات الوظيفة</div>
+                <!-- ترويسة النموذج -->
+                <div class="card-header-custom">
+                    <img src="~/images/Tarjim_Logo_Arabic_Standard.png" alt="ترجم" class="img-fluid" style="max-height: 50px;">
+                    <h2 class="form-title">نشر وظيفة جديدة</h2>
+                </div>
+
+                <!-- محتوى النموذج -->
+                <div class="form-section">
+
+                    <!-- عنوان القسم -->
+                    <h3 class="main-title">معلومات الطلب للتأكيد</h3>
+
+                    <!-- معلومات المشروع -->
+                    <div class="project-info">
+
+                        <div class="row info-row">
+                            <div class="col-md-4 info-label">عنوان المشروع:</div>
+                            <div class="col-md-8 info-value">@Model.Title</div>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(Model.Description))
+                        {
+                            <div class="row info-row">
+                                <div class="col-md-4 info-label">الوصف:</div>
+                                <div class="col-md-8 info-value">@Model.Description</div>
                             </div>
-                            <div class="step-connector completed"></div>
-                            <div class="position-relative d-flex align-items-center">
-                                <div class="step-circle active">
-                                    <span>2</span>
+                        }
+
+                        <div class="row info-row">
+                            <div class="col-md-4 info-label">اللغات:</div>
+                            <div class="col-md-8 info-value">
+                                <div class="d-flex align-items-center">
+                                    <span>@Model.SourceLanguageName</span>
+                                    <i class="fas fa-arrow-left mx-2 text-primary"></i>
+                                    <span>@Model.TargetLanguageName</span>
                                 </div>
-                                <div class="step-label">التأكيد</div>
                             </div>
                         </div>
+
+                        @if (!string.IsNullOrEmpty(Model.CategoryName))
+                        {
+                            <div class="row info-row">
+                                <div class="col-md-4 info-label">فئة الترجمة:</div>
+                                <div class="col-md-8 info-value">@Model.CategoryName</div>
+                            </div>
+                        }
+
+                        @if (Model.PageCount.HasValue)
+                        {
+                            <div class="row info-row">
+                                <div class="col-md-4 info-label">عدد الصفحات:</div>
+                                <div class="col-md-8 info-value">@Model.PageCount</div>
+                            </div>
+                        }
+
+                        @if (Model.Budget.HasValue)
+                        {
+                            <div class="row info-row">
+                                <div class="col-md-4 info-label">الميزانية المتوقعة:</div>
+                                <div class="col-md-8 info-value">
+                                    @Model.Budget <span class="text-muted">JOD</span>
+                                </div>
+                            </div>
+                        }
+
+                        @if (Model.Deadline.HasValue)
+                        {
+                            <div class="row info-row">
+                                <div class="col-md-4 info-label">الموعد النهائي:</div>
+                                <div class="col-md-8 info-value">@Model.Deadline.Value.ToShortDateString()</div>
+                            </div>
+                        }
+
                     </div>
 
-                    <div class="mb-4">
-                        <h3 class="mb-4">معلومات الطلب للتأكيد</h3>
+                    <!-- قسم الملفات -->
+                    @if (Model.UploadedFileNames != null && Model.UploadedFileNames.Count > 0)
+                    {
+                        <div class="mb-4">
+                            <h4 class="section-title">
+                                <i class="fas fa-paperclip me-2"></i> الملفات المرفقة
+                            </h4>
+                            <div class="files-list">
+                                @for (int i = 0; i < Model.UploadedFileNames.Count; i++)
+                                {
+                                    var fileName = Model.UploadedFileNames[i];
+                                    string icon = "fa-file";
 
-                        <div class="bg-light p-3 rounded mb-4">
-                            <div class="row mb-3">
-                                <div class="col-md-4 fw-bold">عنوان المشروع:</div>
-                                <div class="col-md-8">@Model.Title</div>
-                            </div>
+                                    if (fileName.EndsWith(".pdf")) icon = "fa-file-pdf";
+                                    else if (fileName.EndsWith(".doc") || fileName.EndsWith(".docx")) icon = "fa-file-word";
+                                    else if (fileName.EndsWith(".xls") || fileName.EndsWith(".xlsx")) icon = "fa-file-excel";
+                                    else if (fileName.EndsWith(".jpg") || fileName.EndsWith(".jpeg") || fileName.EndsWith(".png")) icon = "fa-file-image";
 
-                            @if (!string.IsNullOrEmpty(Model.Description))
-                            {
-                                <div class="row mb-3">
-                                    <div class="col-md-4 fw-bold">الوصف:</div>
-                                    <div class="col-md-8">@Model.Description</div>
-                                </div>
-                            }
-
-                            <div class="row mb-3">
-                                <div class="col-md-4 fw-bold">اللغات:</div>
-                                <div class="col-md-8">
-                                    <div class="d-flex align-items-center">
-                                        <span>@Model.SourceLanguageName</span>
-                                        <i class="fas fa-arrow-left mx-2"></i>
-                                        <span>@Model.TargetLanguageName</span>
+                                    <div class="file-item">
+                                        <i class="fas @icon file-icon"></i>
+                                        <span>@fileName</span>
                                     </div>
-                                </div>
+                                }
                             </div>
-
-                            @if (!string.IsNullOrEmpty(Model.CategoryName))
-                            {
-                                <div class="row mb-3">
-                                    <div class="col-md-4 fw-bold">فئة الترجمة:</div>
-                                    <div class="col-md-8">@Model.CategoryName</div>
-                                </div>
-                            }
-
-                            @if (Model.PageCount.HasValue)
-                            {
-                                <div class="row mb-3">
-                                    <div class="col-md-4 fw-bold">عدد الصفحات:</div>
-                                    <div class="col-md-8">@Model.PageCount</div>
-                                </div>
-                            }
-
-                            @if (Model.Budget.HasValue)
-                            {
-                                <div class="row mb-3">
-                                    <div class="col-md-4 fw-bold">الميزانية المتوقعة:</div>
-                                    <div class="col-md-8">@Model.Budget JOD</div>
-                                </div>
-                            }
-
-                            @if (Model.Deadline.HasValue)
-                            {
-                                <div class="row mb-3">
-                                    <div class="col-md-4 fw-bold">الموعد النهائي:</div>
-                                    <div class="col-md-8">@Model.Deadline.Value.ToShortDateString()</div>
-                                </div>
-                            }
                         </div>
+                    }
 
-                        <!-- قسم الملفات -->
-                        @if (Model.UploadedFileNames != null && Model.UploadedFileNames.Count > 0)
-                        {
-                            <div class="mb-4">
-                                <h4>الملفات المرفقة</h4>
-                                <div class="list-group">
-                                    @for (int i = 0; i < Model.UploadedFileNames.Count; i++)
-                                    {
-                                        <div class="list-group-item d-flex align-items-center">
-                                            @{
-                                                var fileName = Model.UploadedFileNames[i];
-                                                string icon = "fa-file";
-
-                                                if (fileName.EndsWith(".pdf")) icon = "fa-file-pdf";
-                                                else if (fileName.EndsWith(".doc") || fileName.EndsWith(".docx")) icon = "fa-file-word";
-                                                else if (fileName.EndsWith(".xls") || fileName.EndsWith(".xlsx")) icon = "fa-file-excel";
-                                                else if (fileName.EndsWith(".jpg") || fileName.EndsWith(".jpeg") || fileName.EndsWith(".png")) icon = "fa-file-image";
-                                            }
-                                            <i class="fas @icon text-primary me-2"></i>
-                                            <span>@fileName</span>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        }
-
-                        <!-- قسم المتطلبات الخاصة -->
-                        @if (Model.Requirements != null && Model.Requirements.Count > 0)
-                        {
-                            <div class="mb-4">
-                                <h4>المتطلبات الخاصة</h4>
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>عنوان المتطلب</th>
-                                                <th>النوع</th>
-                                                <th>القيمة الافتراضية</th>
-                                                <th>مطلوب</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var req in Model.Requirements)
+                    <!-- قسم المتطلبات الخاصة -->
+                    @if (Model.Requirements != null && Model.Requirements.Count > 0)
+                    {
+                        <div class="mb-4">
+                            <h4 class="section-title">
+                                <i class="fas fa-tasks me-2"></i> المتطلبات الخاصة
+                            </h4>
+                            <div class="table-responsive">
+                                <table class="table table-hover requirements-table">
+                                    <thead>
+                                        <tr>
+                                            <th>عنوان المتطلب</th>
+                                            <th>النوع</th>
+                                            <th>القيمة الافتراضية</th>
+                                            <th>مطلوب</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var req in Model.Requirements)
+                                        {
+                                            string typeName = req.Type switch
                                             {
-                                                <tr>
-                                                    <td>@req.Label</td>
-                                                    <td>
-                                                        @{
-                                                            string typeName = req.Type switch
-                                                            {
-                                                                "Text" => "نص",
-                                                                "Email" => "بريد إلكتروني",
-                                                                "Number" => "رقم",
-                                                                "Date" => "تاريخ",
-                                                                _ => req.Type
-                                                            };
-                                                        }
-                                                        @typeName
-                                                    </td>
-                                                    <td>@(string.IsNullOrEmpty(req.Value) ? "-" : req.Value)</td>
-                                                    <td>
-                                                        @if (req.IsRequired == true)
-                                                        {
-                                                            <i class="fas fa-check text-success"></i>
-                                                        }
-                                                        else
-                                                        {
-                                                            <i class="fas fa-times text-muted"></i>
-                                                        }
-                                                    </td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        }
+                                                "Text" => "نص",
+                                                "Email" => "بريد إلكتروني",
+                                                "Number" => "رقم",
+                                                "Date" => "تاريخ",
+                                                _ => req.Type
+                                            };
 
-                        <div class="alert alert-info">
-                            <div class="d-flex">
-                                <div class="me-3">
-                                    <i class="fas fa-info-circle fa-2x"></i>
-                                </div>
-                                <div>
-                                    <p class="mb-0">سيتم إرسال إشعار لجميع المترجمين المتاحين بهذا الطلب.</p>
-                                    <p class="mb-0">بمجرد أن يقوم أحد المترجمين بالتقديم، ستتلقى إشعاراً وستتمكن من اختيار المترجم المناسب.</p>
-                                </div>
+                                            <tr>
+                                                <td>@req.Label</td>
+                                                <td>@typeName</td>
+                                                <td>@(string.IsNullOrEmpty(req.Value) ? "-" : req.Value)</td>
+                                                <td>
+                                                    @if (req.IsRequired == true)
+                                                    {
+                                                        <i class="fas fa-check-circle text-success"></i>
+                                                    }
+                                                    else
+                                                    {
+                                                        <i class="fas fa-times-circle text-muted"></i>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
                             </div>
+                        </div>
+                    }
+
+                    <!-- إشعار للمستخدم -->
+                    <div class="alert info-alert d-flex align-items-start mb-4">
+                        <i class="fas fa-info-circle fa-2x info-icon"></i>
+                        <div>
+                            <p class="mb-1">سيتم إرسال إشعار لجميع المترجمين المتاحين بهذا الطلب.</p>
+                            <p class="mb-0">بمجرد أن يقوم أحد المترجمين بالتقديم، ستتلقى إشعاراً وستتمكن من اختيار المترجم المناسب.</p>
                         </div>
                     </div>
 
+                    <!-- نموذج التأكيد -->
                     <form asp-action="SubmitProject" method="post">
                         <div class="d-flex justify-content-between mt-5">
-                            <a asp-action="Step1" class="btn btn-outline-secondary">الرجوع</a>
-                            <button type="submit" class="btn btn-primary">نشر الطلب</button>
+                            <a asp-action="Step1" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-right me-1"></i> الرجوع
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-1"></i> نشر الطلب
+                            </button>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-@section Styles {
-    <style>
-        /* تنسيق شريط التقدم */
-        .step-circle {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background-color: #e9ecef;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #6c757d;
-            border: 2px solid #dee2e6;
-            margin: 0 auto;
-        }
-
-            .step-circle.active {
-                background-color: #0dcaf0;
-                color: white;
-                border-color: #0dcaf0;
-            }
-
-            .step-circle.completed {
-                background-color: #198754;
-                color: white;
-                border-color: #198754;
-            }
-
-        .step-label {
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
-            text-align: center;
-            width: 120px;
-        }
-
-        .step-connector {
-            height: 2px;
-            background-color: #dee2e6;
-            width: 60px;
-            margin: 0 -15px;
-        }
-
-            .step-connector.completed {
-                background-color: #198754;
-            }
-    </style>
-}

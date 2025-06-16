@@ -584,7 +584,6 @@ namespace Tarjim.Controllers
             return View("Settings", model);
         }
 
-        // تقديم طلب مترجم فوري
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SubmitInstantTranslatorRequest(int sourceLanguageId, int targetLanguageId, string serviceType, DateTime appointmentDate, int duration, string subject, string notes)
@@ -592,13 +591,41 @@ namespace Tarjim.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId) || !int.TryParse(userId, out int userIdInt))
             {
-                return Json(new { success = false, message = "لم يتم التحقق من المستخدم." });
+                TempData["ErrorMessage"] = "لم يتم التحقق من المستخدم.";
+                return RedirectToAction("RequestTranslator");
+            }
+
+            // التحقق من أن اللغات المصدر والهدف مختلفة
+            if (sourceLanguageId == targetLanguageId)
+            {
+                TempData["ErrorMessage"] = "لا يمكن أن تكون اللغة المصدر واللغة الهدف متطابقتين.";
+                return RedirectToAction("RequestTranslator");
             }
 
             try
             {
-                // هنا يمكن إضافة منطق لحفظ طلب المترجم الفوري في قاعدة البيانات
-                // على سبيل المثال، إنشاء جدول جديد لطلبات المترجمين الفوريين
+                // إنشاء طلب مترجم فوري جديد
+                var request = new InstantTranslatorRequest
+                {
+                    ClientId = userIdInt,
+                    SourceLanguageId = sourceLanguageId,
+                    TargetLanguageId = targetLanguageId,
+                    ServiceType = serviceType,
+                    AppointmentDate = appointmentDate,
+                    Duration = duration,
+                    Subject = subject,
+                    Notes = notes,
+                    Status = "Pending", // حالة الطلب الأولية
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                // إضافة الطلب إلى قاعدة البيانات
+                _context.InstantTranslatorRequests.Add(request);
+
+                // حفظ التغييرات لتوليد قيمة RequestId
+                await _context.SaveChangesAsync();
+
+                // الآن بعد الحفظ، يمكننا استخدام request.RequestId
 
                 // إضافة نشاط تقديم طلب مترجم فوري
                 _context.ActivityLogs.Add(new ActivityLog
@@ -606,22 +633,42 @@ namespace Tarjim.Controllers
                     UserId = userIdInt,
                     ActivityType = "SubmitInstantTranslatorRequest",
                     EntityType = "InstantTranslatorRequest",
+                    EntityId = request.RequestId, // الآن RequestId له قيمة
                     Description = $"تم تقديم طلب مترجم فوري: {subject}",
                     IpAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "",
                     UserAgent = Request.Headers["User-Agent"].ToString(),
                     CreatedAt = DateTime.UtcNow
                 });
 
+                // إرسال إشعار للأدمن عن الطلب الجديد
+                var adminUsers = await _context.Users
+                    .Where(u => u.Roles.Any(r => r.RoleName == "Admin"))
+                    .ToListAsync();
+
+                foreach (var admin in adminUsers)
+                {
+                    _context.Notifications.Add(new Notification
+                    {
+                        UserId = admin.UserId,
+                        Type = "new_instant_request",
+                        Message = $"طلب مترجم فوري جديد: {subject}",
+                        RelatedId = request.RequestId,
+                        RelatedType = "instant_translator_request",
+                        CreatedAt = DateTime.UtcNow
+                    });
+                }
+
                 await _context.SaveChangesAsync();
 
-                return Json(new { success = true, message = "تم تقديم الطلب بنجاح. سيتم التواصل معك قريباً." });
+                TempData["SuccessMessage"] = "تم تقديم طلب المترجم الفوري بنجاح. سيتم التواصل معك قريباً.";
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "حدث خطأ أثناء تقديم الطلب: " + ex.Message });
+                TempData["ErrorMessage"] = "حدث خطأ أثناء تقديم الطلب: " + ex.Message;
+                return RedirectToAction("RequestTranslator");
             }
         }
-
         // قبول عرض على مشروع
         [HttpPost]
         [ValidateAntiForgeryToken]
