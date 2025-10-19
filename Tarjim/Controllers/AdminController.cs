@@ -68,10 +68,15 @@ namespace Tarjim.Controllers
                 .SumAsync(p => p.Budget ?? 0);
             viewModel.CompletedPayments = payments.Where(p => p.Status == "Completed").Sum(p => p.Amount);
 
-          
-            viewModel.AverageTranslatorRating = await _context.Users
-     .Where(u => u.Roles.Any(r => r.RoleName == "Translator"))
-     .AverageAsync(u => (double)(u.Rating ?? 0));
+
+            var translators = await _context.Users
+           .Where(u => u.Roles.Any(r => r.RoleName == "Translator"))
+           .ToListAsync();
+
+            viewModel.AverageTranslatorRating = translators.Any()
+                ? translators.Average(u => (double)(u.Rating ?? 0))
+                : 0;
+
             viewModel.TopTranslators = await _context.Users
                 .Include(u => u.Roles)
                 .Where(u => u.Roles.Any(r => r.RoleName == "Translator"))
